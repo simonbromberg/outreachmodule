@@ -1,0 +1,16 @@
+﻿@model OutreachModule.Models.Patient 
+@{
+    ViewBag.Title = "Add Patient";
+}
+
+@Html.Partial("~/Views/Shared/_Patient.cshtml")
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var mes = "@ViewBag.Message";
+        if (mes != '') {
+            window.alert(mes);
+        }
+    </script>
+    @Scripts.Render("~/Scripts/birthdatepickersetup.js")
+}

@@ -1,0 +1,152 @@
+﻿@model OutreachModule.Models.Patient
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Patient</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.camp_code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp_code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.gender)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.gender)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.birthdate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.birthdate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.age)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.family_member_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.family_member_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.family_contact_number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.family_contact_number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address_1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address_1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address_2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address_2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.state)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.state)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.district)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.district)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.block)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.block)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.gram_panchayat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.gram_panchayat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contact_1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contact_1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contact_2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contact_2)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+@section Scripts {
+    <script>
+        var mes = "@ViewBag.Message";
+        if (mes != '') {
+            window.alert(mes);
+        }
+    </script>
+}

@@ -1,0 +1,15 @@
+﻿@model OutreachModule.Models.PatientDetailViewModel
+
+@{
+    ViewBag.Title = "Patient";
+}
+
+<h2>Patient</h2>
+
+@Html.Partial("~/Views/Shared/_PatientDetail.cshtml")
+
+<p>
+    @Html.ActionLink("Edit", "EditPatient",new { id = Model.patient.Id },null) |
+    @Html.ActionLink("Delete", "Delete","Patients", new { id = Model.patient.Id },null) |
+    @Html.ActionLink("Back to Camp", "Index", new {campId = ViewBag.Camp.Id})
+</p>

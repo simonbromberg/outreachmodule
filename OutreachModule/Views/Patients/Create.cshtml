@@ -1,0 +1,20 @@
+﻿@model OutreachModule.Models.Patient
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@Html.Partial("~/Views/Shared/_Patient.cshtml")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/birthdatepickerSetup.js")
+    <script>
+        var mes = "@ViewBag.Message";
+        if (mes != '') {
+           window.alert(mes);
+        }
+    </script>
+}

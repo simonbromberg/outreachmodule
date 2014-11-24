@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Camp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="location_1" Type="nvarchar" MaxLength="50" />
+          <Property Name="location_2" Type="nvarchar" MaxLength="50" />
+          <Property Name="organizer" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_person" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_number" Type="nvarchar" MaxLength="50" />
+          <Property Name="date" Type="date" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="camp_patient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="campId" Type="int" Nullable="false" />
+          <Property Name="patientId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mrn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="recordnumber" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="birthdate" Type="date" />
+          <Property Name="age" Type="int" />
+          <Property Name="family_member_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="family_contact_number" Type="nvarchar" MaxLength="50" />
+          <Property Name="address_1" Type="nvarchar" MaxLength="50" />
+          <Property Name="address_2" Type="nvarchar" MaxLength="50" />
+          <Property Name="state" Type="nvarchar" MaxLength="50" />
+          <Property Name="district" Type="nvarchar" MaxLength="50" />
+          <Property Name="block" Type="nvarchar" MaxLength="50" />
+          <Property Name="gram_panchayat" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_1" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_2" Type="nvarchar" MaxLength="50" />
+          <Property Name="campId" Type="int" Nullable="false" />
+          <Property Name="photoPath" Type="nvarchar(max)" />
+          <Property Name="mrnId" Type="int" />
+          <Property Name="dateadded" Type="datetime" />
+          <Property Name="lastupdated" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_camp_patient_ToCamp">
+          <End Role="Camp" Type="Self.Camp" Multiplicity="1" />
+          <End Role="camp_patient" Type="Self.camp_patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Camp">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="camp_patient">
+              <PropertyRef Name="campId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_camp_patient_ToPatient">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="camp_patient" Type="Self.camp_patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="camp_patient">
+              <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_ToCamp">
+          <End Role="Camp" Type="Self.Camp" Multiplicity="1" />
+          <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Camp">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient">
+              <PropertyRef Name="campId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_ToMRN">
+          <End Role="mrn" Type="Self.mrn" Multiplicity="0..1" />
+          <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mrn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient">
+              <PropertyRef Name="mrnId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelsStoreContainer">
+          <EntitySet Name="Camp" EntityType="Self.Camp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="camp_patient" EntityType="Self.camp_patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mrn" EntityType="Self.mrn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_camp_patient_ToCamp" Association="Self.FK_camp_patient_ToCamp">
+            <End Role="Camp" EntitySet="Camp" />
+            <End Role="camp_patient" EntitySet="camp_patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_camp_patient_ToPatient" Association="Self.FK_camp_patient_ToPatient">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="camp_patient" EntitySet="camp_patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_ToCamp" Association="Self.FK_Patient_ToCamp">
+            <End Role="Camp" EntitySet="Camp" />
+            <End Role="Patient" EntitySet="Patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_ToMRN" Association="Self.FK_Patient_ToMRN">
+            <End Role="mrn" EntitySet="mrn" />
+            <End Role="Patient" EntitySet="Patient" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="birthdate" Type="DateTime" Precision="0" />
+          <Property Name="age" Type="Int32" />
+          <Property Name="family_member_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address_1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="district" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="block" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="gram_panchayat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="family_contact_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="campId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="fromCamp" Relationship="Models.FK_Patient_ToTable" FromRole="Patient" ToRole="Camp" />
+          <NavigationProperty Name="camp_patient" Relationship="Models.FK_camp_patient_ToPatient" FromRole="Patient" ToRole="camp_patient" />
+          <Property Name="photoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mrnId" Type="Int32" />
+          <NavigationProperty Name="mrnRef" Relationship="Models.FK_Patient_ToMRN" FromRole="Patient" ToRole="mrn" />
+          <Property Name="dateadded" Type="DateTime" Precision="3" />
+          <Property Name="lastupdated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityContainer Name="OutreachDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Patients" EntityType="Self.Patient" />
+          <EntitySet Name="Camps" EntityType="Models.Camp" />
+          <AssociationSet Name="FK_Patient_ToTable" Association="Models.FK_Patient_ToTable">
+            <End Role="Camp" EntitySet="Camps" />
+            <End Role="Patient" EntitySet="Patients" />
+          </AssociationSet>
+          <EntitySet Name="camp_patient" EntityType="Models.camp_patient" />
+          <AssociationSet Name="FK_camp_patient_ToCamp" Association="Models.FK_camp_patient_ToCamp">
+            <End Role="Camp" EntitySet="Camps" />
+            <End Role="camp_patient" EntitySet="camp_patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_camp_patient_ToPatient" Association="Models.FK_camp_patient_ToPatient">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="camp_patient" EntitySet="camp_patient" />
+          </AssociationSet>
+          <EntitySet Name="mrns" EntityType="Models.mrn" />
+          <AssociationSet Name="FK_Patient_ToMRN" Association="Models.FK_Patient_ToMRN">
+            <End Role="mrn" EntitySet="mrns" />
+            <End Role="Patient" EntitySet="Patients" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Camp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="location_1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="location_2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="organizer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_person" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Patients" Relationship="Models.FK_Patient_ToTable" FromRole="Camp" ToRole="Patient" />
+          <NavigationProperty Name="camp_patient" Relationship="Models.FK_camp_patient_ToCamp" FromRole="Camp" ToRole="camp_patient" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Patient_ToTable">
+          <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
+          <End Type="Models.Patient" Role="Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Camp">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient">
+              <PropertyRef Name="campId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="camp_patient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="campId" Type="Int32" Nullable="false" />
+          <Property Name="patientId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Camp" Relationship="Models.FK_camp_patient_ToCamp" FromRole="camp_patient" ToRole="Camp" />
+          <NavigationProperty Name="Patient" Relationship="Models.FK_camp_patient_ToPatient" FromRole="camp_patient" ToRole="Patient" />
+        </EntityType>
+        <Association Name="FK_camp_patient_ToCamp">
+          <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
+          <End Type="Models.camp_patient" Role="camp_patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Camp">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="camp_patient">
+              <PropertyRef Name="campId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_camp_patient_ToPatient">
+          <End Type="Models.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="Models.camp_patient" Role="camp_patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="camp_patient">
+              <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="mrn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="recordnumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Patients" Relationship="Models.FK_Patient_ToMRN" FromRole="mrn" ToRole="Patient" />
+        </EntityType>
+        <Association Name="FK_Patient_ToMRN">
+          <End Type="Models.mrn" Role="mrn" Multiplicity="0..1" />
+          <End Type="Models.Patient" Role="Patient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mrn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient">
+              <PropertyRef Name="mrnId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="OutreachDBEntities">
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="Models.Patient">
+              <MappingFragment StoreEntitySet="Patient">
+                <ScalarProperty Name="lastupdated" ColumnName="lastupdated" />
+                <ScalarProperty Name="dateadded" ColumnName="dateadded" />
+                <ScalarProperty Name="mrnId" ColumnName="mrnId" />
+                <ScalarProperty Name="photoPath" ColumnName="photoPath" />
+                <ScalarProperty Name="campId" ColumnName="campId" />
+                <ScalarProperty Name="family_contact_number" ColumnName="family_contact_number" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="family_member_name" ColumnName="family_member_name" />
+                <ScalarProperty Name="address_1" ColumnName="address_1" />
+                <ScalarProperty Name="address_2" ColumnName="address_2" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="district" ColumnName="district" />
+                <ScalarProperty Name="block" ColumnName="block" />
+                <ScalarProperty Name="gram_panchayat" ColumnName="gram_panchayat" />
+                <ScalarProperty Name="contact_1" ColumnName="contact_1" />
+                <ScalarProperty Name="contact_2" ColumnName="contact_2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Camps">
+            <EntityTypeMapping TypeName="Models.Camp">
+              <MappingFragment StoreEntitySet="Camp">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="contact_number" ColumnName="contact_number" />
+                <ScalarProperty Name="contact_person" ColumnName="contact_person" />
+                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="location_2" ColumnName="location_2" />
+                <ScalarProperty Name="location_1" ColumnName="location_1" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="camp_patient">
+            <EntityTypeMapping TypeName="Models.camp_patient">
+              <MappingFragment StoreEntitySet="camp_patient">
+                <ScalarProperty Name="patientId" ColumnName="patientId" />
+                <ScalarProperty Name="campId" ColumnName="campId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mrns">
+            <EntityTypeMapping TypeName="Models.mrn">
+              <MappingFragment StoreEntitySet="mrn">
+                <ScalarProperty Name="recordnumber" ColumnName="recordnumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

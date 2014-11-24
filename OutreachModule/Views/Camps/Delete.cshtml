@@ -1,0 +1,96 @@
+﻿@model OutreachModule.Models.Camp
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this camp? All patients originally created within this camp will also be deleted.</h3>
+<div>
+    <h4>Camp</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.location_1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.location_1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.location_2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.location_2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.organizer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.organizer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contact_person)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contact_person)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.contact_number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.contact_number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+@section Scripts {
+    <script>
+        var mes = "@ViewBag.Message";
+        if (mes != '') {
+            window.alert(mes);
+        }
+    </script>
+}

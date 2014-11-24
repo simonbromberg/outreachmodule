@@ -1,0 +1,107 @@
+﻿@model OutreachModule.Models.CampViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Camp</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.camp.type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.location_1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.location_1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.location_2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.location_2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.organizer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.organizer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.contact_person)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.contact_person)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.contact_number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.contact_number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.camp.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.camp.date)
+        </dd>
+
+    </dl>
+</div>
+@{
+    if (Model.campPatients.Count > 0)
+    {
+        <div>
+            <h4>Camp Patients</h4>
+            <ul>
+                @foreach (var patient in Model.campPatients)
+                {
+                    <li>@Html.ActionLink(patient.name, "Patient", new { id = patient.Id }, null)</li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div>This camp has no patients yet</div>
+    }
+}
+
+<p>@Html.ActionLink("Add Patient", "AddPatient", new { campToAddTo = Model.camp.Id })</p>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.camp.Id }) |
+    @Html.ActionLink("Back", "Index", "Home")
+</p>
