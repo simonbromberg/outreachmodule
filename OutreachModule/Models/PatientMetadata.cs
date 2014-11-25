@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-
+using CustomExtensions;
 
 namespace OutreachModule.Models
 {
@@ -22,7 +22,16 @@ namespace OutreachModule.Models
                 return null;
             }
         }
+        public bool search(string query)
+        {
+            var ignoreCase = StringComparison.OrdinalIgnoreCase;
 
+            if (query.Contains("male", ignoreCase))
+            {
+                return gender.EqualsIgnoreCase(query);
+            }
+            return mrn.Contains(query, ignoreCase) || name.Contains(query,ignoreCase) || camp_code.Contains(query,ignoreCase) || address_1.Contains(query,ignoreCase) || address_2.Contains(query,ignoreCase);
+        }
         [Display(Name = "Medical Record Number")]
         public string mrn
         {
@@ -43,7 +52,7 @@ namespace OutreachModule.Models
         [Required]
         public string name;
         [Required]
-        [Display(Name = "Gender")]
+        [Display(Name = "Sex")]
         public string gender;
         [Display(Name = "Birthday")]
         [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy}")]

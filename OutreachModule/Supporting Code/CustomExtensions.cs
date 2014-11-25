@@ -8,5 +8,15 @@ namespace CustomExtensions
         {
             return source.IndexOf(toCheck, comp) >= 0;
         }
+
+        public static bool ContainsIgnoreCase(this string source, string toCheck)
+        {
+            return source.Contains(toCheck, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool EqualsIgnoreCase(this string source, string toCheck)
+        {
+            return source.Equals(toCheck, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

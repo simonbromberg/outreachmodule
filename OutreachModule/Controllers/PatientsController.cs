@@ -22,9 +22,9 @@ namespace OutreachModule.Controllers
             var list = manager.patientList;
             if (!String.IsNullOrEmpty(searchString))
             {
-                var ignoreCase = StringComparison.OrdinalIgnoreCase;
-                list = list.Where(s => s.camp_code.Contains(searchString,ignoreCase) || s.name.Contains(searchString,ignoreCase) || s.mrn.Contains(searchString,ignoreCase)).ToList();
+                list = list.Where(s => s.search(searchString)).ToList();
             }
+            ViewBag.searchString = searchString;
 
             ViewBag.CampSortParm = String.IsNullOrEmpty(sortOrder) ? "code_desc" : "";
             ViewBag.CampSortIcon = String.IsNullOrEmpty(sortOrder) ? "&#9650;" : "&#9660;";

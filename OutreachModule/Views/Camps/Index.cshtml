@@ -6,27 +6,14 @@
 
 <h2>Camps</h2>
 
-<div class="row">
-    <div class="col-md-8">
-        @Html.ActionLink("Create New", "Create")
-    </div>
-    <div class="col-md-4">
-        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "form-inline" }))
-        {
-            <div class="form-group has-feedback">
-                @Html.TextBox("SearchString", null, new { @class = "form-control" })
-                <span class="glyphicon glyphicon-search form-control-feedback"></span>
-            </div>
-            <div class="form-group">
-                <button type="submit" value="Search" class="btn btn-default">Search</button>
-            </div>
-        }
-    </div>
-</div><br />
+@Html.Partial("~/Views/Shared/SearchPartial.cshtml")
 <table class="table">
     <tr>
         <th>
             @Html.ActionLink(Html.DisplayNameFor(model => model.code).ToHtmlString(),"Index", new { sortOrder = ViewBag.CampSortParm }) @MvcHtmlString.Create(ViewBag.CampSortIcon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.type)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.location_1)
@@ -47,6 +34,9 @@
     <tr>
         <td>
             @Html.ActionLink(Html.DisplayFor(modelItem => item.code).ToHtmlString(), "Details", new { id = item.Id })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.type)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.location_1), @Html.DisplayFor(modelItem => item.location_2)
@@ -74,3 +64,6 @@
 }
 
 </table>
+@section Scripts {
+    @Scripts.Render("/Scripts/searchtable.js")
+}

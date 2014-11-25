@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-
+using CustomExtensions;
 
 namespace OutreachModule.Models
 {
@@ -11,6 +11,17 @@ namespace OutreachModule.Models
     [MetadataType(typeof(CampMetadata))]
     public partial class Camp
     {
+        public bool search(string query)
+        {
+            return code.ContainsIgnoreCase(query) || description.ContainsIgnoreCase(query) || location.ContainsIgnoreCase(query) || contact_person.ContainsIgnoreCase(query) || type.ContainsIgnoreCase(query) || organizer.ContainsIgnoreCase(query);
+        }
+        public string location
+        {
+            get
+            {
+                return location_1 + ", " + location_2;
+            }
+        }
         public string selectRow
         {
             get

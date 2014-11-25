@@ -22,8 +22,7 @@ namespace OutreachModule.Controllers
             var list = manager.campList;
             if (!String.IsNullOrEmpty(searchString))
             {
-                var ignoreCase = StringComparison.OrdinalIgnoreCase;
-                list = list.Where(s => s.code.Contains(searchString, ignoreCase) || s.description.Contains(searchString, ignoreCase) || s.location_1.Contains(searchString, ignoreCase) || s.location_2.Contains(searchString, ignoreCase)).ToList();
+                list = list.Where(s => s.search(searchString)).ToList();
             }
 
             ViewBag.CampSortParm = String.IsNullOrEmpty(sortOrder) ? "code_desc" : "";
