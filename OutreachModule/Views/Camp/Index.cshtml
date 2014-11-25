@@ -102,6 +102,11 @@
 
 <p>@Html.ActionLink("Add Patient", "AddPatient", new { campToAddTo = Model.camp.Id })</p>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.camp.Id }) |
+@if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.camp.Id })
+    @Html.Raw(" | ")
+}
     @Html.ActionLink("Back", "Index", "Home")
 </p>
+    

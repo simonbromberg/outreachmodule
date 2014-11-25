@@ -9,7 +9,12 @@
 @Html.Partial("~/Views/Shared/_PatientDetail.cshtml")
 
 <p>
-    @Html.ActionLink("Edit", "EditPatient",new { id = Model.patient.Id },null) |
-    @Html.ActionLink("Delete", "Delete","Patients", new { id = Model.patient.Id },null) |
+    @if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
+    {
+        @Html.ActionLink("Edit", "EditPatient", new { id = Model.patient.Id },null)
+        @Html.Raw(" | ")
+        @Html.ActionLink("Delete", "Delete", "Patients", new { id = Model.patient.Id }, null)
+        @Html.Raw(" | ")
+    }
     @Html.ActionLink("Back to Camp", "Index", new {campId = ViewBag.Camp.Id})
 </p>

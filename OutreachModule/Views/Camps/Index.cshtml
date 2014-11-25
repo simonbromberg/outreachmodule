@@ -6,31 +6,36 @@
 
 <h2>Camps</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div class="row">
+    <div class="col-md-8">
+        @Html.ActionLink("Create New", "Create")
+    </div>
+    <div class="col-md-4">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group has-feedback">
+                @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" value="Search" class="btn btn-default">Search</button>
+            </div>
+        }
+    </div>
+</div><br />
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.code)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.description)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.code).ToHtmlString(),"Index", new { sortOrder = ViewBag.CampSortParm }) @MvcHtmlString.Create(ViewBag.CampSortIcon)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.location_1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.location_2)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.organizer)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.contact_person)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.contact_number)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.date)
@@ -41,16 +46,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.code)
+            @Html.ActionLink(Html.DisplayFor(modelItem => item.code).ToHtmlString(), "Details", new { id = item.Id })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.location_1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.location_2)
+            @Html.DisplayFor(modelItem => item.location_1), @Html.DisplayFor(modelItem => item.location_2)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.organizer)
@@ -59,15 +58,17 @@
             @Html.DisplayFor(modelItem => item.contact_person)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.contact_number)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.date)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+            @if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
+            {   
+                @Html.Raw(" | ")
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.Raw(" | ")
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            }
         </td>
     </tr>
 }

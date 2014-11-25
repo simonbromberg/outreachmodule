@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace OutreachModule.Controllers
 {
+    [Authorize]
     public class CampController : Controller
     {
         private ModelManager manager = new ModelManager();
@@ -29,6 +30,7 @@ namespace OutreachModule.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
         public ActionResult Edit(int? id)
         {        
             if (id == null)
@@ -49,6 +51,7 @@ namespace OutreachModule.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
         public ActionResult Edit(Camp camp)
         {
             if (ModelState.IsValid)

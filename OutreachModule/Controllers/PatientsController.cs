@@ -12,7 +12,7 @@ using CustomExtensions;
 
 namespace OutreachModule.Controllers
 {
-
+    [Authorize]
     public class PatientsController : Controller
     {
         private ModelManager manager = new ModelManager();

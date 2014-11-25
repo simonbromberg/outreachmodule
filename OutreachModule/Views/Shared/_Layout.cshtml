@@ -22,6 +22,11 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Patients Search", "Index", "Patients")</li>
                     <li>@Html.ActionLink("Camps","Index","Camps")</li>
+                    @if (Request.IsAuthenticated && User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
+                    {
+                        <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                        <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

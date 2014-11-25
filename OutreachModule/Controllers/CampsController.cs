@@ -8,16 +8,36 @@ using System.Web;
 using System.Web.Mvc;
 using OutreachModule.Models;
 using System.Diagnostics;
+using CustomExtensions;
 
 namespace OutreachModule.Controllers
 {
+    [Authorize]
     public class CampsController : Controller
     {        
         private ModelManager manager = new ModelManager();
         // GET: Camps
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string searchString)
         {
-            return View(manager.campList);
+            var list = manager.campList;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var ignoreCase = StringComparison.OrdinalIgnoreCase;
+                list = list.Where(s => s.code.Contains(searchString, ignoreCase) || s.description.Contains(searchString, ignoreCase) || s.location_1.Contains(searchString, ignoreCase) || s.location_2.Contains(searchString, ignoreCase)).ToList();
+            }
+
+            ViewBag.CampSortParm = String.IsNullOrEmpty(sortOrder) ? "code_desc" : "";
+            ViewBag.CampSortIcon = String.IsNullOrEmpty(sortOrder) ? "&#9650;" : "&#9660;";
+            switch (sortOrder)
+            {
+                case "code_desc":
+                    list = list.OrderByDescending(s => s.code).ToList();
+                    break;
+                default:
+                    list = list.OrderBy(s => s.code).ToList();
+                    break;
+            }
+            return View(list);
         }
 
         // GET: Camps/Details/5
@@ -64,6 +84,7 @@ namespace OutreachModule.Controllers
             return View(campToCreate);
         }
 
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -84,6 +105,7 @@ namespace OutreachModule.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
         public ActionResult Edit(Camp camp)
         {
             if (ModelState.IsValid)
@@ -97,6 +119,7 @@ namespace OutreachModule.Controllers
         }
 
         // GET: Camps/Delete/5
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -114,6 +137,7 @@ namespace OutreachModule.Controllers
         // POST: Camps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
         public ActionResult DeleteConfirmed(int id)
         {
             if (manager.removeCamp(id))

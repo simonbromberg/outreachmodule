@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace OutreachModule.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private OutreachDBEntities _entities = new OutreachDBEntities();
