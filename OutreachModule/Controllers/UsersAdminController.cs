@@ -90,7 +90,7 @@ namespace OutreachModule.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = userViewModel.Email, Email = userViewModel.Email };
+                var user = new ApplicationUser { UserName = userViewModel.Email, Email = userViewModel.Email, name = userViewModel.name};
                 var adminresult = await UserManager.CreateAsync(user, userViewModel.Password);
 
                 //Add User to the selected Roles 
@@ -165,6 +165,7 @@ namespace OutreachModule.Controllers
 
                 user.UserName = editUser.Email;
                 user.Email = editUser.Email;
+                user.name = editUser.name;
 
                 var userRoles = await UserManager.GetRolesAsync(user.Id);
 

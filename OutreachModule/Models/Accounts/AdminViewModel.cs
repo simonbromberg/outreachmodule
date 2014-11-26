@@ -21,6 +21,11 @@ namespace OutreachModule.Models
         [EmailAddress]
         public string Email { get; set; }
 
+
+        [Required(AllowEmptyStrings = false)]
+        [Display(Name = "Full Name")]
+        public string name { get; set; }
+
         public IEnumerable<SelectListItem> RolesList { get; set; }
     }
 }

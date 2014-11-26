@@ -7,9 +7,35 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using OutreachModule.Models;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Diagnostics;
 
+namespace Microsoft.AspNet.Identity
+{
+    public static class GenericPrincipalExtensions
+    {
+        public static string FullName(this IPrincipal user)
+        {
+            if (user.Identity.IsAuthenticated)
+            {
+                ClaimsIdentity claimsIdentity = user.Identity as ClaimsIdentity;
+                foreach (var claim in claimsIdentity.Claims)
+                {
+                    Debug.Print(claim.Value);
+                    if (claim.Type == "FullName")
+                        return claim.Value;
+                }
+                return "";
+            }
+            else
+                return "";
+        }
+    }
+}
 namespace OutreachModule.Controllers
 {
+    
     [Authorize]
     public class ManageController : Controller
     {
@@ -326,7 +352,8 @@ namespace OutreachModule.Controllers
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, await user.GenerateUserIdentityAsync(UserManager));
+            var identity = await user.GenerateUserIdentityAsync(UserManager);
+            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, identity);
         }
 
         private void AddErrors(IdentityResult result)

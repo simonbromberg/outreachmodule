@@ -120,6 +120,7 @@ namespace OutreachModule
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
             const string name = "admin@example.com";
             const string password = "Admin@123456";
+            const string fullname = "Admin User";
             const string roleName = OutreachRoles.RoleAdmin;
 
             //Create Role Admin if it does not exist
@@ -133,7 +134,7 @@ namespace OutreachModule
             var user = userManager.FindByName(name);
             if (user == null)
             {
-                user = new ApplicationUser { UserName = name, Email = name };
+                user = new ApplicationUser { UserName = name, Email = name, name = fullname};
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
             }
