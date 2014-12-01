@@ -5,15 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c9cd2a3e6e3348d0a2e138bf17c26a36" Name="Diagram1">
-        <EntityTypeShape EntityType="Models.Patient" Width="2" PointX="2" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Models.Camp" Width="1.5" PointX="8.625" PointY="0.5" />
+        <EntityTypeShape EntityType="Models.Patient" Width="2" PointX="2.875" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.Camp" Width="1.5" PointX="8.875" PointY="4.125" />
         <AssociationConnector Association="Models.FK_Patient_ToTable" />
-        <EntityTypeShape EntityType="Models.camp_patient" Width="1.5" PointX="6.125" PointY="4.625" />
+        <EntityTypeShape EntityType="Models.camp_patient" Width="1.5" PointX="6.125" PointY="5.75" />
         <AssociationConnector Association="Models.FK_camp_patient_ToCamp" />
         <AssociationConnector Association="Models.FK_camp_patient_ToPatient" />
-        <EntityTypeShape EntityType="Models.mrn" Width="1.5" PointX="5.375" PointY="0.875" />
+        <EntityTypeShape EntityType="Models.mrn" Width="1.5" PointX="5.125" PointY="8.625" />
         <AssociationConnector Association="Models.FK_Patient_ToMRN" />
-      </Diagram>
+        <EntityTypeShape EntityType="Models.ExamComplaint" Width="1.5" PointX="5.625" PointY="1.75" />
+        <EntityTypeShape EntityType="Models.Examination" Width="1.5" PointX="2.875" PointY="1.25" />
+        <AssociationConnector Association="Models.FK_Examination_ToCamp" />
+        <AssociationConnector Association="Models.FK_ExamComplaint_ToExamination" />
+        <AssociationConnector Association="Models.FK_Examination_ToPatient" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

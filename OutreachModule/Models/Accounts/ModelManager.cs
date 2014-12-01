@@ -21,13 +21,15 @@ namespace OutreachModule.Models
     }
     public class PatientDetailViewModel
     {
-        public PatientDetailViewModel(Patient pt, List<Camp> ptCamps)
+        public PatientDetailViewModel(Patient pt, List<Camp> ptCamps, List<Examination> ptExams)
         {
             patient = pt;
             patientCamps = ptCamps;
+            examinations = ptExams;
         }
         public Patient patient;
         public List<Camp> patientCamps;
+        public List<Examination> examinations;
     }
     public class ModelManager
     {
@@ -85,14 +87,14 @@ namespace OutreachModule.Models
         }
         public SelectList CampTypeSelect(string type = null)
         {
-            var options = new[] { "Type 1", "Type 2","Type 3","Type 4"};
+            var options = new[] { "Type 1", "Type 2", "Type 3", "Type 4" };
             if (type == null)
             {
                 return new SelectList(options.Select(x => new { value = x, text = x }), "value", "text");
             }
             else
             {
-                return new SelectList(options.Select(x=> new { value = x, text = x }),"value","text",type);
+                return new SelectList(options.Select(x => new { value = x, text = x }), "value", "text", type);
             }
         }
 
@@ -123,8 +125,8 @@ namespace OutreachModule.Models
         {
             if (db.Camps.Where(x => x.code == newCamp.code).Count() > 0)
             {
-                    Debug.Print("Camp already exists");
-                    return false;
+                Debug.Print("Camp already exists");
+                return false;
             }
             db.Camps.Add(newCamp);
             return saveChanges();
@@ -140,7 +142,7 @@ namespace OutreachModule.Models
         {
             if (db.camp_patient.Where(s => s.patientId == patient && s.campId == camp).Count() > 0)
             {
-                Debug.Print("Patient " + patient + " already in camp "+ camp);
+                Debug.Print("Patient " + patient + " already in camp " + camp);
                 return true;
             }
             var campPatient = camp_patient.NewWithIDs(patient, camp);
@@ -166,13 +168,15 @@ namespace OutreachModule.Models
                 return null;
             }
             var patientCamps = db.camp_patient.Where(s => s.patientId == pt).ToList().ConvertAll(x => x.Camp);
-            return new PatientDetailViewModel(patient, patientCamps);
+            var examinations = db.Examinations.Where(s => s.patientId == pt).ToList();
+            return new PatientDetailViewModel(patient, patientCamps, examinations);
         }
         public Patient getPatientWithId(int p)
         {
             return db.Patients.Find(p);
         }
-        public List<Patient> patientList {
+        public List<Patient> patientList
+        {
             get
             {
                 return Patients.ToList();
@@ -188,11 +192,13 @@ namespace OutreachModule.Models
 
         public SelectList GenderSelect(string Gender = null)
         {
-            if (Gender == null) {
+            if (Gender == null)
+            {
                 return new SelectList(new[] { "Male", "Female" }.Select(x => new { type = x, text = x }), "type", "text");
             }
 
-            else {
+            else
+            {
                 return new SelectList(new[] { "Male", "Female" }.Select(x => new { type = x, text = x }), "type", "text", Gender);
             }
         }
@@ -211,7 +217,7 @@ namespace OutreachModule.Models
             newPt.lastupdated = DateTime.Now;
             db.Patients.Add(newPt);
             var success = addPatientToCamp(newPt.Id, newPt.campId);
-            
+
             if (imageFile != null && imageFile.ContentLength > 0)
             {
                 var path = "patient" + newPt.Id.ToString() + Path.GetExtension(imageFile.FileName);
@@ -276,6 +282,62 @@ namespace OutreachModule.Models
                 return true;
             }
             return false;
+        }
+
+        // Examination
+        public Examination getExaminationWithId(int e)
+        {
+            return db.Examinations.Find(e);
+        }
+
+        public Examination addExamination(Examination newEx)
+        {
+            try
+            {
+                db.Examinations.Add(newEx);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Error adding examination " + e.Message);
+            }
+            saveChanges();
+            return newEx;
+        }
+
+        public bool addComplaints(List<ExamComplaint> complaints)
+        {
+            foreach (var c in complaints)
+            {
+                try
+                {
+                    db.ExamComplaints.Add(c);
+                }
+                catch (Exception e)
+                {
+                    Debug.Print("Error adding complaint " + e.Message);
+                }
+            }
+            return saveChanges();
+        }
+
+        public List<SelectListItem> listOfComplaintChoices
+        {
+            get
+            {
+                var retList = new List<SelectListItem>();
+                var list = new List<string>() {
+                    "Blurry Vision",
+                    "Dryness",
+                    "Redness",
+                    "Swollen Lid",
+                    "Other"
+                };
+                foreach (var item in list)
+                {
+                    retList.Add(new SelectListItem { Value = item, Text = item, Selected = false });
+                }
+                return retList;
+            }
         }
     }
 }

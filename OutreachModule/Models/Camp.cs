@@ -18,6 +18,7 @@ namespace OutreachModule.Models
         {
             this.Patients = new HashSet<Patient>();
             this.camp_patient = new HashSet<camp_patient>();
+            this.Examinations = new HashSet<Examination>();
         }
     
         public int Id { get; set; }
@@ -33,5 +34,6 @@ namespace OutreachModule.Models
     
         public virtual ICollection<Patient> Patients { get; set; }
         public virtual ICollection<camp_patient> camp_patient { get; set; }
+        public virtual ICollection<Examination> Examinations { get; set; }
     }
 }

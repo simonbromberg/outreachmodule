@@ -28,6 +28,27 @@
           <Property Name="campId" Type="int" Nullable="false" />
           <Property Name="patientId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="ExamComplaint">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="examinationId" Type="int" Nullable="false" />
+          <Property Name="eye" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="complaint" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="otherComplaint" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Examination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="patientID" Type="int" Nullable="false" />
+          <Property Name="dateStarted" Type="datetime" Nullable="false" />
+          <Property Name="dateComplete" Type="datetime" Nullable="false" />
+          <Property Name="user" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="campId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="mrn">
           <Key>
             <PropertyRef Name="Id" />
@@ -84,6 +105,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ExamComplaint_ToExamination">
+          <End Role="Examination" Type="Self.Examination" Multiplicity="1" />
+          <End Role="ExamComplaint" Type="Self.ExamComplaint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Examination">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExamComplaint">
+              <PropertyRef Name="examinationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Examination_ToCamp">
+          <End Role="Camp" Type="Self.Camp" Multiplicity="1" />
+          <End Role="Examination" Type="Self.Examination" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Camp">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Examination">
+              <PropertyRef Name="campId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Examination_ToPatient">
+          <End Role="Patient" Type="Self.Patient" Multiplicity="1" />
+          <End Role="Examination" Type="Self.Examination" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Examination">
+              <PropertyRef Name="patientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Patient_ToCamp">
           <End Role="Camp" Type="Self.Camp" Multiplicity="1" />
           <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
@@ -111,6 +168,8 @@
         <EntityContainer Name="ModelsStoreContainer">
           <EntitySet Name="Camp" EntityType="Self.Camp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="camp_patient" EntityType="Self.camp_patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExamComplaint" EntityType="Self.ExamComplaint" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Examination" EntityType="Self.Examination" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mrn" EntityType="Self.mrn" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_camp_patient_ToCamp" Association="Self.FK_camp_patient_ToCamp">
@@ -120,6 +179,18 @@
           <AssociationSet Name="FK_camp_patient_ToPatient" Association="Self.FK_camp_patient_ToPatient">
             <End Role="Patient" EntitySet="Patient" />
             <End Role="camp_patient" EntitySet="camp_patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExamComplaint_ToExamination" Association="Self.FK_ExamComplaint_ToExamination">
+            <End Role="Examination" EntitySet="Examination" />
+            <End Role="ExamComplaint" EntitySet="ExamComplaint" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Examination_ToCamp" Association="Self.FK_Examination_ToCamp">
+            <End Role="Camp" EntitySet="Camp" />
+            <End Role="Examination" EntitySet="Examination" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Examination_ToPatient" Association="Self.FK_Examination_ToPatient">
+            <End Role="Patient" EntitySet="Patient" />
+            <End Role="Examination" EntitySet="Examination" />
           </AssociationSet>
           <AssociationSet Name="FK_Patient_ToCamp" Association="Self.FK_Patient_ToCamp">
             <End Role="Camp" EntitySet="Camp" />
@@ -161,6 +232,7 @@
           <NavigationProperty Name="mrnRef" Relationship="Models.FK_Patient_ToMRN" FromRole="Patient" ToRole="mrn" />
           <Property Name="dateadded" Type="DateTime" Precision="3" />
           <Property Name="lastupdated" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Examinations" Relationship="Models.FK_Examination_ToPatient" FromRole="Patient" ToRole="Examination" />
         </EntityType>
         <EntityContainer Name="OutreachDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Patients" EntityType="Self.Patient" />
@@ -183,7 +255,21 @@
             <End Role="mrn" EntitySet="mrns" />
             <End Role="Patient" EntitySet="Patients" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="ExamComplaints" EntityType="Models.ExamComplaint" />
+          <EntitySet Name="Examinations" EntityType="Models.Examination" />
+          <AssociationSet Name="FK_Examination_ToCamp" Association="Models.FK_Examination_ToCamp">
+            <End Role="Camp" EntitySet="Camps" />
+            <End Role="Examination" EntitySet="Examinations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExamComplaint_ToExamination" Association="Models.FK_ExamComplaint_ToExamination">
+            <End Role="Examination" EntitySet="Examinations" />
+            <End Role="ExamComplaint" EntitySet="ExamComplaints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Examination_ToPatient" Association="Models.FK_Examination_ToPatient">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Examination" EntitySet="Examinations" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Camp">
           <Key>
             <PropertyRef Name="Id" />
@@ -200,6 +286,7 @@
           <NavigationProperty Name="Patients" Relationship="Models.FK_Patient_ToTable" FromRole="Camp" ToRole="Patient" />
           <NavigationProperty Name="camp_patient" Relationship="Models.FK_camp_patient_ToCamp" FromRole="Camp" ToRole="camp_patient" />
           <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Examinations" Relationship="Models.FK_Examination_ToCamp" FromRole="Camp" ToRole="Examination" />
         </EntityType>
         <Association Name="FK_Patient_ToTable">
           <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
@@ -267,7 +354,68 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="ExamComplaint">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="examinationId" Type="Int32" Nullable="false" />
+          <Property Name="eye" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="complaint" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="otherComplaint" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Examination" Relationship="Models.FK_ExamComplaint_ToExamination" FromRole="ExamComplaint" ToRole="Examination" />
+        </EntityType>
+        <EntityType Name="Examination">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="patientId" Type="Int32" Nullable="false" />
+          <Property Name="dateStarted" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dateComplete" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="user" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="campId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Camp" Relationship="Models.FK_Examination_ToCamp" FromRole="Examination" ToRole="Camp" />
+          <NavigationProperty Name="ExamComplaints" Relationship="Models.FK_ExamComplaint_ToExamination" FromRole="Examination" ToRole="ExamComplaint" />
+          <NavigationProperty Name="Patient" Relationship="Models.FK_Examination_ToPatient" FromRole="Examination" ToRole="Patient" />
+        </EntityType>
+        <Association Name="FK_Examination_ToCamp">
+          <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
+          <End Type="Models.Examination" Role="Examination" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Camp">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Examination">
+              <PropertyRef Name="campId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExamComplaint_ToExamination">
+          <End Type="Models.Examination" Role="Examination" Multiplicity="1" />
+          <End Type="Models.ExamComplaint" Role="ExamComplaint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Examination">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExamComplaint">
+              <PropertyRef Name="examinationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Examination_ToPatient">
+          <End Type="Models.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="Models.Examination" Role="Examination" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Examination">
+              <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -328,6 +476,29 @@
             <EntityTypeMapping TypeName="Models.mrn">
               <MappingFragment StoreEntitySet="mrn">
                 <ScalarProperty Name="recordnumber" ColumnName="recordnumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExamComplaints">
+            <EntityTypeMapping TypeName="Models.ExamComplaint">
+              <MappingFragment StoreEntitySet="ExamComplaint">
+                <ScalarProperty Name="otherComplaint" ColumnName="otherComplaint" />
+                <ScalarProperty Name="complaint" ColumnName="complaint" />
+                <ScalarProperty Name="eye" ColumnName="eye" />
+                <ScalarProperty Name="examinationId" ColumnName="examinationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Examinations">
+            <EntityTypeMapping TypeName="Models.Examination">
+              <MappingFragment StoreEntitySet="Examination">
+                <ScalarProperty Name="campId" ColumnName="campId" />
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="dateComplete" ColumnName="dateComplete" />
+                <ScalarProperty Name="dateStarted" ColumnName="dateStarted" />
+                <ScalarProperty Name="patientId" ColumnName="patientID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

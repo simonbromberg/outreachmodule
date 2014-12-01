@@ -22,7 +22,6 @@ namespace Microsoft.AspNet.Identity
                 ClaimsIdentity claimsIdentity = user.Identity as ClaimsIdentity;
                 foreach (var claim in claimsIdentity.Claims)
                 {
-                    Debug.Print(claim.Value);
                     if (claim.Type == "FullName")
                         return claim.Value;
                 }

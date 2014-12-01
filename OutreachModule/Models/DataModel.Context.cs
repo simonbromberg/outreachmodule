@@ -29,5 +29,7 @@ namespace OutreachModule.Models
         public virtual DbSet<Camp> Camps { get; set; }
         public virtual DbSet<camp_patient> camp_patient { get; set; }
         public virtual DbSet<mrn> mrns { get; set; }
+        public virtual DbSet<ExamComplaint> ExamComplaints { get; set; }
+        public virtual DbSet<Examination> Examinations { get; set; }
     }
 }
