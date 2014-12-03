@@ -265,6 +265,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\outreachmodule.pubxml" />
+    <Content Include="ptimages\placeholder.txt" />
     <Content Include="Scripts\campdatepickersetup.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -403,9 +404,7 @@
     <Content Include="Views\Shared\SearchPartial.cshtml" />
     <Content Include="Views\Examination\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ptimages\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

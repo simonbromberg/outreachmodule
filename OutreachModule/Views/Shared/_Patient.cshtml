@@ -167,7 +167,7 @@
                 @if (Model != null && Model.photoPath != null)
                 {
                     <p>Current:</p>
-                    <img src="@Url.Content("/ptimages/"+Model.photoPath)" alt="@Model.name" style="max-height:150px" />
+                    <img src="@Url.Content("/OutreachModule/ptimages/"+Model.photoPath)" alt="@Model.name" style="max-height:150px" />
                     @Html.HiddenFor(m => m.photoPath)
                 }
             </div>
