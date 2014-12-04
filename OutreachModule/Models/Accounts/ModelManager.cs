@@ -16,8 +16,8 @@ namespace OutreachModule.Models
             camp = cmp;
             campPatients = cmpPatients;
         }
-        public Camp camp;
-        public List<Patient> campPatients;
+        public Camp camp { get; set; }
+        public List<Patient> campPatients { get; set; }
     }
     public class PatientDetailViewModel
     {
@@ -27,9 +27,57 @@ namespace OutreachModule.Models
             patientCamps = ptCamps;
             examinations = ptExams;
         }
-        public Patient patient;
-        public List<Camp> patientCamps;
-        public List<Examination> examinations;
+        public Patient patient { get; set; }
+        public List<Camp> patientCamps { get; set; }
+        public List<Examination> examinations { get; set; }
+    }
+    public class ExaminationDetailModel
+    {
+        public ExaminationDetailModel(Examination ex,List<ExamComplaint> exComplaints) 
+        {
+            examination = ex;
+            complaints = exComplaints;
+        }
+        public Examination examination { get; private set; }
+
+        public List<ExamComplaint> leftEyeComplaints
+        {
+            get
+            {
+                return complaintsForEye("L");
+            }
+        }
+        public List<ExamComplaint> rightEyeComplaints
+        {
+            get
+            {
+                return complaintsForEye("R");
+            }
+        }
+
+        public List<ExamComplaint> leftEyeOcularHistory
+        {
+            get
+            {
+                return ocularHistoryForEye("L");
+            }
+        }
+        public List<ExamComplaint> rightEyeOcularHistory
+        {
+            get
+            {
+                return ocularHistoryForEye("R");
+            }
+        }
+        private List<ExamComplaint> complaints;
+        private List<ExamComplaint> complaintsForEye(string eye)
+        {
+            return complaints.Where(x => (x.eye == eye && x.group == ExamComplaint.GroupComplaint)).ToList();
+        }
+        private List<ExamComplaint> ocularHistoryForEye(string eye)
+        {
+            return complaints.Where(x => (x.eye == eye && x.group == ExamComplaint.GroupOcularHistory)).ToList();
+        }
     }
     public class ModelManager
     {
@@ -267,6 +315,10 @@ namespace OutreachModule.Models
                 db.camp_patient.Remove(row);
             }
             removePatientImage(patient);
+            foreach (var exam in patient.Examinations)
+            {
+                removeExamination(exam);
+            }
             db.Patients.Remove(patient);
             return saveChanges();
         }
@@ -289,7 +341,12 @@ namespace OutreachModule.Models
         {
             return db.Examinations.Find(e);
         }
-
+        public ExaminationDetailModel getExaminationDetailWithId(int e)
+        {
+            Examination ex = getExaminationWithId(e);
+            List<ExamComplaint> complaints = getComplaintsForExam(e);
+            return new ExaminationDetailModel(ex, complaints);
+        }
         public Examination addExamination(Examination newEx)
         {
             try
@@ -303,41 +360,62 @@ namespace OutreachModule.Models
             saveChanges();
             return newEx;
         }
-
-        public bool addComplaints(List<ExamComplaint> complaints)
+        public bool removeExamination(int e)
         {
-            foreach (var c in complaints)
+            var exam = db.Examinations.Find(e);
+            if (exam != null)
             {
-                try
-                {
-                    db.ExamComplaints.Add(c);
-                }
-                catch (Exception e)
-                {
-                    Debug.Print("Error adding complaint " + e.Message);
-                }
+                return removeExamination(exam);
             }
+            return false;
+        }
+        public bool removeExamination(Examination e)
+        {
+            removeComplaintsForExamination(e.Id);
+            db.Examinations.Remove(e);
             return saveChanges();
         }
 
-        public List<SelectListItem> listOfComplaintChoices
+        public List<ExamComplaint> getComplaintsForExam(int examId)
         {
-            get
-            {
-                var retList = new List<SelectListItem>();
-                var list = new List<string>() {
-                    "Blurry Vision",
-                    "Dryness",
-                    "Redness",
-                    "Swollen Lid",
-                    "Other"
-                };
-                foreach (var item in list)
-                {
-                    retList.Add(new SelectListItem { Value = item, Text = item, Selected = false });
-                }
-                return retList;
-            }
+            return db.ExamComplaints.Where(x => x.examinationId == examId).ToList();  
         }
+
+        public bool addComplaintsFrom(ExaminationCreateModel m, int examId)
+        {
+            addComplaints("L",m.SelectedLeftComplaints,m.otherLeft,examId,ExamComplaint.GroupComplaint);
+            addComplaints("R", m.SelectedRightComplaints, m.otherRight, examId, ExamComplaint.GroupComplaint);
+            addComplaints("L", m.SelectedLeftOcularHistory, m.otherOcularHistoryLeft, examId, ExamComplaint.GroupOcularHistory);
+            addComplaints("R", m.SelectedRightOcularHistory, m.otherOcularHistoryRight, examId, ExamComplaint.GroupOcularHistory);
+            return saveChanges();
+        }
+
+        private void removeComplaintsForExamination(int id)
+        {
+            var list = db.ExamComplaints.Where(x => x.examinationId == id);
+            foreach (var ec in list) {
+                db.ExamComplaints.Remove(ec);
+            } 
+        }
+
+        public bool addComplaints(string eye, IEnumerable<CheckboxItem> list, string other, int examId, string group) 
+        {
+            var s = false;
+            string saveOther = null;
+            foreach (var c in list)
+            {
+                if (c.Name == "Other")
+                {
+                    saveOther = other;
+                }
+                else
+                {
+                    saveOther = null;
+                }
+                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, c.Name, saveOther, examId,group));
+            }
+            return s;
+        }
+
     }
 }

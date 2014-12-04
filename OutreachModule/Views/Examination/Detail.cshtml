@@ -1,0 +1,73 @@
+﻿@model OutreachModule.Models.ExaminationDetailModel
+@{
+    ViewBag.Title = "Detail";
+}
+
+<h2>Examination</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Patient Name
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.examination.Patient.name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.examination.Patient.mrn)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.examination.Patient.mrn)
+        </dd>
+        <dt>
+            Camp Code
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.examination.Camp.code)
+        </dd>
+        <dt>
+            Chief Complaints
+        </dt>
+        <dd>
+            <div class="row">
+                <div class="col-md-3">
+                    <b>R/E</b>
+                    @Html.Partial("~/Views/Examination/ComplaintPartial.cshtml", Model.rightEyeComplaints)
+                </div>
+                <div class="col-md-3">
+                    <b>L/E</b>
+                    @Html.Partial("~/Views/Examination/ComplaintPartial.cshtml", Model.leftEyeComplaints)
+                </div>
+            </div>
+        </dd>
+        <dt>
+            Ocular History
+        </dt>
+        <dd>
+            <div class="row">
+                <div class="col-md-3">
+                    <b>R/E</b>
+                    @Html.Partial("~/Views/Examination/ComplaintPartial.cshtml", Model.rightEyeOcularHistory)
+                </div>
+                <div class="col-md-3">
+                    <b>L/E</b>
+                    @Html.Partial("~/Views/Examination/ComplaintPartial.cshtml", Model.leftEyeOcularHistory)
+                </div>
+            </div>
+        </dd>
+    </dl>
+    
+
+
+</div>
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.examination.dateStarted)</dt>
+    <dd>@Html.DisplayFor(model => model.examination.dateStarted)</dd>
+    <dt>@Html.DisplayNameFor(model => model.examination.dateComplete)</dt>
+    <dd>@Html.DisplayFor(model => model.examination.dateComplete)</dd>
+</dl>
+
+@if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
+{
+    @Html.ActionLink("Delete", "Delete", new { examId = Model.examination.Id }, null) @Html.Raw(" | ")
+}
+    @Html.ActionLink("Back", "Patient","Camp", new { id = Model.examination.patientId }, null)

@@ -403,6 +403,8 @@
     <Content Include="Views\UsersAdmin\Index.cshtml" />
     <Content Include="Views\Shared\SearchPartial.cshtml" />
     <Content Include="Views\Examination\Index.cshtml" />
+    <Content Include="Views\Examination\Detail.cshtml" />
+    <Content Include="Views\Examination\ComplaintPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

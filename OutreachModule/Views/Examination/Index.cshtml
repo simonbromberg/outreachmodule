@@ -28,7 +28,8 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-2">
+            <label class="control-label col-md-2">Chief Complaints</label>
+            <div class="col-md-2">
                 <p>R/E</p>
                 @Html.CheckBoxListFor(model => model.PostedRightComplaints.ComplaintIds,model=>model.AvailableComplaints,entity=>entity.Id,entity=>entity.Name,model=>model.SelectedRightComplaints,Position.Vertical)
                 @Html.EditorFor(model => model.otherRight, new { htmlAttributes = new { @class = "form-control", placeholder = "Specify other..." } })
@@ -36,7 +37,20 @@
             <div class="col-md-2">
                 <p>L/E</p>
                 @Html.CheckBoxListFor(model => model.PostedLeftComplaints.ComplaintIds, model => model.AvailableComplaints, entity => entity.Id, entity => entity.Name, model => model.SelectedLeftComplaints, Position.Vertical)
-                @Html.EditorFor(model => model.otherRight, new { htmlAttributes = new { @class = "form-control", placeholder = "Specify other..." } })
+                @Html.EditorFor(model => model.otherLeft, new { htmlAttributes = new { @class = "form-control", placeholder = "Specify other..." } })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">Ocular History</label>
+            <div class="col-md-2">
+                <p>R/E</p>
+                @Html.CheckBoxListFor(model => model.PostedRightOcularHistory.ComplaintIds, model => model.AvailableOcularHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedRightOcularHistory, Position.Vertical)
+                @Html.EditorFor(model => model.otherOcularHistoryRight, new { htmlAttributes = new { @class = "form-control", placeholder = "Specify other..." } })
+            </div>
+            <div class="col-md-2">
+                <p>L/E</p>
+                @Html.CheckBoxListFor(model => model.PostedLeftOcularHistory.ComplaintIds, model => model.AvailableOcularHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedLeftOcularHistory, Position.Vertical)
+                @Html.EditorFor(model => model.otherOcularHistoryLeft, new { htmlAttributes = new { @class = "form-control", placeholder = "Specify other..." } })
             </div>
         </div>
             <div class="form-group">

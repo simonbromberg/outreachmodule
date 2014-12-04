@@ -11,12 +11,17 @@ namespace OutreachModule.Models
 {
     public partial class ExamComplaint
     {
-        public ExamComplaint(string eye, string complaint, string other, int examId)
+        public static string GroupComplaint = "Complaint";
+        public static string GroupOcularHistory = "Ocular History";
+        public static ExamComplaint newComplaintWith(string eye, string complaint, string other, int examId, string group)
         {
-            this.eye = eye;
-            this.complaint = complaint;
-            this.otherComplaint = other;
-            this.examinationId = examId;
+            var c = new ExamComplaint();
+            c.eye = eye;
+            c.complaint = complaint;
+            c.otherComplaint = other;
+            c.examinationId = examId;
+            c.group = group;
+            return c;
         }
     }
     [MetadataType(typeof(ExaminationMetadata))]
@@ -41,7 +46,11 @@ namespace OutreachModule.Models
     public class ExaminationMetadata
     {
         [Display(Name="Date Started")]
-        public System.DateTime dateStarted { get; set; }
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy HH:mm:ss}")]
+        public System.DateTime dateStarted;
+        [Display(Name = "Date Complete")]
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy HH:mm:ss}")]
+        public System.DateTime dateComplete;
     }
     public class CheckboxItem
     {
@@ -77,33 +86,74 @@ namespace OutreachModule.Models
         public string otherLeft { get; set; }
         public string otherRight { get; set; }
 
+        public IEnumerable<CheckboxItem> AvailableOcularHistory { get; set; }
+        public IEnumerable<CheckboxItem> SelectedLeftOcularHistory { get; set; }
+        public IEnumerable<CheckboxItem> SelectedRightOcularHistory { get; set; }
+        public PostedComplaints PostedLeftOcularHistory { get; set; }
+        public PostedComplaints PostedRightOcularHistory { get; set; }
+
+        public string otherOcularHistoryLeft { get; set; }
+        public string otherOcularHistoryRight { get; set; }
+        
         public int campId { get; set; }
         public int patientId { get; set; }
         public System.DateTime dateStarted { get; set; }
         public System.DateTime dateComplete { get; set; }
     }
-    public static class ComplaintRepository
+
+    public enum ListType
     {
-        /// <summary>
-        /// for get fruit for specific id
-        /// </summary>
-        public static CheckboxItem Get(int id)
+        Complaint,
+        OcularHistory,
+        MedicalHistory
+    };
+    public static class ExaminationCheckboxRepository
+    {
+        private static string[] ComplaintOptions = new string[] { "Blurry Vision", "Dryness", "Redness", "Swollen Lid"};
+        private static string[] OcularHistoryOptions = new string[] { "Refractive Error", "Squint", "Corneal Opacity", "Cataract" };
+        private static string[] MedicalHistoryOptions = new string[] { "Diabetes", "High Blood Pressure", "Cancer", "High Cholesterol", "Allergies" };
+        
+        public static CheckboxItem GetComplaints(int id)
         {
-            return GetAll().FirstOrDefault(x => x.Id.Equals(id));
+            return GetList(ListType.Complaint).FirstOrDefault(x => x.Id.Equals(id));
         }
 
-        /// <summary>
-        /// for get all fruits
-        /// </summary>
-        public static IEnumerable<CheckboxItem> GetAll()
-        {                
-            return new List<CheckboxItem> {
-                              new CheckboxItem {Name = "Blurry Vision", Id = 1 },
-                              new CheckboxItem {Name = "Dryness", Id = 2},
-                              new CheckboxItem {Name = "Redness", Id = 3},
-                              new CheckboxItem {Name = "Swollen Lid", Id = 4},
-                              new CheckboxItem {Name = "Other", Id = 5}
-                            };
+        public static CheckboxItem GetOcularHistory(int id)
+        {
+            return GetList(ListType.OcularHistory).FirstOrDefault(x => x.Id.Equals(id));
+        }
+
+        public static CheckboxItem GetMedicalHistory(int id)
+        {
+            return GetList(ListType.MedicalHistory).FirstOrDefault(x => x.Id.Equals(id));
+        }
+
+        public static IEnumerable<CheckboxItem> GetList(ListType type)
+        {
+            var rawList = optionsListForType(type);
+            
+            var list = new List<CheckboxItem>();
+            int i;
+            for (i = 0; i < rawList.Count(); i++) {
+                list.Add(new CheckboxItem { Name = rawList[i], Id = i + 1 });
+            }
+            list.Add(new CheckboxItem {Name = "Other", Id = i + 1});
+            return list;
+        }
+
+        private static string[] optionsListForType(ListType type)
+        {
+            switch (type)
+            {
+                case ListType.Complaint:
+                    return ComplaintOptions;
+                case ListType.OcularHistory:
+                    return OcularHistoryOptions;
+                case ListType.MedicalHistory:
+                    return MedicalHistoryOptions;
+                default:
+                    return null;
+            }
         }
     }
 }

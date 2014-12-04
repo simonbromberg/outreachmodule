@@ -1,0 +1,13 @@
+﻿@model List<OutreachModule.Models.ExamComplaint>
+
+<ul>
+    @foreach (var c in Model)
+    {
+        <li>@Html.DisplayFor(m => c.complaint) 
+        @if (c.complaint == "Other")
+        {
+            @Html.Raw(": " + c.otherComplaint);
+        }               
+         </li>
+    }
+</ul>

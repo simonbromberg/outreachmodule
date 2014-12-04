@@ -37,6 +37,7 @@
           <Property Name="eye" Type="nchar" MaxLength="1" Nullable="false" />
           <Property Name="complaint" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="otherComplaint" Type="nvarchar" MaxLength="50" />
+          <Property Name="group" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Examination">
           <Key>
@@ -364,6 +365,7 @@
           <Property Name="complaint" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="otherComplaint" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Examination" Relationship="Models.FK_ExamComplaint_ToExamination" FromRole="ExamComplaint" ToRole="Examination" />
+          <Property Name="group" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Examination">
           <Key>
@@ -483,6 +485,7 @@
           <EntitySetMapping Name="ExamComplaints">
             <EntityTypeMapping TypeName="Models.ExamComplaint">
               <MappingFragment StoreEntitySet="ExamComplaint">
+                <ScalarProperty Name="group" ColumnName="group" />
                 <ScalarProperty Name="otherComplaint" ColumnName="otherComplaint" />
                 <ScalarProperty Name="complaint" ColumnName="complaint" />
                 <ScalarProperty Name="eye" ColumnName="eye" />

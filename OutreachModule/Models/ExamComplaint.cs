@@ -19,6 +19,7 @@ namespace OutreachModule.Models
         public string eye { get; set; }
         public string complaint { get; set; }
         public string otherComplaint { get; set; }
+        public string group { get; set; }
     
         public virtual Examination Examination { get; set; }
     }

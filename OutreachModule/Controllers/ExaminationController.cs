@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using OutreachModule.Models;
 namespace OutreachModule.Controllers
 {
+    [Authorize]
     public class ExaminationController : Controller
     {
         private ModelManager manager = new ModelManager();
@@ -20,13 +21,10 @@ namespace OutreachModule.Controllers
             }
             ViewBag.camp = manager.getCampWithId((int)campId);
             ViewBag.patient = manager.getPatientWithId((int)patientId);
-            ExaminationCreateModel model = GetExaminationInitialModel();//new ExaminationCreateModel();
+            ExaminationCreateModel model = GetExaminationInitialModel();
             model.campId = (int)campId;
             model.patientId = (int)patientId;
             model.dateStarted = DateTime.Now;
-            //var list = manager.listOfComplaintChoices;
-            //model.leftComplaints = list;
-            //model.rightComplaints = list;
             return View(model);
         }
 
@@ -36,56 +34,74 @@ namespace OutreachModule.Controllers
             var examination = new Examination(m);
             examination.dateComplete = DateTime.Now;
             examination.user = User.Identity.GetUserName();
+            m = FillExaminationModel(m);
             if (m == null)
             {
                 ViewBag.message = "Error saving";
                 return View(m);
             }
             manager.addExamination(examination);
+            manager.addComplaintsFrom(m,examination.Id);
             ViewBag.camp = manager.getCampWithId(m.campId);
-            ViewBag.patient = manager.getPatientWithId(m.patientId);
-            return View("Patient", "Camp", examination.patientId);
+            //ViewBag.patient = manager.getPatientWithId(m.patientId);
+            return RedirectToAction("Patient", "Camp", new { id = m.patientId });
         }
-       
-        private ExaminationCreateModel GetExaminationModel(PostedComplaints postedLeft, PostedComplaints postedRight)
+
+        public ActionResult Detail(int? examId)
+        {
+            if (examId == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var examination = manager.getExaminationDetailWithId((int) examId);
+            return View(examination);
+        }
+
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
+        public ActionResult Delete(int examId)
+        {
+            var exam = manager.getExaminationWithId(examId);
+            manager.removeExamination(exam);
+
+            return RedirectToAction("Patient", "Camp", new { id = exam.patientId });
+        }
+        private List<CheckboxItem> GetSelected(PostedComplaints posted,ListType type)
+        {
+            if (posted != null && posted.ComplaintIds.Any()) {
+                return ExaminationCheckboxRepository.GetList(type)
+                 .Where(x => posted.ComplaintIds.Any(s => x.Id.ToString().Equals(s)))
+                 .ToList();
+            }
+            return new List<CheckboxItem>();
+        }
+        private ExaminationCreateModel FillExaminationModel(ExaminationCreateModel model)
         {
             // setup properties
-            var model = new ExaminationCreateModel();
-            var selectedLeft = new List<CheckboxItem>();
-            var selectedRight = new List<CheckboxItem>();
-            var postedLeftIds = new string[0];
-            var postedRightIds = new string[0];
+            var selectedLeft = GetSelected(model.PostedLeftComplaints,ListType.Complaint);
+            var selectedRight = GetSelected(model.PostedRightComplaints,ListType.Complaint);
+            var postedLeft = model.PostedLeftComplaints;
+            var postedRight = model.PostedRightComplaints;
             if (postedLeft == null) postedLeft = new PostedComplaints();
             if (postedRight == null) postedRight = new PostedComplaints();
-            // if a view model array of posted fruits ids exists
-            // and is not empty,save selected ids
-            if (postedLeft.ComplaintIds != null && postedLeft.ComplaintIds.Any())
-            {
-                postedLeftIds = postedLeft.ComplaintIds;
-            }
-            if (postedRight.ComplaintIds != null && postedRight.ComplaintIds.Any())
-            {
-                postedRightIds = postedRight.ComplaintIds;
-            }
-            // if there are any selected ids saved, create a list of fruits
-            if (postedLeftIds.Any())
-            {
-                selectedLeft = ComplaintRepository.GetAll()
-                 .Where(x => postedLeftIds.Any(s => x.Id.ToString().Equals(s)))
-                 .ToList();
-            }
-            if (postedRightIds.Any())
-            {
-                selectedRight = ComplaintRepository.GetAll()
-                 .Where(x => postedRightIds.Any(s => x.Id.ToString().Equals(s)))
-                 .ToList();
-            }
             //setup a view model
-            model.AvailableComplaints = ComplaintRepository.GetAll().ToList();
+            model.AvailableComplaints = ExaminationCheckboxRepository.GetList(ListType.Complaint);
             model.SelectedLeftComplaints = selectedLeft;
             model.SelectedRightComplaints = selectedRight;
             model.PostedLeftComplaints = postedLeft;
             model.PostedRightComplaints = postedRight;
+
+            selectedLeft = GetSelected(model.PostedLeftOcularHistory,ListType.OcularHistory);
+            selectedRight = GetSelected(model.PostedRightOcularHistory,ListType.OcularHistory);
+            postedLeft = model.PostedLeftOcularHistory;
+            postedRight = model.PostedRightOcularHistory;
+            if (postedLeft == null) postedLeft = new PostedComplaints();
+            if (postedRight == null) postedRight = new PostedComplaints();
+            model.AvailableOcularHistory = ExaminationCheckboxRepository.GetList(ListType.OcularHistory);
+            model.SelectedLeftOcularHistory = selectedLeft;
+            model.SelectedRightOcularHistory = selectedRight;
+            model.PostedLeftOcularHistory = postedLeft;
+            model.PostedRightOcularHistory = postedRight;
+
             return model;
         }
 
@@ -96,13 +112,16 @@ namespace OutreachModule.Controllers
         {
             //setup properties
             var model = new ExaminationCreateModel();
-            var selectedFruits = new List<CheckboxItem>();
+            var selected = new List<CheckboxItem>();
 
             //setup a view model
-            model.AvailableComplaints = ComplaintRepository.GetAll().ToList();
-            model.SelectedLeftComplaints = selectedFruits;
-            model.SelectedRightComplaints = selectedFruits;
+            model.AvailableComplaints = ExaminationCheckboxRepository.GetList(ListType.Complaint);
+            model.SelectedLeftComplaints = selected;
+            model.SelectedRightComplaints = selected;
 
+            model.AvailableOcularHistory = ExaminationCheckboxRepository.GetList(ListType.OcularHistory);
+            model.SelectedLeftOcularHistory = selected;
+            model.SelectedRightOcularHistory = selected;
             return model;
         }
     }

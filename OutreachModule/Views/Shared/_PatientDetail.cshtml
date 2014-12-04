@@ -165,7 +165,7 @@
     <ul class="list-unstyled">
         @foreach (var exam in Model.examinations)
         {
-            <li>Camp @exam.Camp.code: @exam.niceDate</li>
+            <li>@Html.ActionLink("Camp " + exam.Camp.code + ": " + exam.niceDate, "Detail", "Examination",new {examId = exam.Id},null)</li>
         }
     </ul>
 </div>
