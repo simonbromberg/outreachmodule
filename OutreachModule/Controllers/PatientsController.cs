@@ -55,9 +55,10 @@ namespace OutreachModule.Controllers
         // GET: Home/Create
         public ActionResult Create(int? campId)
         {
-            SetGenderViewBag();
-            SetCampViewBag(campId);
-            return View();
+            //SetGenderViewBag();
+            //SetCampViewBag(campId);
+            //return View();
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Home/Create

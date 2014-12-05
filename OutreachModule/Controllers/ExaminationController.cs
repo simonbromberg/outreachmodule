@@ -34,6 +34,7 @@ namespace OutreachModule.Controllers
             var examination = new Examination(m);
             examination.dateComplete = DateTime.Now;
             examination.user = User.Identity.GetUserName();
+            examination.spectacles = m.spectacles;
             m = FillExaminationModel(m);
             if (m == null)
             {
@@ -77,10 +78,10 @@ namespace OutreachModule.Controllers
         private ExaminationCreateModel FillExaminationModel(ExaminationCreateModel model)
         {
             // setup properties
-            var selectedLeft = GetSelected(model.PostedLeftComplaints,ListType.Complaint);
-            var selectedRight = GetSelected(model.PostedRightComplaints,ListType.Complaint);
             var postedLeft = model.PostedLeftComplaints;
             var postedRight = model.PostedRightComplaints;
+            var selectedLeft = GetSelected(postedLeft, ListType.Complaint);
+            var selectedRight = GetSelected(postedRight, ListType.Complaint);
             if (postedLeft == null) postedLeft = new PostedComplaints();
             if (postedRight == null) postedRight = new PostedComplaints();
             //setup a view model
@@ -90,10 +91,10 @@ namespace OutreachModule.Controllers
             model.PostedLeftComplaints = postedLeft;
             model.PostedRightComplaints = postedRight;
 
-            selectedLeft = GetSelected(model.PostedLeftOcularHistory,ListType.OcularHistory);
-            selectedRight = GetSelected(model.PostedRightOcularHistory,ListType.OcularHistory);
             postedLeft = model.PostedLeftOcularHistory;
             postedRight = model.PostedRightOcularHistory;
+            selectedLeft = GetSelected(postedLeft, ListType.OcularHistory);
+            selectedRight = GetSelected(postedRight, ListType.OcularHistory);
             if (postedLeft == null) postedLeft = new PostedComplaints();
             if (postedRight == null) postedRight = new PostedComplaints();
             model.AvailableOcularHistory = ExaminationCheckboxRepository.GetList(ListType.OcularHistory);
@@ -102,11 +103,23 @@ namespace OutreachModule.Controllers
             model.PostedLeftOcularHistory = postedLeft;
             model.PostedRightOcularHistory = postedRight;
 
+            postedLeft = model.PostedMedicalHistory;
+            postedRight = model.PostedFamilyHistory;
+            selectedLeft = GetSelected(postedLeft, ListType.MedicalHistory);
+            selectedRight = GetSelected(postedRight, ListType.MedicalHistory);
+            if (postedLeft == null) postedLeft = new PostedComplaints();
+            if (postedRight == null) postedRight = new PostedComplaints();
+            model.AvailableMedicalHistory = ExaminationCheckboxRepository.GetList(ListType.MedicalHistory);
+            model.SelectedMedicalHistory = selectedLeft;
+            model.SelectedFamilyHistory = selectedRight;
+            model.PostedMedicalHistory = postedLeft;
+            model.PostedFamilyHistory = postedRight;
+
             return model;
         }
 
         /// <summary>
-        /// for setup initial view model for all fruits
+        /// for setup initial view model
         /// </summary>
         private ExaminationCreateModel GetExaminationInitialModel()
         {
@@ -122,6 +135,10 @@ namespace OutreachModule.Controllers
             model.AvailableOcularHistory = ExaminationCheckboxRepository.GetList(ListType.OcularHistory);
             model.SelectedLeftOcularHistory = selected;
             model.SelectedRightOcularHistory = selected;
+
+            model.AvailableMedicalHistory = ExaminationCheckboxRepository.GetList(ListType.MedicalHistory);
+            model.SelectedMedicalHistory = selected;
+            model.SelectedFamilyHistory = selected;
             return model;
         }
     }

@@ -25,6 +25,7 @@ namespace OutreachModule.Models
         public System.DateTime dateComplete { get; set; }
         public string user { get; set; }
         public int campId { get; set; }
+        public bool spectacles { get; set; }
     
         public virtual Camp Camp { get; set; }
         public virtual ICollection<ExamComplaint> ExamComplaints { get; set; }

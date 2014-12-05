@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using OutreachModule.Models;
 using System.Diagnostics;
 using CustomExtensions;
-
+// List all camps in a searchable table
 namespace OutreachModule.Controllers
 {
     [Authorize]

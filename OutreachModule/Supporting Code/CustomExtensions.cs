@@ -6,6 +6,8 @@ namespace CustomExtensions
     {
         public static bool Contains(this string source, string toCheck, StringComparison comp)
         {
+            if (source == null || source.Length == 0 || source.Length < toCheck.Length) { return false; }
+
             return source.IndexOf(toCheck, comp) >= 0;
         }
 

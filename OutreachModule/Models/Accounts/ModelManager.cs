@@ -69,6 +69,20 @@ namespace OutreachModule.Models
                 return ocularHistoryForEye("R");
             }
         }
+        public List<ExamComplaint> medicalHistory
+        {
+            get
+            {
+                return medicalHistoryForGroup("M");
+            }
+        }
+        public List<ExamComplaint> familyHistory
+        {
+            get
+            {
+                return medicalHistoryForGroup("F");
+            }
+        }
         private List<ExamComplaint> complaints;
         private List<ExamComplaint> complaintsForEye(string eye)
         {
@@ -77,6 +91,10 @@ namespace OutreachModule.Models
         private List<ExamComplaint> ocularHistoryForEye(string eye)
         {
             return complaints.Where(x => (x.eye == eye && x.group == ExamComplaint.GroupOcularHistory)).ToList();
+        }
+        private List<ExamComplaint> medicalHistoryForGroup(string MorF)
+        {
+            return complaints.Where(x => (x.eye == MorF && x.group == ExamComplaint.GroupMedicalHistory)).ToList();
         }
     }
     public class ModelManager
@@ -387,6 +405,8 @@ namespace OutreachModule.Models
             addComplaints("R", m.SelectedRightComplaints, m.otherRight, examId, ExamComplaint.GroupComplaint);
             addComplaints("L", m.SelectedLeftOcularHistory, m.otherOcularHistoryLeft, examId, ExamComplaint.GroupOcularHistory);
             addComplaints("R", m.SelectedRightOcularHistory, m.otherOcularHistoryRight, examId, ExamComplaint.GroupOcularHistory);
+            addComplaints("M", m.SelectedMedicalHistory, m.otherMedicalHistory, examId, ExamComplaint.GroupMedicalHistory);
+            addComplaints("F", m.SelectedRightOcularHistory, m.otherFamilyHistory, examId, ExamComplaint.GroupMedicalHistory);
             return saveChanges();
         }
 

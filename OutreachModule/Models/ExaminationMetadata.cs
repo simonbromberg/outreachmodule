@@ -13,6 +13,7 @@ namespace OutreachModule.Models
     {
         public static string GroupComplaint = "Complaint";
         public static string GroupOcularHistory = "Ocular History";
+        public static string GroupMedicalHistory = "Medical History";
         public static ExamComplaint newComplaintWith(string eye, string complaint, string other, int examId, string group)
         {
             var c = new ExamComplaint();
@@ -94,7 +95,18 @@ namespace OutreachModule.Models
 
         public string otherOcularHistoryLeft { get; set; }
         public string otherOcularHistoryRight { get; set; }
-        
+
+        public IEnumerable<CheckboxItem> AvailableMedicalHistory { get; set; }
+        public IEnumerable<CheckboxItem> SelectedMedicalHistory { get; set; }
+        public IEnumerable<CheckboxItem> SelectedFamilyHistory { get; set; }
+        public PostedComplaints PostedMedicalHistory { get; set; }
+        public PostedComplaints PostedFamilyHistory { get; set; }
+
+        public string otherMedicalHistory { get; set; }
+        public string otherFamilyHistory { get; set; }
+
+        public bool spectacles { get; set; }
+
         public int campId { get; set; }
         public int patientId { get; set; }
         public System.DateTime dateStarted { get; set; }

@@ -54,6 +54,27 @@
                 </div>
             </div>
         </dd>
+        <dt>
+            History
+        </dt>
+        <dd>
+            <div class="row">
+                <div class="col-md-3">
+                    <b>Medical History</b>
+                    @Html.Partial("~/Views/Examination/ComplaintPartial.cshtml", Model.medicalHistory)
+                </div>
+                <div class="col-md-3">
+                    <b>Family History</b>
+                    @Html.Partial("~/Views/Examination/ComplaintPartial.cshtml", Model.familyHistory)
+                </div>
+            </div>
+        </dd>
+        <dt>
+            Spectacles
+        </dt>
+        <dd>
+            @Html.DisplayFor(model=>model.examination.spectacles)
+        </dd>
     </dl>
     
 
