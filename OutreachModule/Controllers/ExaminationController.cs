@@ -19,12 +19,12 @@ namespace OutreachModule.Controllers
             {
                 return RedirectToAction("Index","Home");
             }
-            ViewBag.camp = manager.getCampWithId((int)campId);
-            ViewBag.patient = manager.getPatientWithId((int)patientId);
+            var camp = manager.getCampWithId((int)campId);
+            var patient = manager.getPatientWithId((int)patientId);
             ExaminationCreateModel model = GetExaminationInitialModel();
-            model.campId = (int)campId;
-            model.patientId = (int)patientId;
             model.dateStarted = DateTime.Now;
+            model.patient = patient;
+            model.camp = camp;
             return View(model);
         }
 
@@ -44,7 +44,6 @@ namespace OutreachModule.Controllers
             manager.addExamination(examination);
             manager.addComplaintsFrom(m,examination.Id);
             ViewBag.camp = manager.getCampWithId(m.campId);
-            //ViewBag.patient = manager.getPatientWithId(m.patientId);
             return RedirectToAction("Patient", "Camp", new { id = m.patientId });
         }
 

@@ -32,7 +32,6 @@ namespace OutreachModule.Models
         {
             campId = model.campId;
             patientId = model.patientId;
-            campId = model.campId;
             dateStarted = model.dateStarted;
         }
         public string niceDate
@@ -107,8 +106,27 @@ namespace OutreachModule.Models
 
         public bool spectacles { get; set; }
 
+        private Camp _camp;
+        public Camp camp
+        {
+            get { return _camp; }
+            set 
+            { 
+                _camp = value;
+                campId = value.Id;
+            }
+        }
+        private Patient _patient;
+        public Patient patient {
+            get { return _patient; }
+            set {
+                _patient = value;
+                patientId = value.Id;
+            }
+        }
         public int campId { get; set; }
         public int patientId { get; set; }
+        public string photoPath { get; set; }
         public System.DateTime dateStarted { get; set; }
         public System.DateTime dateComplete { get; set; }
     }

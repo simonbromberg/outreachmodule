@@ -5,6 +5,21 @@
 }
 
 <h2>Examination</h2>
+<div class="row">
+    <div class="col-md-1">
+        <img src="@Url.Content("/OutreachModule/ptimages/"+Model.patient.photoPath)" alt="@Model.patient.name" style="max-height:100px" />
+    </div>
+    <div class="col-md-4">
+        <ul class="list-unstyled">
+            <li>@Model.patient.mrn</li>
+            <li>@Model.patient.name</li>
+            <li>@Model.patient.gender, @Model.patient.age</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        @Model.camp.code, @Html.DisplayFor(model=>model.camp.date)
+    </div>
+</div>
 
 @using (Html.BeginForm())
 {
@@ -14,19 +29,7 @@
         <h4>Create new examination</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <label class="control-label col-md-2">Camp Code</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@ViewBag.camp.code</p>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-2">Patient</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@ViewBag.patient.name</p>
-            </div>
-        </div>
         <div class="form-group">
             <label class="control-label col-md-2">Chief Complaints</label>
             <div class="col-md-2">
@@ -81,14 +84,14 @@
             </div>
         </div>
         @Html.HiddenFor(model => model.dateStarted)
-        @Html.HiddenFor(model => model.patientId)
         @Html.HiddenFor(model => model.campId)
+        @Html.HiddenFor(model => model.patientId)
     </div>
 
 }
 
 <div>
-    @Html.ActionLink("Back", "Index", "Camp", null, null, null, new { campId = ViewBag.camp.Id }, null)
+    @Html.ActionLink("Back", "Index", "Camp", null, null, null, new { campId = @Model.campId }, null)
 </div>
 
 @section Scripts {
