@@ -378,6 +378,11 @@ namespace OutreachModule.Models
             saveChanges();
             return newEx;
         }
+        public bool editExamination(Examination e)
+        {            
+            db.Entry(e).State = EntityState.Modified;
+            return saveChanges();
+        }
         public bool removeExamination(int e)
         {
             var exam = db.Examinations.Find(e);
@@ -401,15 +406,22 @@ namespace OutreachModule.Models
 
         public bool addComplaintsFrom(ExaminationCreateModel m, int examId)
         {
-            addComplaints("L",m.SelectedLeftComplaints,m.otherLeft,examId,ExamComplaint.GroupComplaint);
-            addComplaints("R", m.SelectedRightComplaints, m.otherRight, examId, ExamComplaint.GroupComplaint);
-            addComplaints("L", m.SelectedLeftOcularHistory, m.otherOcularHistoryLeft, examId, ExamComplaint.GroupOcularHistory);
-            addComplaints("R", m.SelectedRightOcularHistory, m.otherOcularHistoryRight, examId, ExamComplaint.GroupOcularHistory);
-            addComplaints("M", m.SelectedMedicalHistory, m.otherMedicalHistory, examId, ExamComplaint.GroupMedicalHistory);
-            addComplaints("F", m.SelectedRightOcularHistory, m.otherFamilyHistory, examId, ExamComplaint.GroupMedicalHistory);
+            addComplaints("L",m.SelectedLeftComplaints,m.hasOtherComplaintsLeft ? m.otherLeft : null,examId,ExamComplaint.GroupComplaint);
+            addComplaints("R", m.SelectedRightComplaints, m.hasOtherComplaintsRight ? m.otherRight : null, examId, ExamComplaint.GroupComplaint);
+            addComplaints("L", m.SelectedLeftOcularHistory, m.hasOtherOcularHistoryLeft ? m.otherOcularHistoryLeft : null, examId, ExamComplaint.GroupOcularHistory);
+            addComplaints("R", m.SelectedRightOcularHistory, m.hasOtherOcularHistoryRight ? m.otherOcularHistoryRight : null, examId, ExamComplaint.GroupOcularHistory);
+            addComplaints("M", m.SelectedMedicalHistory, m.hasOtherMedicalHistory ? m.otherMedicalHistory : null, examId, ExamComplaint.GroupMedicalHistory);
+            addComplaints("F", m.SelectedFamilyHistory, m.hasOtherFamilyHistory ? m.otherFamilyHistory : null, examId, ExamComplaint.GroupMedicalHistory);
             return saveChanges();
         }
 
+        public bool editComplaints(ExaminationCreateModel m, int examId)
+        {
+            // easier just to remove and re-add, although that's pretty wasteful...s
+            removeComplaintsForExamination(examId);
+            addComplaintsFrom(m, examId);
+            return saveChanges();
+        }
         private void removeComplaintsForExamination(int id)
         {
             var list = db.ExamComplaints.Where(x => x.examinationId == id);
@@ -418,23 +430,16 @@ namespace OutreachModule.Models
             } 
         }
 
-        public bool addComplaints(string eye, IEnumerable<CheckboxItem> list, string other, int examId, string group) 
+        public void addComplaints(string eye, IEnumerable<CheckboxItem> list, string other, int examId, string group) 
         {
-            var s = false;
-            string saveOther = null;
             foreach (var c in list)
             {
-                if (c.Name == "Other")
-                {
-                    saveOther = other;
-                }
-                else
-                {
-                    saveOther = null;
-                }
-                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, c.Name, saveOther, examId,group));
+                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, c.Name,null, examId,group));
             }
-            return s;
+            if (other != null)
+            {
+                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, "Other", other, examId, group));
+            }
         }
 
     }

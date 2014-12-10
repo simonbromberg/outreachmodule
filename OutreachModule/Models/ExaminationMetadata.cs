@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
+using System.Diagnostics;
 
 namespace OutreachModule.Models
 
@@ -30,8 +31,8 @@ namespace OutreachModule.Models
     {
         public Examination(ExaminationCreateModel model)
         {
-            campId = model.campId;
-            patientId = model.patientId;
+            campId = (int)model.campId;
+            patientId = (int)model.patientId;
             dateStarted = model.dateStarted;
         }
         public string niceDate
@@ -77,6 +78,14 @@ namespace OutreachModule.Models
 
     public class ExaminationCreateModel
     {
+        public string description
+        {
+            get
+            {
+                return "Camp: " + campId.ToString() + ", Patient:" + patientId.ToString() + ", Examination" + examinationID.ToString() + "\nDate Started: " + dateStarted.ToShortDateString() + ", Completed: " + dateComplete.ToShortDateString() + ", Spectacles " + spectacles.ToString();
+            }
+        }
+        public Nullable<int> examinationID {get; set;} //if based on existing examination
         public IEnumerable<CheckboxItem> AvailableComplaints { get; set; }
         public IEnumerable<CheckboxItem> SelectedLeftComplaints { get; set; }
         public IEnumerable<CheckboxItem> SelectedRightComplaints { get; set; }
@@ -85,6 +94,8 @@ namespace OutreachModule.Models
 
         public string otherLeft { get; set; }
         public string otherRight { get; set; }
+        public bool hasOtherComplaintsRight { get; set; }
+        public bool hasOtherComplaintsLeft {get;set;}
 
         public IEnumerable<CheckboxItem> AvailableOcularHistory { get; set; }
         public IEnumerable<CheckboxItem> SelectedLeftOcularHistory { get; set; }
@@ -94,6 +105,8 @@ namespace OutreachModule.Models
 
         public string otherOcularHistoryLeft { get; set; }
         public string otherOcularHistoryRight { get; set; }
+        public bool hasOtherOcularHistoryRight { get; set; }
+        public bool hasOtherOcularHistoryLeft { get; set; }
 
         public IEnumerable<CheckboxItem> AvailableMedicalHistory { get; set; }
         public IEnumerable<CheckboxItem> SelectedMedicalHistory { get; set; }
@@ -103,6 +116,8 @@ namespace OutreachModule.Models
 
         public string otherMedicalHistory { get; set; }
         public string otherFamilyHistory { get; set; }
+        public bool hasOtherMedicalHistory { get; set; }
+        public bool hasOtherFamilyHistory { get; set; }
 
         public bool spectacles { get; set; }
 
@@ -111,7 +126,8 @@ namespace OutreachModule.Models
         {
             get { return _camp; }
             set 
-            { 
+            {
+                Debug.Print("Setting camp");
                 _camp = value;
                 campId = value.Id;
             }
@@ -120,12 +136,14 @@ namespace OutreachModule.Models
         public Patient patient {
             get { return _patient; }
             set {
+                Debug.Print("Setting patient");
                 _patient = value;
                 patientId = value.Id;
             }
         }
-        public int campId { get; set; }
-        public int patientId { get; set; }
+
+        public Nullable<int> campId { get; set; }
+        public Nullable<int> patientId { get; set; }
         public string photoPath { get; set; }
         public System.DateTime dateStarted { get; set; }
         public System.DateTime dateComplete { get; set; }
@@ -142,7 +160,7 @@ namespace OutreachModule.Models
         private static string[] ComplaintOptions = new string[] { "Blurry Vision", "Dryness", "Redness", "Swollen Lid"};
         private static string[] OcularHistoryOptions = new string[] { "Refractive Error", "Squint", "Corneal Opacity", "Cataract" };
         private static string[] MedicalHistoryOptions = new string[] { "Diabetes", "High Blood Pressure", "Cancer", "High Cholesterol", "Allergies" };
-        
+
         public static CheckboxItem GetComplaints(int id)
         {
             return GetList(ListType.Complaint).FirstOrDefault(x => x.Id.Equals(id));
@@ -167,7 +185,7 @@ namespace OutreachModule.Models
             for (i = 0; i < rawList.Count(); i++) {
                 list.Add(new CheckboxItem { Name = rawList[i], Id = i + 1 });
             }
-            list.Add(new CheckboxItem {Name = "Other", Id = i + 1});
+            //list.Add(new CheckboxItem {Name = "Other", Id = i + 1});
             return list;
         }
 

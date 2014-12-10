@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using OutreachModule.Models;
+using System.Diagnostics;
 namespace OutreachModule.Controllers
 {
     [Authorize]
@@ -13,14 +14,16 @@ namespace OutreachModule.Controllers
     {
         private ModelManager manager = new ModelManager();
         // GET: Examination
-        public ActionResult Index(int? patientId, int? campId)
+        public ActionResult Index(int? pt, int? cmp)
         {
-            if (patientId == null || campId == null)
+            Debug.Print("index get action result");
+            if (pt == null || cmp == null)
             {
                 return RedirectToAction("Index","Home");
             }
-            var camp = manager.getCampWithId((int)campId);
-            var patient = manager.getPatientWithId((int)patientId);
+
+            var camp = manager.getCampWithId((int)cmp);
+            var patient = manager.getPatientWithId((int)pt);
             ExaminationCreateModel model = GetExaminationInitialModel();
             model.dateStarted = DateTime.Now;
             model.patient = patient;
@@ -29,24 +32,54 @@ namespace OutreachModule.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(ExaminationCreateModel m)
+        public ActionResult Index(ExaminationCreateModel m,string Command)
         {
-            var examination = new Examination(m);
+            Debug.Print("POST: \n"+m.description);
+            Examination examination;
+            bool shouldUpdate = false;
+            Debug.Print(m.examinationID.ToString() + " " + Command);
+            if (m.examinationID != null)
+            {
+                Debug.Print("existing examination");
+                shouldUpdate = true;
+                examination = manager.getExaminationWithId((int)m.examinationID);
+            }
+            else
+            {
+                Debug.Print("New examination");
+                examination = new Examination(m);
+            }
             examination.dateComplete = DateTime.Now;
             examination.user = User.Identity.GetUserName();
             examination.spectacles = m.spectacles;
             m = FillExaminationModel(m);
-            if (m == null)
+
+            if (shouldUpdate)
             {
-                ViewBag.message = "Error saving";
+                manager.editExamination(examination);
+                manager.editComplaints(m, examination.Id);
+            }
+            else {
+                
+                manager.addExamination(examination);
+                Debug.Print("Adding new examination " + examination.Id.ToString());
+                manager.addComplaintsFrom(m,examination.Id);
+
+            }
+            ViewBag.camp = manager.getCampWithId((int)m.campId);
+
+            if (Command == "Save") // save without discharge
+            {
+                m.examinationID = examination.Id;
+                Debug.Print(m.examinationID.ToString());
+                m.patient = manager.getPatientWithId(examination.patientId);
+                m.camp = manager.getCampWithId(examination.campId);
+                ModelState.Clear();
                 return View(m);
             }
-            manager.addExamination(examination);
-            manager.addComplaintsFrom(m,examination.Id);
-            ViewBag.camp = manager.getCampWithId(m.campId);
+
             return RedirectToAction("Patient", "Camp", new { id = m.patientId });
         }
-
         public ActionResult Detail(int? examId)
         {
             if (examId == null)

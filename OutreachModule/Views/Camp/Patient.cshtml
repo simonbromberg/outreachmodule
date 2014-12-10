@@ -10,7 +10,7 @@
     </div>
     <div class="col-md-5">
         <br/>
-        <button type="button" class="btn btn-default" onclick="location.href='@Html.Raw(Url.Action("Index","Examination",new {patientId = Model.patient.Id, campId = ViewBag.camp.Id}))'">New Examination</button>
+        <button type="button" class="btn btn-default" onclick="location.href='@Html.Raw(Url.Action("Index","Examination",new {pt = Model.patient.Id, cmp = ViewBag.camp.Id}))'">New Examination</button>
     </div>
 </div>
 
@@ -22,7 +22,7 @@
     {
         @Html.ActionLink("Edit", "EditPatient", new { id = Model.patient.Id },null)
         @Html.Raw(" | ")
-        @Html.ActionLink("Delete", "Delete", "Patients", new { id = Model.patient.Id }, null)
+        @Html.ActionLink("Delete", "DeletePatient", new { patientId = Model.patient.Id }, new { onclick = "return confirm('Are you sure you wish to delete this patient?');" })
         @Html.Raw(" | ")
     }
     @Html.ActionLink("Back to Camp", "Index", new {campId = ViewBag.Camp.Id})
