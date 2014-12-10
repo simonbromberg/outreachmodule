@@ -168,4 +168,12 @@
             <li>@Html.ActionLink("Camp " + exam.Camp.code + ": " + exam.niceDate, "Detail", "Examination",new {examId = exam.Id},null)</li>
         }
     </ul>
+    @if (Model.examinations.Count == 0)
+    {
+        <p>This patient has no examinations yet</p>
+    }
+    @if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin) && Model.examinations.Count > 0)
+    {
+        @Html.ActionLink("Delete All Examinations", "DeleteAllPatientExaminations", new { patientId = Model.patient.Id }, new { onclick = "return confirm('Are you sure you wish to delete all examinations for this patient?');" })
+    }
 </div>

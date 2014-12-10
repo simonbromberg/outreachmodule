@@ -122,7 +122,43 @@ namespace OutreachModule.Controllers
             var patient = manager.getPatientViewModel((int)id);
             return View(patient);
         }
-
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
+        public ActionResult DeletePatient(int? patientId)
+        {
+            var camp = getCamp();
+            if (patientId == null)
+            {
+                return RedirectToAction("Index", new { campId = camp.Id });
+            }
+            else
+            {
+                if (!manager.removePatient((int)patientId))
+                {
+                    ViewBag.Message = "Patient failed to be removed";
+                    return RedirectToAction("Patient", new { id = patientId });
+                }
+                return RedirectToAction("Index", new { campId = camp.Id });
+                
+            }
+        }
+        [Authorize(Roles=OutreachRoles.RoleAdmin)]
+        public ActionResult DeleteAllPatientExaminations(int? patientId)
+        {
+            var camp = getCamp();
+            if (patientId == null)
+            {
+                return RedirectToAction("Index",new {campId = camp.Id});
+            }
+            else
+            {
+                var patient = manager.getPatientWithId((int)patientId);
+                var examinations = patient.Examinations.ToList();
+                foreach (var e in examinations) { 
+                    manager.removeExamination(e);
+                }
+                return RedirectToAction("Patient", new { id = patientId });
+            }
+        }
         public ActionResult EditPatient(int? id)
         {
             ViewBag.camp = getCamp();
