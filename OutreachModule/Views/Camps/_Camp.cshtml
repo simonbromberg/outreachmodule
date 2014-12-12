@@ -74,7 +74,7 @@
             @Html.LabelFor(model => model.date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @{
-                    if (Model != null) {
+                    if (Model != null && Model.date != null) {
                         @Html.EditorFor(model => model.date, new { htmlAttributes = new { @Value = ((DateTime)Model.date).ToString("d MMMM yyyy"), @class = "form-control datepicker" } })
                     }
                     else {
