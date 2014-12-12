@@ -71,7 +71,6 @@ namespace OutreachModule.Controllers
             if (Command == "Save") // save without discharge
             {
                 m.examinationID = examination.Id;
-                Debug.Print(m.examinationID.ToString());
                 m.patient = manager.getPatientWithId(examination.patientId);
                 m.camp = manager.getCampWithId(examination.campId);
                 ModelState.Clear();
@@ -79,6 +78,11 @@ namespace OutreachModule.Controllers
             }
 
             return RedirectToAction("Patient", "Camp", new { id = m.patientId });
+        }
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public ActionResult AddOther(string name)
+        {
+            return View(new OtherListModel(name));
         }
         public ActionResult Detail(int? examId)
         {

@@ -1,0 +1,12 @@
+﻿@model OutreachModule.Models.OtherListModel
+@{
+    Layout = null;
+}
+<span class="input-group other-item-group" style="margin-top: 10px;">
+    @Html.EditorForMany(model => model.list, Model.name)
+    <span class="input-group-btn">
+        <button class="btn btn-default remove-other" type="button" value="x">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </span>
+</span>

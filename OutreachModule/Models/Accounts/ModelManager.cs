@@ -333,7 +333,8 @@ namespace OutreachModule.Models
                 db.camp_patient.Remove(row);
             }
             removePatientImage(patient);
-            foreach (var exam in patient.Examinations)
+            var examinations = patient.Examinations.ToList();
+            foreach (var exam in examinations)
             {
                 removeExamination(exam);
             }
@@ -406,8 +407,10 @@ namespace OutreachModule.Models
 
         public bool addComplaintsFrom(ExaminationCreateModel m, int examId)
         {
-            addComplaints("L",m.SelectedLeftComplaints,m.hasOtherComplaintsLeft ? m.otherLeft : null,examId,ExamComplaint.GroupComplaint);
-            addComplaints("R", m.SelectedRightComplaints, m.hasOtherComplaintsRight ? m.otherRight : null, examId, ExamComplaint.GroupComplaint);
+            //addComplaints("L",m.SelectedLeftComplaints,m.OtherComplaintsLeft.list,examId,ExamComplaint.GroupComplaint);
+            //addComplaints("R", m.SelectedRightComplaints,m.OtherComplaintsRight.list, examId, ExamComplaint.GroupComplaint);
+            addComplaints("L", m.SelectedLeftComplaints, m.hasOtherComplaintsLeft ? m.otherLeft : null, examId, ExamComplaint.GroupComplaint);
+            addComplaints("R", m.SelectedRightComplaints,m.hasOtherComplaintsRight ? m.otherRight : null, examId, ExamComplaint.GroupComplaint);
             addComplaints("L", m.SelectedLeftOcularHistory, m.hasOtherOcularHistoryLeft ? m.otherOcularHistoryLeft : null, examId, ExamComplaint.GroupOcularHistory);
             addComplaints("R", m.SelectedRightOcularHistory, m.hasOtherOcularHistoryRight ? m.otherOcularHistoryRight : null, examId, ExamComplaint.GroupOcularHistory);
             addComplaints("M", m.SelectedMedicalHistory, m.hasOtherMedicalHistory ? m.otherMedicalHistory : null, examId, ExamComplaint.GroupMedicalHistory);
@@ -430,15 +433,26 @@ namespace OutreachModule.Models
             } 
         }
 
-        public void addComplaints(string eye, IEnumerable<CheckboxItem> list, string other, int examId, string group) 
+        public void addComplaints(string eye, IEnumerable<CheckboxItem> list, string other, int examId, string group)
+        {
+            foreach (var c in list)
+            {
+                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, c.Name, null, examId, group));
+            }
+            if (other != null)
+            {
+                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, "Other", other, examId, group));
+            }
+        }
+        public void addComplaints(string eye, IEnumerable<CheckboxItem> list, List<string> other, int examId, string group) 
         {
             foreach (var c in list)
             {
                 db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, c.Name,null, examId,group));
             }
-            if (other != null)
+            foreach (var c in other)
             {
-                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, "Other", other, examId, group));
+                db.ExamComplaints.Add(ExamComplaint.newComplaintWith(eye, "Other", c, examId, group));
             }
         }
 

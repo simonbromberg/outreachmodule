@@ -43,7 +43,16 @@ namespace OutreachModule.Models
             }
         }
     }
-
+    public class OtherListModel
+    {
+        public OtherListModel(string n)
+        {
+            name = n;
+            list = new List<string>(){""};
+        }
+        public string name { get; set; }
+        public List<string> list { get; set; }
+    }
     public class ExaminationMetadata
     {
         [Display(Name="Date Started")]
@@ -78,6 +87,11 @@ namespace OutreachModule.Models
 
     public class ExaminationCreateModel
     {
+        public ExaminationCreateModel()
+        {
+            OtherComplaintsRight = new OtherListModel("OtherComplaintsRight");
+            OtherComplaintsLeft = new OtherListModel("OtherComplaintsLeft");
+        }
         public string description
         {
             get
@@ -94,6 +108,8 @@ namespace OutreachModule.Models
 
         public string otherLeft { get; set; }
         public string otherRight { get; set; }
+        public OtherListModel OtherComplaintsRight { get; set;}
+        public OtherListModel OtherComplaintsLeft { get; set; }
         public bool hasOtherComplaintsRight { get; set; }
         public bool hasOtherComplaintsLeft {get;set;}
 

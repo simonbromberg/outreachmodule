@@ -178,6 +178,7 @@
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UsersAdminController.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -405,6 +406,8 @@
     <Content Include="Views\Examination\Index.cshtml" />
     <Content Include="Views\Examination\Detail.cshtml" />
     <Content Include="Views\Examination\ComplaintPartial.cshtml" />
+    <Content Include="Views\Examination\AddOther.cshtml" />
+    <Content Include="Views\Examination\OtherListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
