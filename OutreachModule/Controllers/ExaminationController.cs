@@ -82,7 +82,9 @@ namespace OutreachModule.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult AddOther(string name)
         {
-            return View(new OtherListModel(name));
+            var model = new OtherListModel(name);
+            model.list.Add("");
+            return View(model);
         }
         public ActionResult Detail(int? examId)
         {

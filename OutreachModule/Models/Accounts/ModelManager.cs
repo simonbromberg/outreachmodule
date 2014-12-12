@@ -407,10 +407,10 @@ namespace OutreachModule.Models
 
         public bool addComplaintsFrom(ExaminationCreateModel m, int examId)
         {
-            //addComplaints("L",m.SelectedLeftComplaints,m.OtherComplaintsLeft.list,examId,ExamComplaint.GroupComplaint);
-            //addComplaints("R", m.SelectedRightComplaints,m.OtherComplaintsRight.list, examId, ExamComplaint.GroupComplaint);
-            addComplaints("L", m.SelectedLeftComplaints, m.hasOtherComplaintsLeft ? m.otherLeft : null, examId, ExamComplaint.GroupComplaint);
-            addComplaints("R", m.SelectedRightComplaints,m.hasOtherComplaintsRight ? m.otherRight : null, examId, ExamComplaint.GroupComplaint);
+            addComplaints("L",m.SelectedLeftComplaints,m.OtherComplaintsLeftList,examId,ExamComplaint.GroupComplaint);
+            addComplaints("R", m.SelectedRightComplaints,m.OtherComplaintsRightList, examId, ExamComplaint.GroupComplaint);
+            //addComplaints("L", m.SelectedLeftComplaints, m.hasOtherComplaintsLeft ? m.otherLeft : null, examId, ExamComplaint.GroupComplaint);
+            //addComplaints("R", m.SelectedRightComplaints,m.hasOtherComplaintsRight ? m.otherRight : null, examId, ExamComplaint.GroupComplaint);
             addComplaints("L", m.SelectedLeftOcularHistory, m.hasOtherOcularHistoryLeft ? m.otherOcularHistoryLeft : null, examId, ExamComplaint.GroupOcularHistory);
             addComplaints("R", m.SelectedRightOcularHistory, m.hasOtherOcularHistoryRight ? m.otherOcularHistoryRight : null, examId, ExamComplaint.GroupOcularHistory);
             addComplaints("M", m.SelectedMedicalHistory, m.hasOtherMedicalHistory ? m.otherMedicalHistory : null, examId, ExamComplaint.GroupMedicalHistory);

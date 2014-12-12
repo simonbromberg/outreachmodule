@@ -48,7 +48,7 @@ namespace OutreachModule.Models
         public OtherListModel(string n)
         {
             name = n;
-            list = new List<string>(){""};
+            list = new List<string>();
         }
         public string name { get; set; }
         public List<string> list { get; set; }
@@ -89,8 +89,8 @@ namespace OutreachModule.Models
     {
         public ExaminationCreateModel()
         {
-            OtherComplaintsRight = new OtherListModel("OtherComplaintsRight");
-            OtherComplaintsLeft = new OtherListModel("OtherComplaintsLeft");
+            OtherComplaintsRight = new OtherListModel("OtherComplaintsRightList");
+            OtherComplaintsLeft = new OtherListModel("OtherComplaintsLeftList");
         }
         public string description
         {
@@ -109,7 +109,21 @@ namespace OutreachModule.Models
         public string otherLeft { get; set; }
         public string otherRight { get; set; }
         public OtherListModel OtherComplaintsRight { get; set;}
+        public List<string> OtherComplaintsRightList
+        {
+            get
+            {
+                return OtherComplaintsRight.list;
+            }
+        }
         public OtherListModel OtherComplaintsLeft { get; set; }
+        public List<string> OtherComplaintsLeftList
+        {
+            get
+            {
+                return OtherComplaintsLeft.list;
+            }
+        }
         public bool hasOtherComplaintsRight { get; set; }
         public bool hasOtherComplaintsLeft {get;set;}
 

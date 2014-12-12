@@ -28,15 +28,10 @@ public static class HtmlHelperExtensions
 
             var memberExp = Expression.MakeMemberAccess(Expression.Constant(dummy), dummy.GetType().GetProperty("Item"));
             var singleItemExp = Expression.Lambda<Func<TModel, TValue>>(memberExp, expression.Parameters);
-
+            sb.Append(@"<span class=""input-group other-item-group"" style=""margin-top: 10px;"">");
             sb.Append(String.Format(@"<input type=""hidden"" name=""{0}.Index"" value=""{1}"" />", htmlFieldName, guid));
             sb.Append(html.EditorFor(singleItemExp, null, String.Format("{0}[{1}]", htmlFieldName, guid), new { htmlAttributes = new { @class = "form-control specifyother", placeholder = "Specify other..."} }));
-//            sb.Append(String.Format(
-//@"<span class=""input-group-btn"">
-//        <button class=""btn"" style=""background:none;border:none;"" type=""button"" id=""add-complaint"" value=""x"">
-//            <span class=""glyphicon glyphicon-remove""></span>
-//        </button>
-//      </span>;",)
+          sb.Append(@"<span class=""input-group-btn""><button class=""btn btn-default remove-other"" type=""button"" value=""x""><span class=""glyphicon glyphicon-remove""></span></button></span></span>");
         }
 
         return new MvcHtmlString(sb.ToString());
