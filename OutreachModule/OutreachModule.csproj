@@ -267,6 +267,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\outreachmodule.pubxml" />
     <Content Include="ptimages\placeholder.txt" />
+    <Content Include="Scripts\blockenterkey.js" />
     <Content Include="Scripts\campdatepickersetup.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -408,6 +409,7 @@
     <Content Include="Views\Examination\ComplaintPartial.cshtml" />
     <Content Include="Views\Examination\AddOther.cshtml" />
     <Content Include="Views\Examination\OtherListPartial.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SMSCompatible.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

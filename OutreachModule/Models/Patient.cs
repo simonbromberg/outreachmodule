@@ -40,6 +40,9 @@ namespace OutreachModule.Models
         public Nullable<int> mrnId { get; set; }
         public Nullable<System.DateTime> dateadded { get; set; }
         public Nullable<System.DateTime> lastupdated { get; set; }
+        public bool hasSMS_contactFam { get; set; }
+        public bool hasSMS_contact1 { get; set; }
+        public bool hasSMS_contact2 { get; set; }
     
         public virtual Camp fromCamp { get; set; }
         public virtual ICollection<camp_patient> camp_patient { get; set; }

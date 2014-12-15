@@ -69,6 +69,7 @@
           <Property Name="age" Type="int" />
           <Property Name="family_member_name" Type="nvarchar" MaxLength="50" />
           <Property Name="family_contact_number" Type="nvarchar" MaxLength="50" />
+          <Property Name="hasSMS_contactFam" Type="bit" Nullable="false" />
           <Property Name="address_1" Type="nvarchar" MaxLength="50" />
           <Property Name="address_2" Type="nvarchar" MaxLength="50" />
           <Property Name="state" Type="nvarchar" MaxLength="50" />
@@ -76,7 +77,9 @@
           <Property Name="block" Type="nvarchar" MaxLength="50" />
           <Property Name="gram_panchayat" Type="nvarchar" MaxLength="50" />
           <Property Name="contact_1" Type="nvarchar" MaxLength="50" />
+          <Property Name="hasSMS_contact1" Type="bit" Nullable="false" />
           <Property Name="contact_2" Type="nvarchar" MaxLength="50" />
+          <Property Name="hasSMS_contact2" Type="bit" Nullable="false" />
           <Property Name="campId" Type="int" Nullable="false" />
           <Property Name="photoPath" Type="nvarchar(max)" />
           <Property Name="mrnId" Type="int" />
@@ -235,6 +238,9 @@
           <Property Name="dateadded" Type="DateTime" Precision="3" />
           <Property Name="lastupdated" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Examinations" Relationship="Models.FK_Examination_ToPatient" FromRole="Patient" ToRole="Examination" />
+          <Property Name="hasSMS_contactFam" Type="Boolean" Nullable="false" />
+          <Property Name="hasSMS_contact1" Type="Boolean" Nullable="false" />
+          <Property Name="hasSMS_contact2" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityContainer Name="OutreachDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Patients" EntityType="Self.Patient" />
@@ -428,6 +434,9 @@
           <EntitySetMapping Name="Patients">
             <EntityTypeMapping TypeName="Models.Patient">
               <MappingFragment StoreEntitySet="Patient">
+                <ScalarProperty Name="hasSMS_contact2" ColumnName="hasSMS_contact2" />
+                <ScalarProperty Name="hasSMS_contact1" ColumnName="hasSMS_contact1" />
+                <ScalarProperty Name="hasSMS_contactFam" ColumnName="hasSMS_contactFam" />
                 <ScalarProperty Name="lastupdated" ColumnName="lastupdated" />
                 <ScalarProperty Name="dateadded" ColumnName="dateadded" />
                 <ScalarProperty Name="mrnId" ColumnName="mrnId" />

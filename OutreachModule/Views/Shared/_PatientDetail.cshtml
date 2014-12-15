@@ -53,22 +53,6 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.patient.family_member_name)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.patient.family_member_name)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.patient.family_contact_number)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.patient.family_contact_number)
-                </dd>
-
-                <dt>
                     @Html.DisplayNameFor(model => model.patient.address_1)
                 </dt>
 
@@ -121,17 +105,32 @@
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.patient.contact_1)
+                    @Html.DisplayFor(model => model.patient.contact_1) @Html.DisplayFor(model => model.patient.hasSMS_contact1)
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.patient.contact_2)
+                    @Html.DisplayNameFor(model => model.patient.contact_2) 
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.patient.contact_2)
+                    @Html.DisplayFor(model => model.patient.contact_2) @Html.DisplayFor(model => model.patient.hasSMS_contact2)
                 </dd>
 
+                <dt>
+                    @Html.DisplayNameFor(model => model.patient.family_member_name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.patient.family_member_name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.patient.family_contact_number)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.patient.family_contact_number) @Html.DisplayFor(model=>model.patient.hasSMS_contactFam)
+                </dd>
             </dl>
         </div>
         <div class="col-md-5">

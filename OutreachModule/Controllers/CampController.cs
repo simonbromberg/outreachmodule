@@ -84,6 +84,7 @@ namespace OutreachModule.Controllers
             var model = new Patient();
             model.mrnRef = mrn;
             model.mrnId = mrn.Id;
+            model.fromCamp = camp;
             return View(model);
         }
         [HttpPost]

@@ -1,12 +1,15 @@
 ﻿@model OutreachModule.Models.Patient
 
 @{
-    ViewBag.Title = "EditPatient";
+    ViewBag.Title = "Edit Patient";
 }
 
-<h2>EditPatient</h2>
+<h2>Edit Patient</h2>
 
 @Html.Partial("~/Views/Shared/_Patient.cshtml")
+<div>
+    @Html.ActionLink("Back", "Patient", new { id = Model.Id })
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -16,4 +19,5 @@
         }
     </script>
     @Scripts.Render("~/Scripts/birthdatepickersetup.js")
+    @Scripts.Render("~/Scripts/blockenterkey.js")
 }

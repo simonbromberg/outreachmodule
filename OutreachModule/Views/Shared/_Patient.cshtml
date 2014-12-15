@@ -28,7 +28,7 @@
         <div class="form-group">
             <label class="control-label col-md-2">Camp Code</label>
             <div class="col-md-10">
-                <p class="form-control-static">@ViewBag.camp.code</p>
+                <p class="form-control-static">@Model.camp_code</p>
             </div>
         </div>
     }
@@ -64,36 +64,17 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.birthdate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @{
-    if (Model != null && Model.birthdate != null)
-    {
-        @Html.EditorFor(model => model.birthdate, new { htmlAttributes = new { @Value = ((DateTime)Model.birthdate).ToString("d MMMM yyyy"), @class = "form-control datepicker" } })
-    }
-    else
-    {
-        @Html.EditorFor(model => model.birthdate, new { htmlAttributes = new { @class = "form-control datepicker" } })
-    }
-                }
-                @Html.ValidationMessageFor(model => model.birthdate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.age, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-2">
                 @Html.EditorFor(model => model.age, new { htmlAttributes = new { @class = "form-control", id = "agefield" } })
                 @Html.ValidationMessageFor(model => model.age, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.family_member_name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.family_member_name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.family_member_name, "", new { @class = "text-danger" })
+            @Html.LabelFor(model => model.birthdate, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.birthdate, new { htmlAttributes = new { @Value = Model.birthdateFormatted, @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.birthdate, "", new { @class = "text-danger" })
             </div>
+            <div class="col-md-5"></div>
         </div>
 
         <div class="form-group">
@@ -114,25 +95,21 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.state, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-2">
                 @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.state, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.district, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.district, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
                 @Html.EditorFor(model => model.district, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.district, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.block, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.block, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
                 @Html.EditorFor(model => model.block, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.block, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
             </div>
         </div>
 
@@ -144,27 +121,47 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form-inline">
             @Html.LabelFor(model => model.contact_1, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.contact_1, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.contact_1, "", new { @class = "text-danger" })
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(model => model.hasSMS_contact1, new { htmlAttributes = new { @class = "form-control" } }) SMS Compatible
+                    </label>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form-inline">
             @Html.LabelFor(model => model.contact_2, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.contact_2, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.contact_2, "", new { @class = "text-danger" })
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(model => model.hasSMS_contact2, new { htmlAttributes = new { @class = "form-control" } }) SMS Compatible
+                    </label>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.family_contact_number, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+        <div class="form-group form-inline">
+            @Html.LabelFor(model => model.family_member_name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.family_member_name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.family_member_name, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.family_contact_number, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-4 form-inline">
                 @Html.EditorFor(model => model.family_contact_number, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.family_contact_number, "", new { @class = "text-danger" })
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(model => model.hasSMS_contactFam, new { htmlAttributes = new { @class = "form-control" } }) SMS Compatible
+                    </label>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -180,6 +177,7 @@
             </div>
         </div>
         @Html.HiddenFor(m => m.dateadded)
+        @Html.HiddenFor(m=>m.camp_code)
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -187,7 +185,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

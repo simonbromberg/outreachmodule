@@ -21,3 +21,12 @@
     $('#agefield').bind('keyup mouseup', function () {
         $('.datepicker').val("");
     });
+
+    $('.datepicker').keypress(function (event) {
+        console.log("hi");
+        console.log(event.keyCode);
+        if (event.keyCode == 13) {
+            
+            $(this).val = $(this).val;
+        }
+    });

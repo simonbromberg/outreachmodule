@@ -38,12 +38,12 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             <label class="control-label col-md-2">Chief Complaints</label>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <p>R/E</p>
                 @Html.CheckBoxListFor(model => model.PostedRightComplaints.ComplaintIds, model => model.AvailableComplaints, entity => entity.Id, entity => entity.Name, model => model.SelectedRightComplaints, Position.Vertical)
                 @Html.Partial("OtherListPartial",Model.OtherComplaintsRight)
                 </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <p>L/E</p>
                 @Html.CheckBoxListFor(model => model.PostedLeftComplaints.ComplaintIds, model => model.AvailableComplaints, entity => entity.Id, entity => entity.Name, model => model.SelectedLeftComplaints, Position.Vertical)
                 @Html.Partial("OtherListPartial", Model.OtherComplaintsLeft)
@@ -51,40 +51,28 @@
         </div>
         <div class="form-group">
             <label class="control-label col-md-2">Ocular History</label>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <p>R/E</p>
                 @Html.CheckBoxListFor(model => model.PostedRightOcularHistory.ComplaintIds, model => model.AvailableOcularHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedRightOcularHistory, Position.Vertical)
-                <label>
-                    @Html.CheckBoxFor(model => model.hasOtherOcularHistoryRight, new { @class = "othercb" }) Other
-                </label>
-                @Html.EditorFor(model => model.otherOcularHistoryRight, new { htmlAttributes = new { @class = "form-control specifyother", placeholder = "Specify other...", style = !Model.hasOtherOcularHistoryRight ? "display:none" : "" } })
+                @Html.Partial("OtherListPartial", Model.OtherRightOcularHistory)
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <p>L/E</p>
                 @Html.CheckBoxListFor(model => model.PostedLeftOcularHistory.ComplaintIds, model => model.AvailableOcularHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedLeftOcularHistory, Position.Vertical)
-                <label>
-                    @Html.CheckBoxFor(model => model.hasOtherOcularHistoryLeft, new { @class = "othercb" }) Other
-                </label>
-                @Html.EditorFor(model => model.otherOcularHistoryLeft, new { htmlAttributes = new { @class = "form-control specifyother", placeholder = "Specify other...", style = !Model.hasOtherOcularHistoryLeft ? "display:none" : "" } })
+                @Html.Partial("OtherListPartial", Model.OtherLeftOcularHistory)
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-2">History</label>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <p>Medical</p>
                 @Html.CheckBoxListFor(model => model.PostedMedicalHistory.ComplaintIds, model => model.AvailableMedicalHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedMedicalHistory, Position.Vertical)
-                <label>
-                    @Html.CheckBoxFor(model => model.hasOtherMedicalHistory, new { @class = "othercb" }) Other
-                </label>
-                @Html.EditorFor(model => model.otherMedicalHistory, new { htmlAttributes = new { @class = "form-control specifyother", placeholder = "Specify other...", style = !Model.hasOtherMedicalHistory ? "display:none" : "" } })
+                @Html.Partial("OtherListPartial", Model.OtherMedicalHistory);
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <p>Family</p>
                 @Html.CheckBoxListFor(model => model.PostedFamilyHistory.ComplaintIds, model => model.AvailableMedicalHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedFamilyHistory, Position.Vertical)
-                <label>
-                    @Html.CheckBoxFor(model => model.hasOtherFamilyHistory, new { @class = "othercb" }) Other
-                </label>
-                @Html.EditorFor(model => model.otherFamilyHistory, new { htmlAttributes = new { @class = "form-control specifyother", placeholder = "Specify other...", style = !Model.hasOtherFamilyHistory ? "display:none" : "" } })
+                @Html.Partial("OtherListPartial", Model.OtherFamilyHistory);
             </div>
         </div>
         <div class="form-group">
@@ -117,6 +105,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/blockenterkey.js")
     <script>
         var mes = "@ViewBag.Message";
         if (mes != '') {

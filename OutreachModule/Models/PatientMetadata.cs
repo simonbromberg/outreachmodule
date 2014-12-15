@@ -11,6 +11,18 @@ namespace OutreachModule.Models
     [MetadataType(typeof(PatientMetadata))]
     public partial class Patient
     {
+
+        public string birthdateFormatted
+        {
+            get
+            {
+                if (birthdate != null)
+                {
+                    return ((DateTime)birthdate).ToString("d MMMM yyyy");
+                }
+                    return null;
+            }
+        }
         [Display(Name = "Camp Code")]
         public string camp_code
         {
@@ -62,7 +74,7 @@ namespace OutreachModule.Models
         public Nullable<int> age;
         [Display(Name = "Family Member Name")]
         public string family_member_name;
-        [Display(Name = "Family Member Contact #")]
+        [Display(Name = "Contact #")]
         public string family_contact_number;
         [Display(Name = "Street Address")]
         public string address_1;
@@ -78,6 +90,13 @@ namespace OutreachModule.Models
         public string gram_panchayat;
         [Display(Name = "Phone #")]
         public string contact_1;
+
+        [UIHint("SMSCompatible")]
+        public bool hasSMS_contactFam { get; set; }
+        [UIHint("SMSCompatible")]
+        public bool hasSMS_contact1 { get; set; }
+        [UIHint("SMSCompatible")]
+        public bool hasSMS_contact2 { get; set; }
         [Display(Name = "Alternative Phone #")]
         public string contact_2;
         [Display(Name = "Date Added")]

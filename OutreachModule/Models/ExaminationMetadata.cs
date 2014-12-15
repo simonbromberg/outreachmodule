@@ -91,6 +91,12 @@ namespace OutreachModule.Models
         {
             OtherComplaintsRight = new OtherListModel("OtherComplaintsRightList");
             OtherComplaintsLeft = new OtherListModel("OtherComplaintsLeftList");
+
+            OtherRightOcularHistory = new OtherListModel("OtherRightOcularHistoryList");
+            OtherLeftOcularHistory = new OtherListModel("OtherLeftOcularHistoryList");
+
+            OtherMedicalHistory = new OtherListModel("OtherMedicalHistoryList");
+            OtherFamilyHistory = new OtherListModel("OtherFamilyHistoryList");
         }
         public string description
         {
@@ -106,26 +112,10 @@ namespace OutreachModule.Models
         public PostedComplaints PostedLeftComplaints { get; set; }
         public PostedComplaints PostedRightComplaints { get; set; }
 
-        public string otherLeft { get; set; }
-        public string otherRight { get; set; }
         public OtherListModel OtherComplaintsRight { get; set;}
-        public List<string> OtherComplaintsRightList
-        {
-            get
-            {
-                return OtherComplaintsRight.list;
-            }
-        }
+        public List<string> OtherComplaintsRightList{get{return OtherComplaintsRight.list;}}
         public OtherListModel OtherComplaintsLeft { get; set; }
-        public List<string> OtherComplaintsLeftList
-        {
-            get
-            {
-                return OtherComplaintsLeft.list;
-            }
-        }
-        public bool hasOtherComplaintsRight { get; set; }
-        public bool hasOtherComplaintsLeft {get;set;}
+        public List<string> OtherComplaintsLeftList{get{return OtherComplaintsLeft.list;}}
 
         public IEnumerable<CheckboxItem> AvailableOcularHistory { get; set; }
         public IEnumerable<CheckboxItem> SelectedLeftOcularHistory { get; set; }
@@ -133,10 +123,10 @@ namespace OutreachModule.Models
         public PostedComplaints PostedLeftOcularHistory { get; set; }
         public PostedComplaints PostedRightOcularHistory { get; set; }
 
-        public string otherOcularHistoryLeft { get; set; }
-        public string otherOcularHistoryRight { get; set; }
-        public bool hasOtherOcularHistoryRight { get; set; }
-        public bool hasOtherOcularHistoryLeft { get; set; }
+        public OtherListModel OtherRightOcularHistory { get; set; }
+        public List<string> OtherRightOcularHistoryList{get{return OtherRightOcularHistory.list;}}
+        public OtherListModel OtherLeftOcularHistory { get; set; }
+        public List<string> OtherLeftOcularHistoryList{get{return OtherLeftOcularHistory.list;}}
 
         public IEnumerable<CheckboxItem> AvailableMedicalHistory { get; set; }
         public IEnumerable<CheckboxItem> SelectedMedicalHistory { get; set; }
@@ -144,10 +134,10 @@ namespace OutreachModule.Models
         public PostedComplaints PostedMedicalHistory { get; set; }
         public PostedComplaints PostedFamilyHistory { get; set; }
 
-        public string otherMedicalHistory { get; set; }
-        public string otherFamilyHistory { get; set; }
-        public bool hasOtherMedicalHistory { get; set; }
-        public bool hasOtherFamilyHistory { get; set; }
+        public OtherListModel OtherMedicalHistory { get; set; }
+        public List<string> OtherMedicalHistoryList { get { return OtherMedicalHistory.list; } }
+        public OtherListModel OtherFamilyHistory { get; set; }
+        public List<string> OtherFamilyHistoryList { get { return OtherFamilyHistory.list; } }
 
         public bool spectacles { get; set; }
 
