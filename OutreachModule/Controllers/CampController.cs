@@ -46,7 +46,7 @@ namespace OutreachModule.Controllers
             return View(camp);
         }
 
-        // POST: Camps/Edit/5
+        // POST: Camp/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -67,7 +67,8 @@ namespace OutreachModule.Controllers
 
         public ActionResult AddPatient()
         {
-            var camp = getCamp();
+            var campId = Convert.ToInt32(Url.RequestContext.RouteData.Values["campId"]);
+            var camp = manager.getCampWithId(campId);
             ViewBag.camp = camp;         
             SetGenderViewBag();
             string campCode;
@@ -105,9 +106,9 @@ namespace OutreachModule.Controllers
                 ViewBag.Message = "Saving unsuccessful";
                 return View(patientToAdd);
             }
-            return RedirectToAction("Patient", new {id = patientToAdd.Id});
+            return RedirectToAction("Patient", new {patientId = patientToAdd.Id});
         }
-        public ActionResult Patient(int? id)
+        public ActionResult Patient(int? patientId)
         {
             var camp = getCamp();
             ViewBag.camp = camp;
@@ -116,11 +117,11 @@ namespace OutreachModule.Controllers
             {
                 return RedirectToAction("Index");
             }
-            if (id == null)
+            if (patientId == null)
             {
                 return RedirectToAction("Index", new {campId = camp.Id} );
             }
-            var patient = manager.getPatientViewModel((int)id);
+            var patient = manager.getPatientViewModel((int)patientId);
             return View(patient);
         }
         [Authorize(Roles = OutreachRoles.RoleAdmin)]
@@ -157,18 +158,18 @@ namespace OutreachModule.Controllers
                 foreach (var e in examinations) { 
                     manager.removeExamination(e);
                 }
-                return RedirectToAction("Patient", new { id = patientId });
+                return RedirectToAction("Patient", new { patientId = patientId });
             }
         }
-        public ActionResult EditPatient(int? id)
+        public ActionResult EditPatient(int? patientId)
         {
             ViewBag.camp = getCamp();
-            
-            if (id == null)
+
+            if (patientId == null)
             {
                 return RedirectToAction("Index");
             }
-            var p = manager.getPatientWithId((int)id);
+            var p = manager.getPatientWithId((int)patientId);
             if (p == null)
             {
                 return RedirectToAction("Index");

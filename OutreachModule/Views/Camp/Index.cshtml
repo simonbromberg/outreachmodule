@@ -89,7 +89,7 @@
             <ul>
                 @foreach (var patient in Model.campPatients)
                 {
-                    <li>@Html.ActionLink(patient.name, "Patient", new { id = patient.Id }, null)</li>
+                    <li>@Html.ActionLink(patient.name, "Patient", new { patientId = patient.Id }, null)</li>
                 }
             </ul>
         </div>
@@ -100,7 +100,7 @@
     }
 }
 
-<p>@Html.ActionLink("Add Patient", "AddPatient", new { campToAddTo = Model.camp.Id })</p>
+<p>@Html.ActionLink("Add Patient", "AddPatient")</p>
 <p>
 @if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
 {

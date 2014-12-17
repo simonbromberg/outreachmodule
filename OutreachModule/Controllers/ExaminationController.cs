@@ -14,16 +14,16 @@ namespace OutreachModule.Controllers
     {
         private ModelManager manager = new ModelManager();
         // GET: Examination
-        public ActionResult Index(int? pt, int? cmp)
+        public ActionResult Index(int? patientId, int? campId)
         {
             Debug.Print("index get action result");
-            if (pt == null || cmp == null)
+            if (patientId == null || campId == null)
             {
                 return RedirectToAction("Index","Home");
             }
 
-            var camp = manager.getCampWithId((int)cmp);
-            var patient = manager.getPatientWithId((int)pt);
+            var camp = manager.getCampWithId((int)campId);
+            var patient = manager.getPatientWithId((int)patientId);
             ExaminationCreateModel model = GetExaminationInitialModel();
             model.dateStarted = DateTime.Now;
             model.patient = patient;
@@ -77,7 +77,7 @@ namespace OutreachModule.Controllers
                 return View(m);
             }
 
-            return RedirectToAction("Patient", "Camp", new { id = m.patientId });
+            return RedirectToAction("Patient", "Camp", new { patientId = m.patientId });
         }
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult AddOther(string name)
@@ -102,7 +102,7 @@ namespace OutreachModule.Controllers
             var exam = manager.getExaminationWithId(examId);
             manager.removeExamination(exam);
 
-            return RedirectToAction("Patient", "Camp", new { id = exam.patientId });
+            return RedirectToAction("Patient", "Camp", new { patientId = exam.patientId });
         }
         private List<CheckboxItem> GetSelected(PostedComplaints posted,ListType type)
         {
