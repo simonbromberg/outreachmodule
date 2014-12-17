@@ -8,32 +8,48 @@
             background:none;
             border:none;
         }
+    #header-fixed {
+        position: fixed;
+        padding-top: 10px;
+        top: 35px;
+        left: 0px;
+        right: 0px;
+        padding-left: 20px;
+        width: 100%;
+        z-index: 100;
+        background: #F8F8F8;
+        border-bottom: solid 1px grey;
+    }
+    #body-form {
+        margin-top: 110px;
+    }
 </style>
-<h2>Examination</h2>
-<div class="row">
-    <div class="col-md-1">
-        <img src="@Url.Content("/OutreachModule/ptimages/"+Model.patient.photoPath)" alt="@Model.patient.name" style="max-height:100px" class="img-thumbnail" />
-    </div>
-    <div class="col-md-4">
-        <ul class="list-unstyled">
-            <li>@Model.patient.mrn</li>
-            <li>@Model.patient.name</li>
-            <li>@Model.patient.gender, @Model.patient.age</li>
-        </ul>
-    </div>
-    <div class="col-md-4">
-        Camp: @Html.DisplayFor(model => model.camp.code), @Html.DisplayFor(model => model.camp.date) <br /><br />
-        <label for="submit-form" class="btn btn-default">Save</label>
-        <label for="submit-form-discharge" class="btn btn-default">Save & Discharge</label>
+<div id="header-fixed">
+    <h4>New Examination</h4>
+    <div class="row">
+        <div class="col-md-1">
+            <img src="@Url.Content("/OutreachModule/ptimages/"+Model.patient.photoPathOrPlaceholder)" alt="@Model.patient.name" style="max-height:100px" class="img-thumbnail" />
+        </div>
+        <div class="col-md-4">
+            <ul class="list-unstyled">
+                <li>@Model.patient.mrn</li>
+                <li>@Model.patient.name</li>
+                <li>@Model.patient.gender, @Model.patient.age</li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            Camp: @Html.DisplayFor(model => model.camp.code), @Html.DisplayFor(model => model.camp.date) <br /><br />
+            <label for="submit-form" class="btn btn-default">Save</label>
+            <label for="submit-form-discharge" class="btn btn-default">Save & Discharge</label>
+        </div>
     </div>
 </div>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null,FormMethod.Post, new { id = "body-form" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal col-md-12">
-        <h4>Create new examination</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -41,7 +57,7 @@
             <div class="col-md-3">
                 <p>R/E</p>
                 @Html.CheckBoxListFor(model => model.PostedRightComplaints.ComplaintIds, model => model.AvailableComplaints, entity => entity.Id, entity => entity.Name, model => model.SelectedRightComplaints, Position.Vertical)
-                @Html.Partial("OtherListPartial",Model.OtherComplaintsRight)
+                @Html.Partial("OtherListPartial", Model.OtherComplaintsRight)
                 </div>
             <div class="col-md-3">
                 <p>L/E</p>
@@ -100,7 +116,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back", "Index", "Camp", null, null, null, new { campId = @Model.campId }, null)
+    @Html.ActionLink("Back", "Patient", "Camp", new { patientId = Model.patientId },null)
 </div>
 
 @section Scripts {

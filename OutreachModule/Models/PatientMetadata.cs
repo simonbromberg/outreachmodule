@@ -11,7 +11,13 @@ namespace OutreachModule.Models
     [MetadataType(typeof(PatientMetadata))]
     public partial class Patient
     {
-
+        public string photoPathOrPlaceholder
+        {
+            get
+            {
+                return photoPath == null ? "placeholder.jpg" : photoPath;
+            }
+        }
         public string birthdateFormatted
         {
             get
