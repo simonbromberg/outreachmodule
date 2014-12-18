@@ -1,0 +1,72 @@
+﻿@model OutreachModule.Models.ExaminationSection2CreateModel
+
+@{
+    ViewBag.Title = "Examination";
+}
+
+@section Style {
+    <style>
+        .add-other, .remove-other {
+            background: none;
+            border: none;
+        }
+
+        #header-fixed {
+            position: fixed;
+            padding: 20px;
+            top: 35px;
+            z-index: 100;
+            background: #F8F8F8;
+            border: solid 1px grey;
+        }
+
+        #body-form {
+            margin-top: 140px;
+        }
+    </style>
+}
+<div class="container" id="header-fixed">
+    <div class="row">
+        <h4>Examination Section 2</h4>
+
+        <div class="col-md-1">
+            <img src="@Url.Content("/OutreachModule/ptimages/"+Model.patient.photoPathOrPlaceholder)" alt="@Model.patient.name" style="max-height:100px" class="img-thumbnail" />
+        </div>
+        <div class="col-md-8">
+            <ul class="list-unstyled">
+                <li>@Model.patient.mrn</li>
+                <li>@Model.patient.name</li>
+                <li>@Model.patient.gender, @Model.patient.age</li>
+            </ul>
+        </div>
+        <div class="col-md-3">
+            Camp: @Html.DisplayFor(model => model.camp.code), @Html.DisplayFor(model => model.camp.date) <br /><br />
+            <label for="submit-form" class="btn btn-default">Save</label>
+            <label for="submit-form-discharge" class="btn btn-default">Save & Discharge</label>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "body-form" }))
+        {
+            @Html.AntiForgeryToken()
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("VisualAcuityPartial", Model.visualAcuity)
+            @Html.Partial("RefractionPartial", Model.refraction)
+            @Html.HiddenFor(model => model.dateStarted)
+        }
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/blockenterkey.js")
+    <script>
+        var mes = "@ViewBag.Message";
+        if (mes != '') {
+            window.alert(mes);
+        }
+    </script>
+    @Scripts.Render("~/Scripts/otherlist.js")
+}

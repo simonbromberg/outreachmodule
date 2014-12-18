@@ -50,6 +50,7 @@
           <Property Name="user" Type="nvarchar(max)" Nullable="false" />
           <Property Name="campId" Type="int" Nullable="false" />
           <Property Name="spectacles" Type="bit" Nullable="false" />
+          <Property Name="status" Type="int" />
         </EntityType>
         <EntityType Name="mrn">
           <Key>
@@ -388,6 +389,7 @@
           <NavigationProperty Name="ExamComplaints" Relationship="Models.FK_ExamComplaint_ToExamination" FromRole="Examination" ToRole="ExamComplaint" />
           <NavigationProperty Name="Patient" Relationship="Models.FK_Examination_ToPatient" FromRole="Examination" ToRole="Patient" />
           <Property Name="spectacles" Type="Boolean" Nullable="false" />
+          <Property Name="status" Type="Int32" />
         </EntityType>
         <Association Name="FK_Examination_ToCamp">
           <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
@@ -508,6 +510,7 @@
           <EntitySetMapping Name="Examinations">
             <EntityTypeMapping TypeName="Models.Examination">
               <MappingFragment StoreEntitySet="Examination">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="spectacles" ColumnName="spectacles" />
                 <ScalarProperty Name="campId" ColumnName="campId" />
                 <ScalarProperty Name="user" ColumnName="user" />

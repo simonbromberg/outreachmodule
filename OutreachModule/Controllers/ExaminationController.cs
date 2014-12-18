@@ -52,6 +52,8 @@ namespace OutreachModule.Controllers
             examination.dateComplete = DateTime.Now;
             examination.user = User.Identity.GetUserName();
             examination.spectacles = m.spectacles;
+            examination.status = Command == "Save" ? (int)Examination.ExamStatus.ScreeningInProgress : (int)Examination.ExamStatus.ScreeningDone;
+
             m = FillExaminationModel(m);
 
             if (shouldUpdate)
@@ -103,6 +105,16 @@ namespace OutreachModule.Controllers
             manager.removeExamination(exam);
 
             return RedirectToAction("Patient", "Camp", new { patientId = exam.patientId });
+        }
+
+        public ActionResult ContinueExamination(int examId)
+        {
+            ExaminationSection2CreateModel model = new ExaminationSection2CreateModel();
+            var exam = manager.getExaminationWithId(examId);
+            model.patient = exam.Patient;
+            model.camp = exam.Camp;
+            model.dateStarted = DateTime.Now;
+            return View(model);
         }
         private List<CheckboxItem> GetSelected(PostedComplaints posted,ListType type)
         {

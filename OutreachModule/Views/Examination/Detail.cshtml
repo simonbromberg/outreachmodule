@@ -91,4 +91,5 @@
 {
     @Html.ActionLink("Delete", "Delete", new { examId = Model.examination.Id }, null) @Html.Raw(" | ")
 }
-    @Html.ActionLink("Back", "Patient","Camp", new { patientId = Model.examination.patientId }, null)
+    @Html.ActionLink("Back", "Patient","Camp", new { patientId = Model.examination.patientId }, null) | 
+    @Html.ActionLink("Next", "ContinueExamination", new {examId = Model.examination.Id})

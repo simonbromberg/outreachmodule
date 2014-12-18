@@ -26,6 +26,7 @@ namespace OutreachModule.Models
         public string user { get; set; }
         public int campId { get; set; }
         public bool spectacles { get; set; }
+        public Nullable<int> status { get; set; }
     
         public virtual Camp Camp { get; set; }
         public virtual ICollection<ExamComplaint> ExamComplaints { get; set; }

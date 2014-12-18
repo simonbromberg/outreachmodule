@@ -1,0 +1,11 @@
+﻿@model Dictionary<OutreachModule.Models.Eye,OutreachModule.Models.RefractionModel>
+@using OutreachModule.Models
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Refraction</h3>
+    </div>
+    <div class="panel-body">
+    @Html.Partial("RefractionSubPartial",Model[Eye.Right])
+    @Html.Partial("RefractionSubPartial", Model[Eye.Left])
+    </div>
+</div>

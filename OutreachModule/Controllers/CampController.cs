@@ -199,6 +199,23 @@ namespace OutreachModule.Controllers
             return RedirectToAction("Patient", new { id = p.Id });
         }
 
+        public ActionResult PatientScreeningQueue(int campId)
+        {
+            var list = manager.getListOfUnscreenedPatientsForCamp(campId);
+            return View(list);
+        }
+
+        public ActionResult ExaminationQueue(int campId)
+        {
+            var list = manager.getListOfUnfinishedExaminationsForCamp(campId);
+            return View(list);
+        }
+
+        public ActionResult GoToExamination(int examId)
+        {
+            var exam = manager.getExaminationWithId(examId);
+            return RedirectToAction("Detail", "Examination", new { examId = examId,campId = exam.campId,patientId = exam.patientId});
+        }
         private void SetGenderViewBag(string Gender = null)
         {
             ViewBag.GenderSelect = manager.GenderSelect(Gender);

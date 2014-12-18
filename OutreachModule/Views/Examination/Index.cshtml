@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Examination";
 }
+@section Style {
 <style>
     .add-other,.remove-other {
             background:none;
@@ -12,32 +13,30 @@
         position: fixed;
         padding-top: 10px;
         top: 35px;
-        left: 0px;
-        right: 0px;
-        padding-left: 20px;
-        width: 100%;
+        padding-bottom: 10px;
         z-index: 100;
         background: #F8F8F8;
-        border-bottom: solid 1px grey;
+        border: solid 1px grey;
     }
     #body-form {
         margin-top: 110px;
     }
 </style>
-<div id="header-fixed">
-    <h4>New Examination</h4>
+    }
+<div class ="container" id="header-fixed">
+    <h4>New Screening</h4>
     <div class="row">
         <div class="col-md-1">
             <img src="@Url.Content("/OutreachModule/ptimages/"+Model.patient.photoPathOrPlaceholder)" alt="@Model.patient.name" style="max-height:100px" class="img-thumbnail" />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-8">
             <ul class="list-unstyled">
                 <li>@Model.patient.mrn</li>
                 <li>@Model.patient.name</li>
                 <li>@Model.patient.gender, @Model.patient.age</li>
             </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             Camp: @Html.DisplayFor(model => model.camp.code), @Html.DisplayFor(model => model.camp.date) <br /><br />
             <label for="submit-form" class="btn btn-default">Save</label>
             <label for="submit-form-discharge" class="btn btn-default">Save & Discharge</label>
@@ -58,12 +57,12 @@
                 <p>R/E</p>
                 @Html.CheckBoxListFor(model => model.PostedRightComplaints.ComplaintIds, model => model.AvailableComplaints, entity => entity.Id, entity => entity.Name, model => model.SelectedRightComplaints, Position.Vertical)
                 @Html.Partial("OtherListPartial", Model.OtherComplaintsRight)
-                </div>
+            </div>
             <div class="col-md-3">
                 <p>L/E</p>
                 @Html.CheckBoxListFor(model => model.PostedLeftComplaints.ComplaintIds, model => model.AvailableComplaints, entity => entity.Id, entity => entity.Name, model => model.SelectedLeftComplaints, Position.Vertical)
                 @Html.Partial("OtherListPartial", Model.OtherComplaintsLeft)
-                </div>
+            </div>
         </div>
         <div class="form-group">
             <label class="control-label col-md-2">Ocular History</label>
@@ -83,12 +82,12 @@
             <div class="col-md-3">
                 <p>Medical</p>
                 @Html.CheckBoxListFor(model => model.PostedMedicalHistory.ComplaintIds, model => model.AvailableMedicalHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedMedicalHistory, Position.Vertical)
-                @Html.Partial("OtherListPartial", Model.OtherMedicalHistory);
+                @Html.Partial("OtherListPartial", Model.OtherMedicalHistory)
             </div>
             <div class="col-md-3">
                 <p>Family</p>
                 @Html.CheckBoxListFor(model => model.PostedFamilyHistory.ComplaintIds, model => model.AvailableMedicalHistory, entity => entity.Id, entity => entity.Name, model => model.SelectedFamilyHistory, Position.Vertical)
-                @Html.Partial("OtherListPartial", Model.OtherFamilyHistory);
+                @Html.Partial("OtherListPartial", Model.OtherFamilyHistory)
             </div>
         </div>
         <div class="form-group">
@@ -129,33 +128,5 @@
         }
     </script>
 
-    <script type="text/javascript">
-        $(document).ready(function ($) {
-            $('input.othercb').change(function () {
-                var otherBox = $(this).parent().parent().find("input.specifyother");
-                if ($(this).is(':checked'))
-                    otherBox.show();
-                else
-                    otherBox.hide();
-            });
-        })
-    </script>
-    <script>
-        $(document).ready(function ($) {
-            $('.add-other').on('click', function () {
-                var self = $(this);
-                console.log("click");
-                $.get("./Examination/AddOther?name="+self.attr('id')).done(function (html) {
-                    var list = self.next(".other-list");
-                    list.append(html);
-
-                    $(".remove-other").on("click", function () {
-                        var par = $(this).parent().parent();
-                        console.log("here");
-                        par.remove();
-                    });
-                });
-            });
-        });
-    </script>
+    @Scripts.Render("~/scripts/otherlist.js") 
 }

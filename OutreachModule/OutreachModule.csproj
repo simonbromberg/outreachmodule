@@ -274,6 +274,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\birthdatepickersetup.js" />
+    <Content Include="Scripts\otherlist.js" />
     <Content Include="Scripts\searchtable.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
@@ -410,6 +411,12 @@
     <Content Include="Views\Examination\AddOther.cshtml" />
     <Content Include="Views\Examination\OtherListPartial.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SMSCompatible.cshtml" />
+    <Content Include="Views\Camp\PatientScreeningQueue.cshtml" />
+    <Content Include="Views\Camp\ExaminationQueue.cshtml" />
+    <Content Include="Views\Examination\ContinueExamination.cshtml" />
+    <Content Include="Views\Examination\VisualAcuityPartial.cshtml" />
+    <Content Include="Views\Examination\RefractionPartial.cshtml" />
+    <Content Include="Views\Examination\RefractionSubPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

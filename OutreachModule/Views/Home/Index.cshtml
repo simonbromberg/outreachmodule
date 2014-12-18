@@ -4,23 +4,50 @@
 }
 
 <h2>Outreach Module</h2>
-<p>Welcome to the Outreach Module. This is the home page where information about what to do can be displayed. Could also add a list of camps to choose from here or a 'Start' link.</p>
+<p style="font-weight:bold">
+    Current camp:
+    @{
+        if (ViewBag.SavedCamp != null)
+        {
+            @Html.Raw(ViewBag.SavedCamp.code);
+        }
+        else
+        {
+            @Html.Raw("Not set");
+        }
+    }
+</p>
 
-@using (Html.BeginForm("Go","Home", FormMethod.Get, new { @class = "form-inline"}))
-{ 
+<h4>@Html.ActionLink("Counter 1: Patient Registration", "GoToRegistration")</h4>
+<h4>@Html.ActionLink("Counter 2: Patient Screening", "GoToScreening")</h4>
+<h4>@Html.ActionLink("Counter 3: Patient Examination", "GoToExamination")</h4>
+
+<p> Change current camp:</p>
+@using (Html.BeginForm("Go", "Home", FormMethod.Get, new { @class = "form-inline" }))
+{
     {
-    if (((SelectList)ViewBag.CampList).Count() > 0) { 
-    <div class="form-group">
-        @Html.DropDownList("selectedId", ViewBag.CampList as SelectList, new { @class = "form-control form-inline" })
-    </div>
-    <div class="form-group">
-        <input type="submit" class="btn btn-success" value="Go"/><br />
-    </div>
-    }
-    else
-    {
-        <p><i>No camps in database</i></p>
-    }
+        if (((SelectList)ViewBag.CampList).Count() > 0)
+        {
+            <div class="form-group">
+                @Html.DropDownList("selectedId", ViewBag.CampList as SelectList, new { @class = "form-control form-inline" })
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="Save" /><br />
+            </div>
+        }
+        else
+        {
+            <p><i>No camps in database</i></p>
+        }
     }
 }
-    <div>@Html.ActionLink("Add New Camp", "Create", "Camps")</div>
+<div>@Html.ActionLink("Add New Camp", "Create", "Camps")</div>
+
+@section Scripts {
+    <script>
+        var mes = "@TempData["message"]";
+        if (mes != '') {
+            window.alert(mes);
+        }
+    </script>
+}

@@ -1,0 +1,9 @@
+﻿@model List<OutreachModule.Models.Patient>
+<h2>Patients to be screened</h2>
+
+<ul>
+    @foreach (var p in Model)
+    {
+        <li>@Html.ActionLink(p.mrn, "Patient", new { patientId = p.Id })</li>
+    }
+</ul>
