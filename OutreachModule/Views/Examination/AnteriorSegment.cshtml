@@ -1,0 +1,28 @@
+﻿@model OutreachModule.Models.AnteriorSegmentModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Anterior Segment</h3>
+    </div>
+    <div class="panel-body">
+        <label class="radio-inline" id="normal-anterior">
+            @Html.RadioButtonFor(m => m.isNormal, "true") Normal
+        </label>
+        <label class="radio-inline" id="abnormal-anterior">
+            @Html.RadioButtonFor(m => m.isNormal, "false") Abnormal
+        </label>
+        <div id="anterior-abnormal-detail" style="display:none;">
+            <br />
+            <label class="radio-inline">
+                @Html.RadioButtonFor(m => m.abnormalEye, "right") Right Eye
+            </label>
+            <label class="radio-inline">
+                @Html.RadioButtonFor(m => m.abnormalEye, "left") Left Eye
+            </label>
+            <label class="radio-inline">
+                @Html.RadioButtonFor(m => m.abnormalEye, "both") Both Eyes
+            </label>
+            @Html.EditorFor(m => m.description, new { htmlAttributes = new { @class = "form-control", placeholder = "Describe abnormal findings..." } })
+        </div>
+    </div>
+</div>

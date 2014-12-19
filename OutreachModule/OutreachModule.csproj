@@ -417,6 +417,12 @@
     <Content Include="Views\Examination\VisualAcuityPartial.cshtml" />
     <Content Include="Views\Examination\RefractionPartial.cshtml" />
     <Content Include="Views\Examination\RefractionSubPartial.cshtml" />
+    <Content Include="Views\Examination\AlignmentPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\AlignmentModel.cshtml" />
+    <Content Include="Views\Examination\AnteriorSegment.cshtml" />
+    <Content Include="Views\Examination\DiagnosisPartial.cshtml" />
+    <Content Include="Views\Examination\CommentsPartial.cshtml" />
+    <Content Include="Views\Examination\SpectaclesPartial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

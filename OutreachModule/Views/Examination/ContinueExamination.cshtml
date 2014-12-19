@@ -55,6 +55,12 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.Partial("VisualAcuityPartial", Model.visualAcuity)
             @Html.Partial("RefractionPartial", Model.refraction)
+            @Html.Partial("AlignmentPartial", Model.alignment)
+            @Html.Partial("AnteriorSegment", Model.anteriorSegment)
+            @Html.Partial("DiagnosisPartial", Model.diagnosis)
+            @Html.Partial("CommentsPartial", Model.Comments)
+            @Html.Partial("SpectaclesPartial", Model.spectacles)
+            @Html.Partial("CommentsPartial",Model.PatientCounseling)
             @Html.HiddenFor(model => model.dateStarted)
         }
     </div>
@@ -68,5 +74,36 @@
             window.alert(mes);
         }
     </script>
-    @Scripts.Render("~/Scripts/otherlist.js")
+    <script>
+   $(document).ready(function ($) {
+    $('.add-other').on('click', function () {
+        var self = $(this);
+        $.get("./AddOther?name=" + self.attr('id')).done(function (html) {
+            var list = self.next(".other-list");
+            list.append(html);
+            $(".remove-other").on("click", function () {
+                var par = $(this).parent().parent();
+                par.remove();
+            });
+        });
+    });
+   });
+    </script>
+    <script>
+        $("#normal-anterior").click(function () {
+            $("#anterior-abnormal-detail").hide();
+        });
+        $("#abnormal-anterior").click(function () {
+            $("#anterior-abnormal-detail").show();
+        });
+    </script>
+<script>
+    $("#spectacles-no").click(function () {
+        $("#spectacles-cost").hide();
+    });
+    $("#spectacles-yes").click(function () {
+        $("#spectacles-cost").show();
+    });
+</script>
+
 }

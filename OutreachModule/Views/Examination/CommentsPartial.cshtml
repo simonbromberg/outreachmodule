@@ -1,0 +1,9 @@
+﻿@model OutreachModule.Models.CommentsModel
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.name</h3>
+    </div>
+    <div class="panel-body">
+        @Html.TextAreaFor(model => model.comment, htmlAttributes: new { @class = "form-control", rows = "4"})
+    </div>
+</div>

@@ -185,20 +185,6 @@ namespace OutreachModule.Models
         private static string[] ComplaintOptions = new string[] { "Blurry Vision", "Dryness", "Redness", "Swollen Lid"};
         private static string[] OcularHistoryOptions = new string[] { "Refractive Error", "Squint", "Corneal Opacity", "Cataract" };
         private static string[] MedicalHistoryOptions = new string[] { "Diabetes", "High Blood Pressure", "Cancer", "High Cholesterol", "Allergies" };
-        public static CheckboxItem GetComplaints(int id)
-        {
-            return GetList(ListType.Complaint).FirstOrDefault(x => x.Id.Equals(id));
-        }
-
-        public static CheckboxItem GetOcularHistory(int id)
-        {
-            return GetList(ListType.OcularHistory).FirstOrDefault(x => x.Id.Equals(id));
-        }
-
-        public static CheckboxItem GetMedicalHistory(int id)
-        {
-            return GetList(ListType.MedicalHistory).FirstOrDefault(x => x.Id.Equals(id));
-        }
 
         public static IEnumerable<CheckboxItem> GetList(ListType type)
         {
@@ -233,17 +219,21 @@ namespace OutreachModule.Models
     {
         public ExaminationSection2CreateModel()
         {
-            OtherDiagnosisRight = new OtherListModel("OtherDiagnosisRightList");
-            OtherDiagnosisLeft = new OtherListModel("OtherDiagnosisLeftList");
-
             visualAcuity = new VisualAcuityModel();
             refraction = new Dictionary<Eye,RefractionModel>() {{Eye.Right,new RefractionModel("RE")},{Eye.Left,new RefractionModel("LE")}};
             alignment = new List<AlignmentModel>();
+            for (var i = 0; i < 9; i++)
+            {
+                alignment.Add(new AlignmentModel(i));
+            }
             anteriorSegment = new AnteriorSegmentModel();
             externalAdnexa = new ExternalAdnexaModel();
             fundusFindings = new FundusFindingsModel();
-            pupillaryReaction = new PupillaryReactionModel();
+            diagnosis = new DiagnosisModel();
+            Comments = new CommentsModel("Special Questions or Comments");
 
+            spectacles = new SpectaclesDispensedModel();
+            PatientCounseling = new CommentsModel("Patient Counseling");
         }
         private Camp _camp;
         public Camp camp
@@ -283,24 +273,13 @@ namespace OutreachModule.Models
         public int leftTonometry { get; set; }
         public int rightTonometry { get; set; }
 
-        public IEnumerable<CheckboxItem> AvailableDiagnosisOptions { get; set; }
-        public IEnumerable<CheckboxItem> SelectedDiagnosisLeft { get; set; }
-        public IEnumerable<CheckboxItem> SelectedDiagnosisRight { get; set; }
-        public PostedComplaints PostedDiagnosisLeft { get; set; }
-        public PostedComplaints PostedDiagnosisRight { get; set; }
+        public DiagnosisModel diagnosis { get; set; }
 
-        public OtherListModel OtherDiagnosisLeft { get; set; }
-        public List<string> OtherDiagnosisLeftList{get{return OtherDiagnosisLeft.list;}}
-        public OtherListModel OtherDiagnosisRight { get; set; }
-        public List<string> OtherDiagnosisRightList{get{return OtherDiagnosisRight.list;}}
+        public CommentsModel Comments { get; set;}
 
-        public string Comments { get; set;}
+        public SpectaclesDispensedModel spectacles {get; set;}
 
-        public bool SpectaclesDispensed { get; set; }
-        public string SpectaclesComment { get; set; }
-        public string SpectaclesCost { get; set; }
-
-        public string PatientCounseling { get; set; }
+        public CommentsModel PatientCounseling { get; set; }
         
         public bool PatientReferral { get; set; }
         public string PatientReferralComment { get; set; }
@@ -342,16 +321,44 @@ namespace OutreachModule.Models
     }
     public class AlignmentModel
     {
+        public AlignmentModel(int i)
+        {
+            index = i;
+        }
+        public int index { get; set; }
         public int horizontal { get; set; }
         public int vertical { get; set; }
+
+        public IEnumerable<SelectListItem> HorizontalOptions
+        {
+            get
+            {
+                return _horizontalAlignmentOptions.Select((r, index) => new SelectListItem { Text = r, Value = index.ToString() });
+            }
+        }
+
+        public IEnumerable<SelectListItem> VerticalOptions
+        {
+            get
+            {
+                return _verticalAlignmentOptions.Select((r, index) => new SelectListItem { Text = r, Value = index.ToString() });
+            }
+        }
+        private readonly List<string> _horizontalAlignmentOptions = new List<string> {"90XT","85XT","80XT","75XT","70XT","65XT","60XT","55XT","50XT","45XT","40XT","35XT","30XT","25XT","20XT","18XT","16XT","14XT","12XT","10XT","9XT","8XT","7XT","6XT","5XT","4XT","3XT","2XT","1XT","O","1ET","2ET","3ET","4ET","5ET","6ET","7ET","8ET","9ET","10ET","12ET","14ET","16ET","18ET","20ET","25ET","30ET","35ET","40ET","45ET","50ET","55ET","60ET","65ET","70ET","75ET","80ET","85ET","90ET"};
+        private readonly List<string> _verticalAlignmentOptions = new List<string> { "50LHT", "45LHT", "40LHT", "35LHT", "30LHT", "25LHT", "20LHT", "18LHT", "16LHT", "14LHT", "12LHT", "10LHT", "9LHT", "8LHT", "7LHT", "6LHT", "5LHT", "4LHT", "3LHT", "2LHT", "1LHT", "O", "1RHT", "2RHT", "3RHT", "4RHT", "5RHT", "6RHT", "7RHT", "8RHT", "9RHT", "10RHT", "12RHT", "14RHT", "16RHT", "18RHT", "20RHT", "25RHT", "30RHT", "35RHT", "40RHT", "45RHT", "50RHT" };
     }
     public enum Eye: int {
+        Neither,
         Left,
         Right,
         Both
     }
     public class AnteriorSegmentModel
     {
+        public AnteriorSegmentModel()
+        {
+            isNormal = true;
+        }
         public bool isNormal { get; set; }
         public Eye abnormalEye { get; set; }
         public string description { get; set; }
@@ -374,5 +381,43 @@ namespace OutreachModule.Models
         public bool isPresent { get; set; }
         public string comment { get; set; }
     }
+    public class DiagnosisModel
+    {
+        public DiagnosisModel()
+        {
+            OtherDiagnosisRight = new OtherListModel("OtherDiagnosisRightList");
+            OtherDiagnosisLeft = new OtherListModel("OtherDiagnosisLeftList");
+            AvailableDiagnosisOptions = ExaminationCheckboxRepository.GetList(ListType.MedicalHistory);
+        }
+        public IEnumerable<CheckboxItem> AvailableDiagnosisOptions { get; set; }
+        public IEnumerable<CheckboxItem> SelectedDiagnosisLeft { get; set; }
+        public IEnumerable<CheckboxItem> SelectedDiagnosisRight { get; set; }
+        public PostedComplaints PostedDiagnosisLeft { get; set; }
+        public PostedComplaints PostedDiagnosisRight { get; set; }
 
+        public OtherListModel OtherDiagnosisLeft { get; set; }
+        public List<string> OtherDiagnosisLeftList { get { return OtherDiagnosisLeft.list; } }
+        public OtherListModel OtherDiagnosisRight { get; set; }
+        public List<string> OtherDiagnosisRightList { get { return OtherDiagnosisRight.list; } }
+    }
+    public class CommentsModel
+    {
+        public CommentsModel(string title)
+        {
+            name = title;
+            comment = "";
+        }
+        public string name { get; set; }
+        public string comment { get; set; }
+    }
+    public class SpectaclesDispensedModel
+    {
+        //public SpectaclesDispensedModel()
+        //{
+
+        //}
+        public bool SpectaclesDispensed { get; set; }
+        public string SpectaclesComment { get; set; }
+        public string SpectaclesCost { get; set; }
+    }
 }

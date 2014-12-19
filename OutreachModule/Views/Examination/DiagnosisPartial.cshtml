@@ -1,0 +1,23 @@
+﻿@model OutreachModule.Models.DiagnosisModel
+@using MvcCheckBoxList.Model
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Diagnosis Type</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="control-label">RE</label><br />
+                @Html.CheckBoxListFor(model => model.PostedDiagnosisRight.ComplaintIds, model => model.AvailableDiagnosisOptions, entity => entity.Id, entity => entity.Name, model => model.SelectedDiagnosisRight, Position.Vertical)
+                @Html.Partial("OtherListPartial", Model.OtherDiagnosisLeft)
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">LE</label><br />
+                @Html.CheckBoxListFor(model => model.PostedDiagnosisLeft.ComplaintIds, model => model.AvailableDiagnosisOptions, entity => entity.Id, entity => entity.Name, model => model.SelectedDiagnosisLeft, Position.Vertical)
+                @Html.Partial("OtherListPartial", Model.OtherDiagnosisLeft)
+            </div>
+        </div>
+    </div>
+</div>
+
