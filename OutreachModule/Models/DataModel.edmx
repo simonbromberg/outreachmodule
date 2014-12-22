@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alignment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="direction" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="index" Type="int" Nullable="false" />
+          <Property Name="e2Id" Type="int" Nullable="false" />
+          <Property Name="selection" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Camp">
           <Key>
             <PropertyRef Name="Id" />
@@ -27,6 +37,34 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="campId" Type="int" Nullable="false" />
           <Property Name="patientId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Diagnosis">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="e2Id" Type="int" Nullable="false" />
+          <Property Name="group" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="other" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="E2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="acuity_method" Type="nvarchar" MaxLength="50" />
+          <Property Name="comments" Type="nvarchar(max)" />
+          <Property Name="counseling" Type="nvarchar(max)" />
+          <Property Name="abnormal_anterior" Type="nvarchar" MaxLength="50" />
+          <Property Name="abnormal_anterior_descr" Type="nvarchar(max)" />
+          <Property Name="spectacles_dispensed" Type="bit" />
+          <Property Name="spectacles_comment" Type="nvarchar" MaxLength="50" />
+          <Property Name="spectacles_cost" Type="nvarchar" MaxLength="50" />
+          <Property Name="referral" Type="bit" />
+          <Property Name="referral_comment" Type="nvarchar" MaxLength="50" />
+          <Property Name="referral_reason" Type="nvarchar" MaxLength="50" />
+          <Property Name="referral_other" Type="nvarchar" MaxLength="50" />
+          <Property Name="referral_location" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ExamComplaint">
           <Key>
@@ -87,6 +125,28 @@
           <Property Name="dateadded" Type="datetime" />
           <Property Name="lastupdated" Type="datetime" />
         </EntityType>
+        <EntityType Name="Refraction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="direction" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="eye" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="value" Type="float" Nullable="false" />
+          <Property Name="e2Id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Alignment_ToE2">
+          <End Role="E2" Type="Self.E2" Multiplicity="1" />
+          <End Role="Alignment" Type="Self.Alignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="E2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Alignment">
+              <PropertyRef Name="e2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_camp_patient_ToCamp">
           <End Role="Camp" Type="Self.Camp" Multiplicity="1" />
           <End Role="camp_patient" Type="Self.camp_patient" Multiplicity="*" />
@@ -108,6 +168,30 @@
             </Principal>
             <Dependent Role="camp_patient">
               <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Diagnosis_ToE2">
+          <End Role="E2" Type="Self.E2" Multiplicity="1" />
+          <End Role="Diagnosis" Type="Self.Diagnosis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="E2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Diagnosis">
+              <PropertyRef Name="e2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_E2_ToExamination">
+          <End Role="Examination" Type="Self.Examination" Multiplicity="1" />
+          <End Role="E2" Type="Self.E2" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Examination">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="E2">
+              <PropertyRef Name="Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -171,13 +255,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Refraction_ToE2">
+          <End Role="E2" Type="Self.E2" Multiplicity="1" />
+          <End Role="Refraction" Type="Self.Refraction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="E2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Refraction">
+              <PropertyRef Name="e2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ModelsStoreContainer">
+          <EntitySet Name="Alignment" EntityType="Self.Alignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Camp" EntityType="Self.Camp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="camp_patient" EntityType="Self.camp_patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Diagnosis" EntityType="Self.Diagnosis" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="E2" EntityType="Self.E2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExamComplaint" EntityType="Self.ExamComplaint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Examination" EntityType="Self.Examination" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mrn" EntityType="Self.mrn" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Refraction" EntityType="Self.Refraction" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Alignment_ToE2" Association="Self.FK_Alignment_ToE2">
+            <End Role="E2" EntitySet="E2" />
+            <End Role="Alignment" EntitySet="Alignment" />
+          </AssociationSet>
           <AssociationSet Name="FK_camp_patient_ToCamp" Association="Self.FK_camp_patient_ToCamp">
             <End Role="Camp" EntitySet="Camp" />
             <End Role="camp_patient" EntitySet="camp_patient" />
@@ -185,6 +289,14 @@
           <AssociationSet Name="FK_camp_patient_ToPatient" Association="Self.FK_camp_patient_ToPatient">
             <End Role="Patient" EntitySet="Patient" />
             <End Role="camp_patient" EntitySet="camp_patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Diagnosis_ToE2" Association="Self.FK_Diagnosis_ToE2">
+            <End Role="E2" EntitySet="E2" />
+            <End Role="Diagnosis" EntitySet="Diagnosis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_E2_ToExamination" Association="Self.FK_E2_ToExamination">
+            <End Role="Examination" EntitySet="Examination" />
+            <End Role="E2" EntitySet="E2" />
           </AssociationSet>
           <AssociationSet Name="FK_ExamComplaint_ToExamination" Association="Self.FK_ExamComplaint_ToExamination">
             <End Role="Examination" EntitySet="Examination" />
@@ -205,6 +317,10 @@
           <AssociationSet Name="FK_Patient_ToMRN" Association="Self.FK_Patient_ToMRN">
             <End Role="mrn" EntitySet="mrn" />
             <End Role="Patient" EntitySet="Patient" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Refraction_ToE2" Association="Self.FK_Refraction_ToE2">
+            <End Role="E2" EntitySet="E2" />
+            <End Role="Refraction" EntitySet="Refraction" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -252,8 +368,8 @@
           </AssociationSet>
           <EntitySet Name="camp_patient" EntityType="Models.camp_patient" />
           <AssociationSet Name="FK_camp_patient_ToCamp" Association="Models.FK_camp_patient_ToCamp">
-            <End Role="Camp" EntitySet="Camps" />
-            <End Role="camp_patient" EntitySet="camp_patient" />
+            <End EntitySet="Camps" Role="Camp" />
+            <End EntitySet="camp_patient" Role="camp_patient" />
           </AssociationSet>
           <AssociationSet Name="FK_camp_patient_ToPatient" Association="Models.FK_camp_patient_ToPatient">
             <End Role="Patient" EntitySet="Patients" />
@@ -277,6 +393,26 @@
           <AssociationSet Name="FK_Examination_ToPatient" Association="Models.FK_Examination_ToPatient">
             <End Role="Patient" EntitySet="Patients" />
             <End Role="Examination" EntitySet="Examinations" />
+          </AssociationSet>
+          <EntitySet Name="Alignments" EntityType="Models.Alignment" />
+          <EntitySet Name="Diagnosis" EntityType="Models.Diagnosi" />
+          <EntitySet Name="E2" EntityType="Models.E2" />
+          <AssociationSet Name="FK_Alignment_ToE2" Association="Models.FK_Alignment_ToE2">
+            <End Role="E2" EntitySet="E2" />
+            <End Role="Alignment" EntitySet="Alignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Diagnosis_ToE2" Association="Models.FK_Diagnosis_ToE2">
+            <End Role="E2" EntitySet="E2" />
+            <End Role="Diagnosi" EntitySet="Diagnosis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_E2_ToExamination" Association="Models.FK_E2_ToExamination">
+            <End Role="Examination" EntitySet="Examinations" />
+            <End Role="E2" EntitySet="E2" />
+          </AssociationSet>
+          <EntitySet Name="Refractions" EntityType="Models.Refraction" />
+          <AssociationSet Name="FK_Refraction_ToE2" Association="Models.FK_Refraction_ToE2">
+            <End Role="E2" EntitySet="E2" />
+            <End Role="Refraction" EntitySet="Refractions" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Camp">
@@ -320,8 +456,8 @@
           <NavigationProperty Name="Patient" Relationship="Models.FK_camp_patient_ToPatient" FromRole="camp_patient" ToRole="Patient" />
         </EntityType>
         <Association Name="FK_camp_patient_ToCamp">
-          <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
-          <End Type="Models.camp_patient" Role="camp_patient" Multiplicity="*" />
+          <End Type="Models.Camp" Multiplicity="1" Role="Camp" />
+          <End Type="Models.camp_patient" Multiplicity="*" Role="camp_patient" />
           <ReferentialConstraint>
             <Principal Role="Camp">
               <PropertyRef Name="Id" />
@@ -390,6 +526,7 @@
           <NavigationProperty Name="Patient" Relationship="Models.FK_Examination_ToPatient" FromRole="Examination" ToRole="Patient" />
           <Property Name="spectacles" Type="Boolean" Nullable="false" />
           <Property Name="status" Type="Int32" />
+          <NavigationProperty Name="E2" Relationship="Models.FK_E2_ToExamination" FromRole="Examination" ToRole="E2" />
         </EntityType>
         <Association Name="FK_Examination_ToCamp">
           <End Type="Models.Camp" Role="Camp" Multiplicity="1" />
@@ -424,6 +561,109 @@
             </Principal>
             <Dependent Role="Examination">
               <PropertyRef Name="patientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Alignment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="direction" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="index" Type="Int32" Nullable="false" />
+          <Property Name="e2Id" Type="Int32" Nullable="false" />
+          <Property Name="selection" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="E2" Relationship="Models.FK_Alignment_ToE2" FromRole="Alignment" ToRole="E2" />
+        </EntityType>
+        <EntityType Name="Diagnosi">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="e2Id" Type="Int32" Nullable="false" />
+          <Property Name="group" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="other" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="E2" Relationship="Models.FK_Diagnosis_ToE2" FromRole="Diagnosi" ToRole="E2" />
+        </EntityType>
+        <EntityType Name="E2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="acuity_method" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="counseling" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="abnormal_anterior" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="abnormal_anterior_descr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="spectacles_dispensed" Type="Boolean" />
+          <Property Name="spectacles_comment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="spectacles_cost" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="referral" Type="Boolean" />
+          <Property Name="referral_comment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="referral_reason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="referral_other" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="referral_location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Alignments" Relationship="Models.FK_Alignment_ToE2" FromRole="E2" ToRole="Alignment" />
+          <NavigationProperty Name="Diagnosis" Relationship="Models.FK_Diagnosis_ToE2" FromRole="E2" ToRole="Diagnosi" />
+          <NavigationProperty Name="Examination" Relationship="Models.FK_E2_ToExamination" FromRole="E2" ToRole="Examination" />
+          <NavigationProperty Name="Refractions" Relationship="Models.FK_Refraction_ToE2" FromRole="E2" ToRole="Refraction" />
+        </EntityType>
+        <Association Name="FK_Alignment_ToE2">
+          <End Type="Models.E2" Role="E2" Multiplicity="1" />
+          <End Type="Models.Alignment" Role="Alignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="E2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Alignment">
+              <PropertyRef Name="e2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Diagnosis_ToE2">
+          <End Type="Models.E2" Role="E2" Multiplicity="1" />
+          <End Type="Models.Diagnosi" Role="Diagnosi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="E2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Diagnosi">
+              <PropertyRef Name="e2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_E2_ToExamination">
+          <End Type="Models.Examination" Role="Examination" Multiplicity="1" />
+          <End Type="Models.E2" Role="E2" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Examination">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="E2">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Refraction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="direction" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="eye" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="value" Type="Double" Nullable="false" />
+          <Property Name="e2Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="E2" Relationship="Models.FK_Refraction_ToE2" FromRole="Refraction" ToRole="E2" />
+        </EntityType>
+        <Association Name="FK_Refraction_ToE2">
+          <End Type="Models.E2" Role="E2" Multiplicity="1" />
+          <End Type="Models.Refraction" Role="Refraction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="E2">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Refraction">
+              <PropertyRef Name="e2Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -517,6 +757,58 @@
                 <ScalarProperty Name="dateComplete" ColumnName="dateComplete" />
                 <ScalarProperty Name="dateStarted" ColumnName="dateStarted" />
                 <ScalarProperty Name="patientId" ColumnName="patientID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Alignments">
+            <EntityTypeMapping TypeName="Models.Alignment">
+              <MappingFragment StoreEntitySet="Alignment">
+                <ScalarProperty Name="selection" ColumnName="selection" />
+                <ScalarProperty Name="e2Id" ColumnName="e2Id" />
+                <ScalarProperty Name="index" ColumnName="index" />
+                <ScalarProperty Name="direction" ColumnName="direction" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Diagnosis">
+            <EntityTypeMapping TypeName="Models.Diagnosi">
+              <MappingFragment StoreEntitySet="Diagnosis">
+                <ScalarProperty Name="other" ColumnName="other" />
+                <ScalarProperty Name="group" ColumnName="group" />
+                <ScalarProperty Name="e2Id" ColumnName="e2Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="E2">
+            <EntityTypeMapping TypeName="Models.E2">
+              <MappingFragment StoreEntitySet="E2">
+                <ScalarProperty Name="referral_location" ColumnName="referral_location" />
+                <ScalarProperty Name="referral_other" ColumnName="referral_other" />
+                <ScalarProperty Name="referral_reason" ColumnName="referral_reason" />
+                <ScalarProperty Name="referral_comment" ColumnName="referral_comment" />
+                <ScalarProperty Name="referral" ColumnName="referral" />
+                <ScalarProperty Name="spectacles_cost" ColumnName="spectacles_cost" />
+                <ScalarProperty Name="spectacles_comment" ColumnName="spectacles_comment" />
+                <ScalarProperty Name="spectacles_dispensed" ColumnName="spectacles_dispensed" />
+                <ScalarProperty Name="abnormal_anterior_descr" ColumnName="abnormal_anterior_descr" />
+                <ScalarProperty Name="abnormal_anterior" ColumnName="abnormal_anterior" />
+                <ScalarProperty Name="counseling" ColumnName="counseling" />
+                <ScalarProperty Name="comments" ColumnName="comments" />
+                <ScalarProperty Name="acuity_method" ColumnName="acuity_method" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Refractions">
+            <EntityTypeMapping TypeName="Models.Refraction">
+              <MappingFragment StoreEntitySet="Refraction">
+                <ScalarProperty Name="e2Id" ColumnName="e2Id" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="eye" ColumnName="eye" />
+                <ScalarProperty Name="direction" ColumnName="direction" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

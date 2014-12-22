@@ -31,5 +31,9 @@ namespace OutreachModule.Models
         public virtual DbSet<mrn> mrns { get; set; }
         public virtual DbSet<ExamComplaint> ExamComplaints { get; set; }
         public virtual DbSet<Examination> Examinations { get; set; }
+        public virtual DbSet<Alignment> Alignments { get; set; }
+        public virtual DbSet<Diagnosi> Diagnosis { get; set; }
+        public virtual DbSet<E2> E2 { get; set; }
+        public virtual DbSet<Refraction> Refractions { get; set; }
     }
 }

@@ -234,6 +234,7 @@ namespace OutreachModule.Models
 
             spectacles = new SpectaclesDispensedModel();
             PatientCounseling = new CommentsModel("Patient Counseling");
+            PatientReferral = new ReferralModel();
         }
         private Camp _camp;
         public Camp camp
@@ -281,11 +282,7 @@ namespace OutreachModule.Models
 
         public CommentsModel PatientCounseling { get; set; }
         
-        public bool PatientReferral { get; set; }
-        public string PatientReferralComment { get; set; }
-        public string PatientReferralReason { get; set; }
-        public string PatientReferralReasonOther { get; set; }
-        public string PatientReferralHospital { get; set; }
+        public ReferralModel PatientReferral { get; set; }
     }
     public class RefractionModel
     {
@@ -419,5 +416,28 @@ namespace OutreachModule.Models
         public bool SpectaclesDispensed { get; set; }
         public string SpectaclesComment { get; set; }
         public string SpectaclesCost { get; set; }
+    }
+    public class ReferralModel
+    {
+        public IEnumerable<SelectListItem> ReferralReasons
+        {
+            get
+            {
+                return _referralReasons.Select((r, index) => new SelectListItem { Text = r, Value = index.ToString() });
+            }
+        }
+        private readonly List<string> _referralReasons = new List<string> {"Cataract","Cornea","Glaucoma","Other"};
+        public int otherIndex 
+        {
+            get
+            {
+                return _referralReasons.Count - 1;
+            }
+       }
+        public bool referred { get; set; }
+        public string comment { get; set; }
+        public string reason { get; set; }
+        public string reasonOther { get; set; }
+        public string hospital { get; set; }
     }
 }

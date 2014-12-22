@@ -39,7 +39,7 @@
                 <li>@Model.patient.gender, @Model.patient.age</li>
             </ul>
         </div>
-        <div class="col-md-3">
+        <div class="pull-right" style="margin-right:20px;">
             Camp: @Html.DisplayFor(model => model.camp.code), @Html.DisplayFor(model => model.camp.date) <br /><br />
             <label for="submit-form" class="btn btn-default">Save</label>
             <label for="submit-form-discharge" class="btn btn-default">Save & Discharge</label>
@@ -61,6 +61,7 @@
             @Html.Partial("CommentsPartial", Model.Comments)
             @Html.Partial("SpectaclesPartial", Model.spectacles)
             @Html.Partial("CommentsPartial",Model.PatientCounseling)
+            @Html.Partial("ReferralPartial",Model.PatientReferral)
             @Html.HiddenFor(model => model.dateStarted)
         }
     </div>
@@ -97,13 +98,32 @@
             $("#anterior-abnormal-detail").show();
         });
     </script>
-<script>
-    $("#spectacles-no").click(function () {
-        $("#spectacles-cost").hide();
-    });
-    $("#spectacles-yes").click(function () {
-        $("#spectacles-cost").show();
-    });
-</script>
+    <script>
+        $("#spectacles-no").click(function () {
+            $("#spectacles-cost").hide();
+        });
+        $("#spectacles-yes").click(function () {
+            $("#spectacles-cost").show();
+        });
+    </script>
+    <script>
+        $("#referral-reasons").change(function () {
+            var val = $(this).val();
+            if (val == @(Model.PatientReferral.otherIndex))
+            {
+                $("#referral-reason-other").show();
+        }
+        else {
+             $("#referral-reason-other").hide();
+        }
+
+        });
+        $("#referred-no").click(function () {
+            $("#referral-yes-details").hide();
+        });
+        $("#referred-yes").click(function () {
+            $("#referral-yes-details").show();
+        });
+    </script>
 
 }

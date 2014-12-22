@@ -31,5 +31,6 @@ namespace OutreachModule.Models
         public virtual Camp Camp { get; set; }
         public virtual ICollection<ExamComplaint> ExamComplaints { get; set; }
         public virtual Patient Patient { get; set; }
+        public virtual E2 E2 { get; set; }
     }
 }

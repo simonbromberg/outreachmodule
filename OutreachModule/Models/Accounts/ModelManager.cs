@@ -471,5 +471,11 @@ namespace OutreachModule.Models
             }
         }
 
+        //Examination Part 2
+        public E2 getE2WithId(int id)
+        {
+            return db.E2.Find(id);
+        }
+
     }
 }
