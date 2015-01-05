@@ -367,7 +367,7 @@ namespace OutreachModule.Models
         public ExaminationDetailModel getExaminationDetailWithId(int e)
         {
             Examination ex = getExaminationWithId(e);
-            List<ExamComplaint> complaints = getComplaintsForExam(e);
+            List<ExamComplaint> complaints = ex.ExamComplaints.ToList(); //getComplaintsForExam(e);
             return new ExaminationDetailModel(ex, complaints);
         }
         public List<Examination> getListOfUnfinishedExaminationsForCamp(int campId)
@@ -477,5 +477,107 @@ namespace OutreachModule.Models
             return db.E2.Find(id);
         }
 
+        public E2 addE2WithModel(ExaminationSection2CreateModel model, string username)
+        {
+            var e2 = new E2();
+            e2.Id = (int)model.examId;
+            e2.user = username;
+            e2.timestamp = DateTime.Now;
+            // Acuity
+            e2.acuity_method = model.visualAcuity.method;
+            e2.acuity_left = model.visualAcuity.leftAcuity;
+            e2.acuity_right = model.visualAcuity.rightAcuity;
+
+            // Refraction
+            var leftRefraction = Refraction.refractionFrom(model.refraction.left);
+            leftRefraction.e2Id = e2.Id;
+            db.Refractions.Add(leftRefraction);
+            var rightRefraction = Refraction.refractionFrom(model.refraction.right);
+            rightRefraction.e2Id = e2.Id;
+            db.Refractions.Add(rightRefraction);
+
+            // Alignment
+            foreach (var align in model.alignment)
+            {
+                var a = new Alignment();
+                a.horizontal = align.horizontalSelection;
+                a.vertical = align.verticalSelection;
+                a.index = align.index;
+                a.e2Id = e2.Id;
+                db.Alignments.Add(a);
+            }
+
+            // Anterior Segment
+            if (!model.anteriorSegment.isNormal) {
+                e2.abnormal_anterior = model.anteriorSegment.abnormalEye.ToString();
+                e2.abnormal_anterior_descr = model.anteriorSegment.description;
+            }
+
+            // Spectacles
+            if (model.spectacles.dispensed)
+            {
+                e2.spectacles_dispensed = model.spectacles.dispensed;
+                e2.spectacles_comment = model.spectacles.comment;
+                e2.spectacles_cost = model.spectacles.cost;
+            }
+
+            // Referral
+            if (model.PatientReferral.referred)
+            {
+                e2.referral = model.PatientReferral.referred;
+                e2.referral_comment = model.PatientReferral.comment;
+                e2.referral_reason = model.PatientReferral.reason;
+                e2.referral_other = model.PatientReferral.reasonOther;
+                e2.referral_location = model.PatientReferral.hospital;
+            }
+
+            // Diagnosis
+            addDiagnosis("L", model.diagnosis.SelectedDiagnosisLeft, model.diagnosis.OtherDiagnosisLeftList,e2.Id);
+            addDiagnosis("R", model.diagnosis.SelectedDiagnosisRight, model.diagnosis.OtherDiagnosisRightList, e2.Id);
+            
+            // Comments + Counseling
+            e2.comments = model.Comments.comment;
+            e2.counseling = model.PatientCounseling.comment;
+
+            db.E2.Add(e2);
+            if (!saveChanges())
+            {
+                Debug.Print("Error saving E2");
+            }
+            return e2;
+        }
+        public void addDiagnosis(string eye, IEnumerable<CheckboxItem> selected,List<string>other,int id) {
+            foreach (var d in selected)
+            {
+                db.Diagnosis.Add(Diagnosis.newDiagnosisWith(eye, id, d.Name, null));
+            }
+
+            foreach (var d in other)
+            {
+                db.Diagnosis.Add(Diagnosis.newDiagnosisWith(eye, id, "Other", d));
+            }
+
+        }
+        public bool deleteE2WithId(int id)
+        {
+            var e2 = db.E2.Find(id);
+            var list = e2.Refractions.ToList();
+            foreach (var r in list)
+            {
+                db.Refractions.Remove(r);
+            }
+            var list2 = e2.Diagnosis.ToList();
+            foreach (var d in list2)
+            {
+                db.Diagnosis.Remove(d);
+            }
+            var list3 = e2.Alignments.ToList();
+            foreach (var a in list3)
+            {
+                db.Alignments.Remove(a);
+            }
+            db.E2.Remove(e2);
+            return saveChanges();
+        }
     }
 }

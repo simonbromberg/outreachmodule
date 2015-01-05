@@ -1,0 +1,175 @@
+﻿@model OutreachModule.Models.E2
+
+<div>
+    <h4>Section 2</h4>
+
+    <dl class="dl-horizontal">
+        <dt>
+            Acuity
+        </dt>
+        <dd>
+            <b>@Html.DisplayNameFor(model => model.acuity_method):</b> @Html.DisplayFor(model => model.acuity_method),
+            <b>@Html.DisplayNameFor(model => model.acuity_right):</b> @Html.DisplayFor(model => model.acuity_right),
+            <b>@Html.DisplayNameFor(model => model.acuity_left):</b> @Html.DisplayFor(model => model.acuity_left)
+        </dd>
+        <dt>
+            Refraction
+        </dt>
+        <dd>
+            @foreach (var r in Model.Refractions)
+            {
+                @Html.Raw("<b>" + r.eye + ": </b>")
+                @Html.Raw("sph: ") @Html.Raw(r.sph)
+                @Html.Raw(", cyl: ") @Html.Raw(r.cyl)
+                @Html.Raw(", axis: ") @Html.Raw(r.axis) @Html.Raw("&emsp;")
+            }
+        </dd>
+        <dt>
+            Alignment
+        </dt>
+        <dd>
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <tr>
+                        @foreach (var a in Model.Alignments)
+                        {
+
+                            <td style="text-align:center;">@Html.Raw(" <b>H:</b> " + a.horizontal + " <b>V:</b> " + a.vertical)</td>
+                            if (a.index != 0 && (a.index + 1) % 3 == 0)
+                            {
+                                @Html.Raw("</tr>")
+                                if (a.index != 8)
+                                {
+                                    @Html.Raw("<tr>")
+                                }
+                            }
+
+                        }
+                </table>
+            </div>
+        </dd>
+        <dt>
+            Anterior Segment
+        </dt>
+        <dd>
+            @if (Model.abnormal_anterior == null || Model.abnormal_anterior.Length == 0) 
+            { 
+                @Html.Raw("Normal");
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.abnormal_anterior);
+                @Html.Raw(" abnormal")
+                if (Model.abnormal_anterior_descr != null)
+                {
+                    @Html.Raw("<b>&emsp;Comment: </b>");
+                    @Html.DisplayFor(model => model.abnormal_anterior_descr);
+                }
+            }
+        </dd>
+        <dt>
+            Diagnosis
+        </dt>
+        <dd>
+            <div class="col-md-3">
+                <b>RE</b><br />
+                @foreach (var d in Model.DiagnosisRight)
+                {
+                    @Html.Raw(d.value + " <br/>");
+                }
+            </div>
+            <div class="col-md-3">
+                <b>LE</b><br />
+                @foreach (var d in Model.DiagnosisLeft)
+                {
+                    @Html.Raw(d.value + " <br/>");
+                }
+            </div>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.counseling)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.counseling)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.spectacles_dispensed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.spectacles_dispensed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.spectacles_comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.spectacles_comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.spectacles_cost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.spectacles_cost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referral)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referral)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referral_comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referral_comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referral_reason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referral_reason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referral_other)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referral_other)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referral_location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referral_location)
+        </dd>
+
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Delete Part 2", "Delete2", new { examId = Model.Id })
+</p>

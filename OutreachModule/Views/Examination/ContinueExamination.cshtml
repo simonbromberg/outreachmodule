@@ -23,6 +23,9 @@
         #body-form {
             margin-top: 140px;
         }
+        .alignment-dropdown {
+            width: 100px;
+        }
     </style>
 }
 <div class="container" id="header-fixed">
@@ -30,17 +33,17 @@
         <h4>Examination Section 2</h4>
 
         <div class="col-md-1">
-            <img src="@Url.Content("/OutreachModule/ptimages/"+Model.patient.photoPathOrPlaceholder)" alt="@Model.patient.name" style="max-height:100px" class="img-thumbnail" />
+            <img src="@Url.Content("/OutreachModule/ptimages/" + Model.exam.Patient.photoPathOrPlaceholder)" alt="@Model.exam.Patient.name" style="max-height:100px" class="img-thumbnail" />
         </div>
         <div class="col-md-8">
             <ul class="list-unstyled">
-                <li>@Model.patient.mrn</li>
-                <li>@Model.patient.name</li>
-                <li>@Model.patient.gender, @Model.patient.age</li>
+                <li>@Model.exam.Patient.mrn</li>
+                <li>@Model.exam.Patient.name</li>
+                <li>@Model.exam.Patient.gender, @Model.exam.Patient.age</li>
             </ul>
         </div>
         <div class="pull-right" style="margin-right:20px;">
-            Camp: @Html.DisplayFor(model => model.camp.code), @Html.DisplayFor(model => model.camp.date) <br /><br />
+            Camp: @Html.DisplayFor(model => model.exam.Camp.code), @Html.DisplayFor(model => model.exam.Camp.date) <br /><br />
             <label for="submit-form" class="btn btn-default">Save</label>
             <label for="submit-form-discharge" class="btn btn-default">Save & Discharge</label>
         </div>
@@ -53,16 +56,19 @@
             @Html.AntiForgeryToken()
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("VisualAcuityPartial", Model.visualAcuity)
-            @Html.Partial("RefractionPartial", Model.refraction)
-            @Html.Partial("AlignmentPartial", Model.alignment)
-            @Html.Partial("AnteriorSegment", Model.anteriorSegment)
-            @Html.Partial("DiagnosisPartial", Model.diagnosis)
-            @Html.Partial("CommentsPartial", Model.Comments)
-            @Html.Partial("SpectaclesPartial", Model.spectacles)
-            @Html.Partial("CommentsPartial",Model.PatientCounseling)
-            @Html.Partial("ReferralPartial",Model.PatientReferral)
+            @Html.Partial("VisualAcuityPartial", Model.visualAcuity, new ViewDataDictionary() {TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "visualAcuity" }})
+            @Html.Partial("RefractionPartial", Model.refraction, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "refraction" } })
+            @Html.Partial("AlignmentPartial", Model.alignment, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "alignment" } })
+            @Html.Partial("AnteriorSegment", Model.anteriorSegment, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "anteriorSegment" } })
+            @Html.Partial("DiagnosisPartial", Model.diagnosis, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "diagnosis" } })
+            @Html.Partial("CommentsPartial", Model.Comments, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "Comments" } })
+            @Html.Partial("SpectaclesPartial", Model.spectacles, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "spectacles" } })
+            @Html.Partial("CommentsPartial", Model.PatientCounseling, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "PatientCounseling" } })
+            @Html.Partial("ReferralPartial", Model.PatientReferral, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "PatientReferral" } })
             @Html.HiddenFor(model => model.dateStarted)
+            @Html.HiddenFor(model => model.examId)
+    <input type="submit" value="Save" name="Command" class="btn btn-default hidden" id="submit-form" />
+    <input type="submit" value="SaveAndDischarge" name="Command" class="btn btn-default hidden" id="submit-form-discharge" />
         }
     </div>
 </div>

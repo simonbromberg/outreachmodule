@@ -196,7 +196,7 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Accounts\IdentityModels.cs" />
-    <Compile Include="Models\Diagnosi.cs">
+    <Compile Include="Models\Diagnosis.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\E2.cs">
@@ -436,6 +436,8 @@
     <Content Include="Views\Examination\CommentsPartial.cshtml" />
     <Content Include="Views\Examination\SpectaclesPartial.cshtml" />
     <Content Include="Views\Examination\ReferralPartial.cshtml" />
+    <Content Include="Views\Examination\E2DetailPartial.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\spectacles.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

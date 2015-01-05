@@ -10,10 +10,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="direction" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="index" Type="int" Nullable="false" />
           <Property Name="e2Id" Type="int" Nullable="false" />
-          <Property Name="selection" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="horizontal" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="index" Type="int" Nullable="false" />
+          <Property Name="vertical" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Camp">
           <Key>
@@ -46,13 +46,16 @@
           <Property Name="e2Id" Type="int" Nullable="false" />
           <Property Name="group" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="other" Type="nvarchar" MaxLength="50" />
+          <Property Name="value" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="E2">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="acuity_method" Type="nvarchar" MaxLength="50" />
+          <Property Name="acuity_left" Type="nvarchar" MaxLength="50" />
+          <Property Name="acuity_right" Type="nvarchar" MaxLength="50" />
           <Property Name="comments" Type="nvarchar(max)" />
           <Property Name="counseling" Type="nvarchar(max)" />
           <Property Name="abnormal_anterior" Type="nvarchar" MaxLength="50" />
@@ -65,6 +68,8 @@
           <Property Name="referral_reason" Type="nvarchar" MaxLength="50" />
           <Property Name="referral_other" Type="nvarchar" MaxLength="50" />
           <Property Name="referral_location" Type="nvarchar" MaxLength="50" />
+          <Property Name="timestamp" Type="datetime" />
+          <Property Name="user" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ExamComplaint">
           <Key>
@@ -130,10 +135,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="direction" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="eye" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="value" Type="float" Nullable="false" />
           <Property Name="e2Id" Type="int" Nullable="false" />
+          <Property Name="sph" Type="float" Nullable="false" />
+          <Property Name="cyl" Type="float" Nullable="false" />
+          <Property Name="axis" Type="float" Nullable="false" />
+          <Property Name="eye" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <Association Name="FK_Alignment_ToE2">
           <End Role="E2" Type="Self.E2" Multiplicity="1" />
@@ -395,7 +401,7 @@
             <End Role="Examination" EntitySet="Examinations" />
           </AssociationSet>
           <EntitySet Name="Alignments" EntityType="Models.Alignment" />
-          <EntitySet Name="Diagnosis" EntityType="Models.Diagnosi" />
+          <EntitySet Name="Diagnosis" EntityType="Models.Diagnosis" />
           <EntitySet Name="E2" EntityType="Models.E2" />
           <AssociationSet Name="FK_Alignment_ToE2" Association="Models.FK_Alignment_ToE2">
             <End Role="E2" EntitySet="E2" />
@@ -569,13 +575,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="direction" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="index" Type="Int32" Nullable="false" />
           <Property Name="e2Id" Type="Int32" Nullable="false" />
-          <Property Name="selection" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="E2" Relationship="Models.FK_Alignment_ToE2" FromRole="Alignment" ToRole="E2" />
+          <Property Name="horizontal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="vertical" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Diagnosi">
+        <EntityType Name="Diagnosis">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -584,6 +590,7 @@
           <Property Name="group" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="other" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="E2" Relationship="Models.FK_Diagnosis_ToE2" FromRole="Diagnosi" ToRole="E2" />
+          <Property Name="value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="E2">
           <Key>
@@ -607,6 +614,10 @@
           <NavigationProperty Name="Diagnosis" Relationship="Models.FK_Diagnosis_ToE2" FromRole="E2" ToRole="Diagnosi" />
           <NavigationProperty Name="Examination" Relationship="Models.FK_E2_ToExamination" FromRole="E2" ToRole="Examination" />
           <NavigationProperty Name="Refractions" Relationship="Models.FK_Refraction_ToE2" FromRole="E2" ToRole="Refraction" />
+          <Property Name="acuity_left" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="acuity_right" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="timestamp" Type="DateTime" Precision="3" />
+          <Property Name="user" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Alignment_ToE2">
           <End Type="Models.E2" Role="E2" Multiplicity="1" />
@@ -622,7 +633,7 @@
         </Association>
         <Association Name="FK_Diagnosis_ToE2">
           <End Type="Models.E2" Role="E2" Multiplicity="1" />
-          <End Type="Models.Diagnosi" Role="Diagnosi" Multiplicity="*" />
+          <End Type="Models.Diagnosis" Role="Diagnosi" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="E2">
               <PropertyRef Name="Id" />
@@ -649,11 +660,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="direction" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="eye" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="value" Type="Double" Nullable="false" />
           <Property Name="e2Id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="E2" Relationship="Models.FK_Refraction_ToE2" FromRole="Refraction" ToRole="E2" />
+          <Property Name="sph" Type="Double" Nullable="false" />
+          <Property Name="cyl" Type="Double" Nullable="false" />
+          <Property Name="axis" Type="Double" Nullable="false" />
         </EntityType>
         <Association Name="FK_Refraction_ToE2">
           <End Type="Models.E2" Role="E2" Multiplicity="1" />
@@ -764,17 +776,18 @@
           <EntitySetMapping Name="Alignments">
             <EntityTypeMapping TypeName="Models.Alignment">
               <MappingFragment StoreEntitySet="Alignment">
-                <ScalarProperty Name="selection" ColumnName="selection" />
+                <ScalarProperty Name="vertical" ColumnName="vertical" />
+                <ScalarProperty Name="horizontal" ColumnName="horizontal" />
                 <ScalarProperty Name="e2Id" ColumnName="e2Id" />
                 <ScalarProperty Name="index" ColumnName="index" />
-                <ScalarProperty Name="direction" ColumnName="direction" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Diagnosis">
-            <EntityTypeMapping TypeName="Models.Diagnosi">
+            <EntityTypeMapping TypeName="Models.Diagnosis">
               <MappingFragment StoreEntitySet="Diagnosis">
+                <ScalarProperty Name="value" ColumnName="value" />
                 <ScalarProperty Name="other" ColumnName="other" />
                 <ScalarProperty Name="group" ColumnName="group" />
                 <ScalarProperty Name="e2Id" ColumnName="e2Id" />
@@ -785,6 +798,10 @@
           <EntitySetMapping Name="E2">
             <EntityTypeMapping TypeName="Models.E2">
               <MappingFragment StoreEntitySet="E2">
+                <ScalarProperty Name="user" ColumnName="user" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="acuity_right" ColumnName="acuity_right" />
+                <ScalarProperty Name="acuity_left" ColumnName="acuity_left" />
                 <ScalarProperty Name="referral_location" ColumnName="referral_location" />
                 <ScalarProperty Name="referral_other" ColumnName="referral_other" />
                 <ScalarProperty Name="referral_reason" ColumnName="referral_reason" />
@@ -805,10 +822,11 @@
           <EntitySetMapping Name="Refractions">
             <EntityTypeMapping TypeName="Models.Refraction">
               <MappingFragment StoreEntitySet="Refraction">
+                <ScalarProperty Name="axis" ColumnName="axis" />
+                <ScalarProperty Name="cyl" ColumnName="cyl" />
+                <ScalarProperty Name="sph" ColumnName="sph" />
                 <ScalarProperty Name="e2Id" ColumnName="e2Id" />
-                <ScalarProperty Name="value" ColumnName="value" />
                 <ScalarProperty Name="eye" ColumnName="eye" />
-                <ScalarProperty Name="direction" ColumnName="direction" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

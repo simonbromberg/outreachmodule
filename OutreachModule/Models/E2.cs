@@ -17,7 +17,7 @@ namespace OutreachModule.Models
         public E2()
         {
             this.Alignments = new HashSet<Alignment>();
-            this.Diagnosis = new HashSet<Diagnosi>();
+            this.Diagnosis = new HashSet<Diagnosis>();
             this.Refractions = new HashSet<Refraction>();
         }
     
@@ -35,9 +35,13 @@ namespace OutreachModule.Models
         public string referral_reason { get; set; }
         public string referral_other { get; set; }
         public string referral_location { get; set; }
+        public string acuity_left { get; set; }
+        public string acuity_right { get; set; }
+        public Nullable<System.DateTime> timestamp { get; set; }
+        public string user { get; set; }
     
         public virtual ICollection<Alignment> Alignments { get; set; }
-        public virtual ICollection<Diagnosi> Diagnosis { get; set; }
+        public virtual ICollection<Diagnosis> Diagnosis { get; set; }
         public virtual Examination Examination { get; set; }
         public virtual ICollection<Refraction> Refractions { get; set; }
     }

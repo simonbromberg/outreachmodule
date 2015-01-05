@@ -1,11 +1,11 @@
-﻿@model Dictionary<OutreachModule.Models.Eye,OutreachModule.Models.RefractionModel>
+﻿@model OutreachModule.Models.RefractionModel
 @using OutreachModule.Models
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Refraction</h3>
     </div>
     <div class="panel-body">
-    @Html.Partial("RefractionSubPartial",Model[Eye.Right])
-    @Html.Partial("RefractionSubPartial", Model[Eye.Left])
+    @Html.Partial("RefractionSubPartial", Model.right, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "refraction.right" } })
+    @Html.Partial("RefractionSubPartial", Model.left, new ViewDataDictionary() { TemplateInfo = new TemplateInfo() { HtmlFieldPrefix = "refraction.left" } })
     </div>
 </div>

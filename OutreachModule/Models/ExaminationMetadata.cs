@@ -26,6 +26,17 @@ namespace OutreachModule.Models
             return c;
         }
     }
+    public class ExaminationMetadata
+    {
+        [Display(Name = "Date Started")]
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy HH:mm:ss}")]
+        public System.DateTime dateStarted;
+        [Display(Name = "Date Complete")]
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy HH:mm:ss}")]
+        public System.DateTime dateComplete;
+        [UIHint("spectacles")]
+        public bool spectacles;
+    }
     [MetadataType(typeof(ExaminationMetadata))]
     public partial class Examination
     {
@@ -50,6 +61,86 @@ namespace OutreachModule.Models
             }
         }
     }
+    [MetadataType(typeof(E2Metadata))]
+    public partial class E2
+    {
+        public List<Diagnosis> DiagnosisLeft
+        {
+            get
+            {
+                var list = Diagnosis;
+                foreach (var m in list)
+                {
+                    bool b =  m.group=="L";
+                    Debug.Print(m.value+" <"+m.group + "> " + b.ToString());
+                }
+                return Diagnosis.Where(m => m.group == "L").ToList();
+            }
+        }
+        public List<Diagnosis> DiagnosisRight
+        {
+            get
+            {
+                return Diagnosis.Where(m => m.group == "R").ToList();
+            }
+        }
+    }
+    public class E2Metadata
+    {
+        //Acuity
+        [Display(Name = "Method")]
+        public string acuity_method;
+        [Display(Name = "Left")]
+        public string acuity_left;
+        [Display(Name = "Right")]
+        public string acuity_right;
+
+        [Display(Name = "Comments")]
+        public string comments;
+        [Display(Name = "Patient Counseling")]
+        public string counseling;
+
+        [Display(Name = "Anterior Segment")]
+        public string abnormal_anterior;
+        [Display(Name = "Description")]
+        public string abnormal_anterior_descr { get; set; }
+
+        [Display(Name = "Spectacles Dispensed?")]
+        [UIHint("spectacles")]
+        public Nullable<bool> spectacles_dispensed;
+        [Display(Name = "Comment")]
+        public string spectacles_comment;
+        [Display(Name = "Cost")]
+        public string spectacles_cost;
+        [Display(Name = "Referral")]
+        public Nullable<bool> referral;
+        [Display(Name = "Comment")]
+        public string referral_comment;
+        [Display(Name = "Reason")]
+        public string referral_reason;
+        [Display(Name = "Other")]
+        public string referral_other;
+        [Display(Name = "Referral Location")]
+        public string referral_location { get; set; }
+
+        [Display(Name = "Timestamp")]
+        public Nullable<System.DateTime> timestamp { get; set; }
+        [Display(Name = "User")]
+        public string user { get; set; }
+    }
+
+    public partial class Diagnosis
+    {
+        public static Diagnosis newDiagnosisWith(string eye, int id, string value,string other)
+        {
+            var diag = new Diagnosis();
+            diag.e2Id = id;
+            diag.value = value;
+            diag.group = eye;
+            diag.other = other;
+            return diag;
+        }
+    }
     public class OtherListModel
     {
         public OtherListModel(string n)
@@ -60,15 +151,7 @@ namespace OutreachModule.Models
         public string name { get; set; }
         public List<string> list { get; set; }
     }
-    public class ExaminationMetadata
-    {
-        [Display(Name="Date Started")]
-        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy HH:mm:ss}")]
-        public System.DateTime dateStarted;
-        [Display(Name = "Date Complete")]
-        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy HH:mm:ss}")]
-        public System.DateTime dateComplete;
-    }
+
     public class CheckboxItem
     {
         //Integer value of a checkbox
@@ -220,7 +303,7 @@ namespace OutreachModule.Models
         public ExaminationSection2CreateModel()
         {
             visualAcuity = new VisualAcuityModel();
-            refraction = new Dictionary<Eye,RefractionModel>() {{Eye.Right,new RefractionModel("RE")},{Eye.Left,new RefractionModel("LE")}};
+            refraction = new RefractionModel();
             alignment = new List<AlignmentModel>();
             for (var i = 0; i < 9; i++)
             {
@@ -236,36 +319,24 @@ namespace OutreachModule.Models
             PatientCounseling = new CommentsModel("Patient Counseling");
             PatientReferral = new ReferralModel();
         }
-        private Camp _camp;
-        public Camp camp
+        private Examination _exam;
+        public Examination exam
         {
-            get { return _camp; }
+            get { return _exam; }
             set
             {
-                _camp = value;
-                campId = value.Id;
+                _exam = value;
+                examId = value.Id;
             }
         }
-        private Patient _patient;
-        public Patient patient
-        {
-            get { return _patient; }
-            set
-            {
-                _patient = value;
-                patientId = value.Id;
-            }
-        }
+        public Nullable<int> examId { get; set; }
 
-        public Nullable<int> campId { get; set; }
-        public Nullable<int> patientId { get; set; }
         public string photoPath { get; set; }
         public System.DateTime dateStarted { get; set; }
         public System.DateTime dateComplete { get; set; }
 
         public VisualAcuityModel visualAcuity { get; set; }
-        public Dictionary<Eye,RefractionModel> refraction { get; set; }
-        public RefractionModel rightRefraction { get; set; }
+        public RefractionModel refraction { get; set; }
         public List<AlignmentModel> alignment { get; set; } //list of 9, left to right, top to bottom
         public AnteriorSegmentModel anteriorSegment { get; set; }
         public ExternalAdnexaModel externalAdnexa { get; set; }
@@ -286,7 +357,17 @@ namespace OutreachModule.Models
     }
     public class RefractionModel
     {
-        public RefractionModel(string i)
+        public RefractionModel()
+        {
+            left = new RefractionSubModel("LE");
+            right = new RefractionSubModel("RE");
+        }
+        public RefractionSubModel left {get; set;}
+        public RefractionSubModel right {get; set;}
+    }
+
+    public class RefractionSubModel {
+        public RefractionSubModel(string i)
         {
             eye = i;
         }
@@ -313,11 +394,29 @@ namespace OutreachModule.Models
         private readonly List<string> _acuityOptions = new List<string> { "20/630", "20/500", "20/400", "20/320", "20/250", "20/200", "20/160", "20/125", "20/100", "20/80", "20/63", "20/50", "20/40", "20/32", "20/25", "20/20" };
         public static List<string> options = new List<string> { "Unaided", "Best Corrected", "Pinhole", "Presenting" };
         public string method { get; set; }
-        public string leftAcuity { get; set; }
-        public string rightAcuity { get; set; }
+        public int l { get; set; }
+        public int r { get; set; }
+        public string leftAcuity
+        {
+            get
+            {
+                return _acuityOptions[l];
+            }
+        }
+        public string rightAcuity
+        {
+            get
+            {
+                return _acuityOptions[r];
+            }
+        }
     }
     public class AlignmentModel
     {
+        public AlignmentModel()
+        {
+            index = 0;
+        }
         public AlignmentModel(int i)
         {
             index = i;
@@ -325,7 +424,20 @@ namespace OutreachModule.Models
         public int index { get; set; }
         public int horizontal { get; set; }
         public int vertical { get; set; }
-
+        public string horizontalSelection
+        {
+            get
+            {
+                return _horizontalAlignmentOptions[horizontal];
+            }
+        }
+        public string verticalSelection
+        {
+            get
+            {
+                return _verticalAlignmentOptions[vertical];
+            }
+        }
         public IEnumerable<SelectListItem> HorizontalOptions
         {
             get
@@ -341,8 +453,8 @@ namespace OutreachModule.Models
                 return _verticalAlignmentOptions.Select((r, index) => new SelectListItem { Text = r, Value = index.ToString() });
             }
         }
-        private readonly List<string> _horizontalAlignmentOptions = new List<string> {"90XT","85XT","80XT","75XT","70XT","65XT","60XT","55XT","50XT","45XT","40XT","35XT","30XT","25XT","20XT","18XT","16XT","14XT","12XT","10XT","9XT","8XT","7XT","6XT","5XT","4XT","3XT","2XT","1XT","O","1ET","2ET","3ET","4ET","5ET","6ET","7ET","8ET","9ET","10ET","12ET","14ET","16ET","18ET","20ET","25ET","30ET","35ET","40ET","45ET","50ET","55ET","60ET","65ET","70ET","75ET","80ET","85ET","90ET"};
-        private readonly List<string> _verticalAlignmentOptions = new List<string> { "50LHT", "45LHT", "40LHT", "35LHT", "30LHT", "25LHT", "20LHT", "18LHT", "16LHT", "14LHT", "12LHT", "10LHT", "9LHT", "8LHT", "7LHT", "6LHT", "5LHT", "4LHT", "3LHT", "2LHT", "1LHT", "O", "1RHT", "2RHT", "3RHT", "4RHT", "5RHT", "6RHT", "7RHT", "8RHT", "9RHT", "10RHT", "12RHT", "14RHT", "16RHT", "18RHT", "20RHT", "25RHT", "30RHT", "35RHT", "40RHT", "45RHT", "50RHT" };
+        public readonly List<string> _horizontalAlignmentOptions = new List<string> {"90XT","85XT","80XT","75XT","70XT","65XT","60XT","55XT","50XT","45XT","40XT","35XT","30XT","25XT","20XT","18XT","16XT","14XT","12XT","10XT","9XT","8XT","7XT","6XT","5XT","4XT","3XT","2XT","1XT","O","1ET","2ET","3ET","4ET","5ET","6ET","7ET","8ET","9ET","10ET","12ET","14ET","16ET","18ET","20ET","25ET","30ET","35ET","40ET","45ET","50ET","55ET","60ET","65ET","70ET","75ET","80ET","85ET","90ET"};
+        public readonly List<string> _verticalAlignmentOptions = new List<string> { "50LHT", "45LHT", "40LHT", "35LHT", "30LHT", "25LHT", "20LHT", "18LHT", "16LHT", "14LHT", "12LHT", "10LHT", "9LHT", "8LHT", "7LHT", "6LHT", "5LHT", "4LHT", "3LHT", "2LHT", "1LHT", "O", "1RHT", "2RHT", "3RHT", "4RHT", "5RHT", "6RHT", "7RHT", "8RHT", "9RHT", "10RHT", "12RHT", "14RHT", "16RHT", "18RHT", "20RHT", "25RHT", "30RHT", "35RHT", "40RHT", "45RHT", "50RHT" };
     }
     public enum Eye: int {
         Neither,
@@ -384,6 +496,8 @@ namespace OutreachModule.Models
         {
             OtherDiagnosisRight = new OtherListModel("OtherDiagnosisRightList");
             OtherDiagnosisLeft = new OtherListModel("OtherDiagnosisLeftList");
+            SelectedDiagnosisLeft = new List<CheckboxItem>();
+            SelectedDiagnosisRight = new List<CheckboxItem>();
             AvailableDiagnosisOptions = ExaminationCheckboxRepository.GetList(ListType.MedicalHistory);
         }
         public IEnumerable<CheckboxItem> AvailableDiagnosisOptions { get; set; }
@@ -413,9 +527,9 @@ namespace OutreachModule.Models
         //{
 
         //}
-        public bool SpectaclesDispensed { get; set; }
-        public string SpectaclesComment { get; set; }
-        public string SpectaclesCost { get; set; }
+        public bool dispensed { get; set; }
+        public string comment { get; set; }
+        public string cost { get; set; }
     }
     public class ReferralModel
     {
@@ -439,5 +553,18 @@ namespace OutreachModule.Models
         public string reason { get; set; }
         public string reasonOther { get; set; }
         public string hospital { get; set; }
+    }
+
+    public partial class Refraction
+    {
+        public static Refraction refractionFrom(RefractionSubModel model)
+        {
+            var refraction = new Refraction();
+            refraction.eye = model.eye;
+            refraction.sph = model.sph;
+            refraction.cyl = model.cyl;
+            refraction.axis = model.axis;
+            return refraction;
+        }
     }
 }

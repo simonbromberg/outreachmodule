@@ -6,16 +6,16 @@
     <div class="panel-body">
         <div class="form-group form-inline">
             <label class="radio-inline" id="spectacles-yes">
-                @Html.RadioButtonFor(model => model.SpectaclesDispensed, "true") Yes
+                @Html.RadioButtonFor(model => model.dispensed, "true") Yes
             </label>
             <label class="radio-inline" id="spectacles-no">
-                @Html.RadioButtonFor(model => model.SpectaclesDispensed, "false") No
+                @Html.RadioButtonFor(model => model.dispensed, "false") No
             </label>&nbsp;&nbsp;&nbsp;
-            @Html.EditorFor(model => model.SpectaclesComment, new { htmlAttributes = new { @class = "form-control",placeholder="Comment"} })
+            @Html.EditorFor(model => model.comment, new { htmlAttributes = new { @class = "form-control",placeholder="Comment"} })
         </div>
         <div class="form-group form-inline" id="spectacles-cost" style="display:none">
             <label class="control-label">Cost</label>
-            @Html.EditorFor(model => model.SpectaclesCost, new { htmlAttributes = new { @class = "form-control", placeholder = "Spectacle Cost (Rupees)" } })
+            @Html.EditorFor(model => model.cost, new { htmlAttributes = new { @class = "form-control", placeholder = "Spectacle Cost (Rupees)" } })
         </div>
     </div>
 </div>

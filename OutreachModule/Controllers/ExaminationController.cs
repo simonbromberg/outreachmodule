@@ -34,19 +34,15 @@ namespace OutreachModule.Controllers
         [HttpPost]
         public ActionResult Index(ExaminationCreateModel m,string Command)
         {
-            Debug.Print("POST: \n"+m.description);
             Examination examination;
             bool shouldUpdate = false;
-            Debug.Print(m.examinationID.ToString() + " " + Command);
             if (m.examinationID != null)
             {
-                Debug.Print("existing examination");
                 shouldUpdate = true;
                 examination = manager.getExaminationWithId((int)m.examinationID);
             }
             else
             {
-                Debug.Print("New examination");
                 examination = new Examination(m);
             }
             examination.dateComplete = DateTime.Now;
@@ -64,7 +60,6 @@ namespace OutreachModule.Controllers
             else {
                 
                 manager.addExamination(examination);
-                Debug.Print("Adding new examination " + examination.Id.ToString());
                 manager.addComplaintsFrom(m,examination.Id);
 
             }
@@ -106,15 +101,28 @@ namespace OutreachModule.Controllers
 
             return RedirectToAction("Patient", "Camp", new { patientId = exam.patientId });
         }
-
+        [Authorize(Roles = OutreachRoles.RoleAdmin)]
+        public ActionResult Delete2(int examId)
+        {
+            manager.deleteE2WithId(examId);
+            return RedirectToAction("Detail", new { examId = examId });
+        }
         public ActionResult ContinueExamination(int examId)
         {
             ExaminationSection2CreateModel model = new ExaminationSection2CreateModel();
             var exam = manager.getExaminationWithId(examId);
-            model.patient = exam.Patient;
-            model.camp = exam.Camp;
+            model.exam = exam;
             model.dateStarted = DateTime.Now;
             return View(model);
+        }
+        [HttpPost]
+        public ActionResult ContinueExamination(ExaminationSection2CreateModel model)
+        {
+            model.diagnosis.SelectedDiagnosisLeft = GetSelected(model.diagnosis.PostedDiagnosisLeft, ListType.MedicalHistory);
+            model.diagnosis.SelectedDiagnosisRight = GetSelected(model.diagnosis.PostedDiagnosisRight, ListType.MedicalHistory);
+            
+            manager.addE2WithModel(model,User.Identity.GetUserName());
+            return RedirectToAction("Detail", new { examId = model.examId });
         }
         private List<CheckboxItem> GetSelected(PostedComplaints posted,ListType type)
         {
@@ -179,16 +187,16 @@ namespace OutreachModule.Controllers
 
             //setup a view model
             model.AvailableComplaints = ExaminationCheckboxRepository.GetList(ListType.Complaint);
-            model.SelectedLeftComplaints = selected;
-            model.SelectedRightComplaints = selected;
+            model.SelectedLeftComplaints = new List<CheckboxItem>(); ;
+            model.SelectedRightComplaints = new List<CheckboxItem>(); ;
 
             model.AvailableOcularHistory = ExaminationCheckboxRepository.GetList(ListType.OcularHistory);
-            model.SelectedLeftOcularHistory = selected;
-            model.SelectedRightOcularHistory = selected;
+            model.SelectedLeftOcularHistory = new List<CheckboxItem>(); ;
+            model.SelectedRightOcularHistory = new List<CheckboxItem>(); ;
 
             model.AvailableMedicalHistory = ExaminationCheckboxRepository.GetList(ListType.MedicalHistory);
-            model.SelectedMedicalHistory = selected;
-            model.SelectedFamilyHistory = selected;
+            model.SelectedMedicalHistory = new List<CheckboxItem>(); ;
+            model.SelectedFamilyHistory = new List<CheckboxItem>(); ;
             return model;
         }
     }

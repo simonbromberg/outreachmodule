@@ -12,12 +12,13 @@ namespace OutreachModule.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Diagnosi
+    public partial class Diagnosis
     {
         public int Id { get; set; }
         public int e2Id { get; set; }
         public string group { get; set; }
         public string other { get; set; }
+        public string value { get; set; }
     
         public virtual E2 E2 { get; set; }
     }

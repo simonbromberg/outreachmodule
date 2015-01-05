@@ -15,10 +15,11 @@ namespace OutreachModule.Models
     public partial class Refraction
     {
         public int Id { get; set; }
-        public string direction { get; set; }
         public string eye { get; set; }
-        public double value { get; set; }
         public int e2Id { get; set; }
+        public double sph { get; set; }
+        public double cyl { get; set; }
+        public double axis { get; set; }
     
         public virtual E2 E2 { get; set; }
     }

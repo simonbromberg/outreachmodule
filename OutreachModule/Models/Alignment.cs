@@ -15,10 +15,10 @@ namespace OutreachModule.Models
     public partial class Alignment
     {
         public int Id { get; set; }
-        public string direction { get; set; }
         public int index { get; set; }
         public int e2Id { get; set; }
-        public string selection { get; set; }
+        public string horizontal { get; set; }
+        public string vertical { get; set; }
     
         public virtual E2 E2 { get; set; }
     }

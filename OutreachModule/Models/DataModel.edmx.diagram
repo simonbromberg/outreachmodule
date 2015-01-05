@@ -18,8 +18,8 @@
         <AssociationConnector Association="Models.FK_Examination_ToCamp" />
         <AssociationConnector Association="Models.FK_ExamComplaint_ToExamination" />
         <AssociationConnector Association="Models.FK_Examination_ToPatient" />
-        <EntityTypeShape EntityType="Models.Alignment" Width="1.5" PointX="2.5" PointY="5" />
-        <EntityTypeShape EntityType="Models.Diagnosi" Width="1.5" PointX="2.5" PointY="2.875" />
+        <EntityTypeShape EntityType="Models.Alignment" Width="1.5" PointX="2.5" PointY="5.75" />
+        <EntityTypeShape EntityType="Models.Diagnosis" Width="1.5" PointX="2.5" PointY="3.375" />
         <EntityTypeShape EntityType="Models.E2" Width="1.5" PointX="4.625" PointY="0.875" />
         <AssociationConnector Association="Models.FK_Alignment_ToE2" />
         <AssociationConnector Association="Models.FK_Diagnosis_ToE2" />
