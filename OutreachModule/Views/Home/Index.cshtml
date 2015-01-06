@@ -19,20 +19,17 @@
 </p>
 
 <h4>@Html.ActionLink("Counter 1: Patient Registration", "GoToRegistration")</h4>
-<h4>@Html.ActionLink("Counter 2: Patient Screening", "GoToScreening")</h4>
-<h4>@Html.ActionLink("Counter 3: Patient Examination", "GoToExamination")</h4>
+<h4>@Html.ActionLink("Counter 2: Patient Screening", "GoToScreening") (@ViewBag.ToScreenCount)</h4>
+<h4>@Html.ActionLink("Counter 3: Patient Examination", "GoToExamination") (@ViewBag.ToExamineCount)</h4>
 
 <p> Change current camp:</p>
-@using (Html.BeginForm("Go", "Home", FormMethod.Get, new { @class = "form-inline" }))
+@using (Html.BeginForm("Go", "Home", FormMethod.Get, new { @class = "form-inline",id="camp-form" }))
 {
     {
         if (((SelectList)ViewBag.CampList).Count() > 0)
         {
             <div class="form-group">
-                @Html.DropDownList("selectedId", ViewBag.CampList as SelectList, new { @class = "form-control form-inline" })
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-success" value="Save" /><br />
+                @Html.DropDownList("selectedId", ViewBag.CampList as SelectList, new { @class = "form-control form-inline",id="camp-select" })
             </div>
         }
         else
@@ -49,5 +46,10 @@
         if (mes != '') {
             window.alert(mes);
         }
+
+        $("#camp-select").change(function () {
+            $("#camp-form").submit();
+        });
     </script>
+
 }

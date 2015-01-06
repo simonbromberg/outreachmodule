@@ -22,9 +22,15 @@ namespace OutreachModule.Controllers
         {
             var campId = getDefaultCamp();
             if (campId != null) {
-                ViewBag.SavedCamp = manager.getCampWithId((int)campId);
+                ViewBag.SavedCamp = manager.getCampWithId((int)campId);            
+                ViewBag.ToScreenCount = manager.getListOfUnscreenedPatientsForCamp((int)campId).Count();
+                ViewBag.ToExamineCount = manager.getListOfUnfinishedExaminationsForCamp((int)campId).Count();
             }
-            
+            else
+            {
+                ViewBag.ToScreenCount = "N/A";
+                ViewBag.ToExamineCount = "N/A";
+            }
             ViewBag.CampList = new SelectList(manager.campList, "Id", "selectRow", getDefaultCamp());
             return View();
         }
