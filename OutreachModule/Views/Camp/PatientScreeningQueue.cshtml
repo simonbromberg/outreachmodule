@@ -1,9 +1,16 @@
 ﻿@model List<OutreachModule.Models.Patient>
 <h2>Patients to be screened</h2>
 
+@if (Model.Count > 0) {
 <ul>
     @foreach (var p in Model)
     {
         <li>@Html.ActionLink(p.mrn, "Patient", new { patientId = p.Id })</li>
     }
 </ul>
+}
+else
+{
+    <p>No patients in this queue</p>
+}
+<p>@Html.ActionLink("Back", "Index", "Home")</p>

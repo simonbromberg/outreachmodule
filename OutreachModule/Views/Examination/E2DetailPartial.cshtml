@@ -52,8 +52,8 @@
             Anterior Segment
         </dt>
         <dd>
-            @if (Model.abnormal_anterior == null || Model.abnormal_anterior.Length == 0) 
-            { 
+            @if (Model.abnormal_anterior == null || Model.abnormal_anterior.Length == 0)
+            {
                 @Html.Raw("Normal");
             }
             else
@@ -63,7 +63,7 @@
                 if (Model.abnormal_anterior_descr != null)
                 {
                     @Html.Raw("<b>&emsp;Comment: </b>");
-                    @Html.DisplayFor(model => model.abnormal_anterior_descr);
+                @Html.DisplayFor(model => model.abnormal_anterior_descr);
                 }
             }
         </dd>
@@ -71,27 +71,43 @@
             Diagnosis
         </dt>
         <dd>
-            <div class="col-md-3">
-                <b>RE</b><br />
-                @foreach (var d in Model.DiagnosisRight)
+            @{
+                if (!(Model.DiagnosisRight.Count() > 0) && !(Model.DiagnosisLeft.Count() > 0))
                 {
-                    @Html.Raw(d.displayValue + " <br/>");
+                    @Html.Raw("N/A");
                 }
-            </div>
-            <div class="col-md-3">
-                <b>LE</b><br />
-                @foreach (var d in Model.DiagnosisLeft)
+                else
                 {
-                    @Html.Raw(d.displayValue + " <br/>");
+                    <div class="col-md-3">
+                        <b>RE</b><br />
+                        @foreach (var d in Model.DiagnosisRight)
+                        {
+                            @Html.Raw(d.displayValue + " <br/>");
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        <b>LE</b><br />
+                        @foreach (var d in Model.DiagnosisLeft)
+                        {
+                            @Html.Raw(d.displayValue + " <br/>");
+                        }
+                    </div>
                 }
-            </div>
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.comments)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.comments)
+            @if (Model.comments != null && Model.comments.Length > 0)
+            {
+                @Html.DisplayFor(model => model.comments)
+            }
+            else
+            {
+                @Html.Raw("N/A")
+            }
         </dd>
 
         <dt>
@@ -107,7 +123,14 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.counseling)
+            @if (Model.counseling != null && Model.counseling.Length > 0)
+            {
+                @Html.DisplayFor(model => model.counseling)
+            }
+            else
+            {
+                @Html.Raw("N/A")
+            }
         </dd>
 
         <dt>
@@ -117,9 +140,15 @@
         <dd>
             @Html.DisplayFor(model => model.displayReferral)
         </dd>
+        <br />
+        <dt>@Html.DisplayNameFor(model => model.timestamp)</dt>
+        <dd>@Html.DisplayFor(model => model.timestamp)</dd>
+        <dt>@Html.DisplayNameFor(model => model.user)</dt>
+        <dd>@Html.DisplayFor(model => model.user)</dd>
+
     </dl>
     <div class="pull-right btn-group">
-        @Html.ActionLink("Print", "PrintReferral", new {examId = Model.Id}, new { target = "_blank" })
+        @Html.ActionLink("Print", "PrintReferral", new { examId = Model.Id }, new { target = "_blank" })
     </div>
 </div>
 <p>

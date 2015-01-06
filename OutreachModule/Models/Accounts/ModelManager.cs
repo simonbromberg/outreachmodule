@@ -544,6 +544,8 @@ namespace OutreachModule.Models
             {
                 Debug.Print("Error saving E2");
             }
+            db.Examinations.Find(e2.Id).status = (int)Examination.ExamStatus.ExaminationDone;
+            saveChanges();
             return e2;
         }
         public void addDiagnosis(string eye, IEnumerable<CheckboxItem> selected,List<string>other,int id) {

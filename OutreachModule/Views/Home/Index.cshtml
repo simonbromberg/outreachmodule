@@ -9,7 +9,7 @@
     @{
         if (ViewBag.SavedCamp != null)
         {
-            @Html.Raw(ViewBag.SavedCamp.code);
+            @Html.ActionLink((string)ViewBag.SavedCamp.code, "Index", "Camp",new { campId = ViewBag.SavedCamp.Id },null);
         }
         else
         {

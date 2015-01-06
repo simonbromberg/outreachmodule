@@ -19,7 +19,19 @@ namespace OutreachModule.Models
         {
             get
             {
-                return location_1 + ", " + location_2;
+                string display = "";
+                string sep = "";
+                if (location_1 != null && location_1.Length > 0)
+                {
+                    display += location_1;
+                    sep = ", ";
+                }
+                if (location_2 != null && location_2.Length > 0)
+                {
+                    display += sep;
+                    display += location_2;
+                }
+                return display;
             }
         }
         public string selectRow

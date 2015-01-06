@@ -76,6 +76,7 @@ namespace OutreachModule.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
+                Email = await UserManager.GetEmailAsync(User.Identity.GetUserId()),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(User.Identity.GetUserId()),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
                 Logins = await UserManager.GetLoginsAsync(User.Identity.GetUserId()),
