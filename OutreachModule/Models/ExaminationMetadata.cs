@@ -84,6 +84,51 @@ namespace OutreachModule.Models
                 return Diagnosis.Where(m => m.group == "R").ToList();
             }
         }
+        [DisplayName("Referral")]
+        public string displayReferral
+        {
+            get
+            {
+                string display = "";
+
+                if (referral != null && (bool)referral)
+                {
+                    var reason = referral_other != null && referral_other.Length > 0 ? referral_other : referral_reason;
+                    display += "Referred to: " + referral_location + " for " + reason;
+                }
+                else
+                {
+                    display += "Not referred";
+                }
+                if (referral_comment != null && referral_comment.Length > 0) {
+                    display += " — Comment: " + referral_comment;
+                }
+                return display;
+            }
+        }
+        [DisplayName("Spectacles")]
+        public string displaySpectacles
+        {
+            get
+            {
+                string display = "";
+                if (spectacles_dispensed != null && (bool)spectacles_dispensed)
+                {
+                    display += "Dispensed (Cost: " + spectacles_cost + ")";
+                }
+                else
+                {
+                    display += "Not Dispensed";
+                }
+
+                if (spectacles_comment != null && spectacles_comment.Length > 0)
+                {
+                    display += " — Comment: " + spectacles_comment;
+                }
+                
+                return display;
+            }
+        }
     }
     public class E2Metadata
     {
@@ -95,7 +140,7 @@ namespace OutreachModule.Models
         [Display(Name = "Right")]
         public string acuity_right;
 
-        [Display(Name = "Comments")]
+        [Display(Name = "Special Questions or Comments")]
         public string comments;
         [Display(Name = "Patient Counseling")]
         public string counseling;
@@ -105,7 +150,7 @@ namespace OutreachModule.Models
         [Display(Name = "Description")]
         public string abnormal_anterior_descr { get; set; }
 
-        [Display(Name = "Spectacles Dispensed?")]
+        [Display(Name = "Spectacles")]
         [UIHint("spectacles")]
         public Nullable<bool> spectacles_dispensed;
         [Display(Name = "Comment")]
@@ -139,6 +184,16 @@ namespace OutreachModule.Models
             diag.group = eye;
             diag.other = other;
             return diag;
+        }
+        public string displayValue {
+            get
+            {
+                if (other != null)
+                {
+                    return value + ": " + other;
+                }
+                else return value;
+            }
         }
     }
     public class OtherListModel
@@ -391,7 +446,7 @@ namespace OutreachModule.Models
                 return _acuityOptions.Select((r, index) => new SelectListItem { Text = r, Value = index.ToString()});
             }
         }
-        private readonly List<string> _acuityOptions = new List<string> { "20/630", "20/500", "20/400", "20/320", "20/250", "20/200", "20/160", "20/125", "20/100", "20/80", "20/63", "20/50", "20/40", "20/32", "20/25", "20/20" };
+        private readonly List<string> _acuityOptions = new List<string> { "Enter acuity","20/630", "20/500", "20/400", "20/320", "20/250", "20/200", "20/160", "20/125", "20/100", "20/80", "20/63", "20/50", "20/40", "20/32", "20/25", "20/20" };
         public static List<string> options = new List<string> { "Unaided", "Best Corrected", "Pinhole", "Presenting" };
         public string method { get; set; }
         public int l { get; set; }
@@ -416,10 +471,20 @@ namespace OutreachModule.Models
         public AlignmentModel()
         {
             index = 0;
+            horizontal = 29;
+            vertical = 21;
         }
         public AlignmentModel(int i)
         {
             index = i;
+            horizontal = 29;
+            vertical = 21;
+        }
+        public AlignmentModel(int i, string h, string v) //initialize with previous selection
+        {
+            index = i;
+            horizontal = _horizontalAlignmentOptions.IndexOf(h);
+            vertical = _verticalAlignmentOptions.IndexOf(v);
         }
         public int index { get; set; }
         public int horizontal { get; set; }
@@ -494,8 +559,8 @@ namespace OutreachModule.Models
     {
         public DiagnosisModel()
         {
-            OtherDiagnosisRight = new OtherListModel("OtherDiagnosisRightList");
-            OtherDiagnosisLeft = new OtherListModel("OtherDiagnosisLeftList");
+            OtherDiagnosisRight = new OtherListModel("diagnosis.OtherDiagnosisRightList");
+            OtherDiagnosisLeft = new OtherListModel("diagnosis.OtherDiagnosisLeftList");
             SelectedDiagnosisLeft = new List<CheckboxItem>();
             SelectedDiagnosisRight = new List<CheckboxItem>();
             AvailableDiagnosisOptions = ExaminationCheckboxRepository.GetList(ListType.MedicalHistory);

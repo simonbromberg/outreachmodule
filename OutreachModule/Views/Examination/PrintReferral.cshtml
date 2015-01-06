@@ -1,0 +1,58 @@
+﻿@model OutreachModule.Models.E2
+@{
+    Layout = "~/Views/Shared/_LayoutPrintout.cshtml";
+}
+<h4>Referral Printout</h4>
+<dl class="dl-horizontal">
+    <dt>Name</dt>
+    <dd>@Model.Examination.Patient.name</dd>
+    <dt>Age</dt>
+    <dd>@Model.Examination.Patient.age</dd>
+    <dt>Sex</dt>
+    <dd>@Model.Examination.Patient.gender</dd>
+    <dt>Phone Number 1</dt>
+    <dd>@Model.Examination.Patient.contact_1</dd>
+    <dt>Phone Number 2</dt>
+    <dd>@Model.Examination.Patient.contact_2</dd>
+    <dt>Family Phone Number</dt>
+    <dd>@Model.Examination.Patient.family_contact_number</dd>
+    <dt>Village</dt>
+    <dd>@Model.Examination.Patient.district,@Model.Examination.Patient.gram_panchayat,@Model.Examination.Patient.address_1,@Model.Examination.Patient.address_2,</dd>
+
+    <dt>MRN</dt>
+    <dd>@Model.Examination.Patient.mrn</dd>
+
+    <dt>
+        Diagnosis
+    </dt>
+    <dd>
+        <div class="col-md-3">
+            <b>RE</b><br />
+            @foreach (var d in Model.DiagnosisRight)
+            {
+                @Html.Raw(d.displayValue + " <br/>");
+            }
+        </div>
+        <div class="col-md-3">
+            <b>LE</b><br />
+            @foreach (var d in Model.DiagnosisLeft)
+            {
+                @Html.Raw(d.displayValue + " <br/>");
+            }
+        </div>
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.displayReferral)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.displayReferral)
+    </dd>
+    <dt>Staff Member</dt>
+    <dd>@Model.user</dd>
+
+    <dt>Camp Code</dt>
+    <dd>@Model.Examination.Camp.code</dd>
+    <dt>Camp Date</dt>
+    <dd>@Model.Examination.Camp.date</dd>
+</dl>

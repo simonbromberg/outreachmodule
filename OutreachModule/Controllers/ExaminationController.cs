@@ -124,6 +124,15 @@ namespace OutreachModule.Controllers
             manager.addE2WithModel(model,User.Identity.GetUserName());
             return RedirectToAction("Detail", new { examId = model.examId });
         }
+        public ActionResult PrintReferral(int? examId)
+        {
+            if (examId == null)
+            {
+                return null;
+            }
+            var model = manager.getE2WithId((int)examId);
+            return View(model);
+        }
         private List<CheckboxItem> GetSelected(PostedComplaints posted,ListType type)
         {
             if (posted != null && posted.ComplaintIds.Any()) {

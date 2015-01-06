@@ -75,14 +75,14 @@
                 <b>RE</b><br />
                 @foreach (var d in Model.DiagnosisRight)
                 {
-                    @Html.Raw(d.value + " <br/>");
+                    @Html.Raw(d.displayValue + " <br/>");
                 }
             </div>
             <div class="col-md-3">
                 <b>LE</b><br />
                 @foreach (var d in Model.DiagnosisLeft)
                 {
-                    @Html.Raw(d.value + " <br/>");
+                    @Html.Raw(d.displayValue + " <br/>");
                 }
             </div>
         </dd>
@@ -95,6 +95,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.displaySpectacles)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.displaySpectacles)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.counseling)
         </dt>
 
@@ -103,72 +111,16 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.spectacles_dispensed)
+            @Html.DisplayNameFor(model => model.displayReferral)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.spectacles_dispensed)
+            @Html.DisplayFor(model => model.displayReferral)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.spectacles_comment)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.spectacles_comment)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.spectacles_cost)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.spectacles_cost)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.referral)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.referral)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.referral_comment)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.referral_comment)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.referral_reason)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.referral_reason)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.referral_other)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.referral_other)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.referral_location)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.referral_location)
-        </dd>
-
-
-
     </dl>
+    <div class="pull-right btn-group">
+        @Html.ActionLink("Print", "PrintReferral", new {examId = Model.Id}, new { target = "_blank" })
+    </div>
 </div>
 <p>
     @Html.ActionLink("Delete Part 2", "Delete2", new { examId = Model.Id })

@@ -12,7 +12,12 @@ namespace OutreachModule
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute(
+           "ContinueExamination",
+           "Camp/{campId}/Patient/{patientId}/Examination/{examId}/{action}",
+           new { controller = "Examination"},
+           new { campId = @"\d+", patientId = @"\d+", examId = @"\d+" }
+           );
             routes.MapRoute(
             "Examination",
             "Camp/{campId}/Patient/{patientId}/Examination/{examId}",

@@ -438,6 +438,8 @@
     <Content Include="Views\Examination\ReferralPartial.cshtml" />
     <Content Include="Views\Examination\E2DetailPartial.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\spectacles.cshtml" />
+    <Content Include="Views\Examination\PrintReferral.cshtml" />
+    <Content Include="Views\Shared\_LayoutPrintout.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

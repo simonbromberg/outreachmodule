@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Outreach Module</title>
+    @Styles.RenderFormat(@"<link href=""{0}"" rel=""stylesheet"" media=""all"" />", "~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @if (IsSectionDefined("Style"))
+    {
+        @RenderSection("Style");
+    }
+    <link rel="stylesheet" type="text/css" media="print" href="bootstrap.min.css">
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Orbis International</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

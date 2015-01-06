@@ -76,25 +76,27 @@
             @Html.DisplayFor(model=>model.examination.spectacles)
         </dd>
     </dl>
-    
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.examination.dateStarted)</dt>
+        <dd>@Html.DisplayFor(model => model.examination.dateStarted)</dd>
+        <dt>@Html.DisplayNameFor(model => model.examination.dateComplete)</dt>
+        <dd>@Html.DisplayFor(model => model.examination.dateComplete)</dd>
+    </dl>
     @{
         if (Model.examination.E2 != null)
     {
         @Html.Partial("E2DetailPartial",Model.examination.E2)
     }
-    }
+        else
+        {
+            @Html.ActionLink("Continue Examination", "ContinueExamination", new { examId = Model.examination.Id })
+        }
+}
 
 </div>
-<dl class="dl-horizontal">
-    <dt>@Html.DisplayNameFor(model => model.examination.dateStarted)</dt>
-    <dd>@Html.DisplayFor(model => model.examination.dateStarted)</dd>
-    <dt>@Html.DisplayNameFor(model => model.examination.dateComplete)</dt>
-    <dd>@Html.DisplayFor(model => model.examination.dateComplete)</dd>
-</dl>
-
+<br />
 @if (User.IsInRole(OutreachModule.Controllers.OutreachRoles.RoleAdmin))
 {
     @Html.ActionLink("Delete", "Delete", new { examId = Model.examination.Id }, null) @Html.Raw(" | ")
 }
-    @Html.ActionLink("Back", "Patient","Camp", new { patientId = Model.examination.patientId }, null) | 
-    @Html.ActionLink("Next", "ContinueExamination", new {examId = Model.examination.Id})
+    @Html.ActionLink("Back", "Patient","Camp", new { patientId = Model.examination.patientId }, null)
