@@ -133,6 +133,15 @@ namespace OutreachModule.Controllers
             var model = manager.getE2WithId((int)examId);
             return View(model);
         }
+        public ActionResult PrintPrescription(int? examId)
+        {
+            if (examId == null)
+            {
+                return null;
+            }
+            var model = manager.getE2WithId((int)examId);
+            return View(model);
+        }
         private List<CheckboxItem> GetSelected(PostedComplaints posted,ListType type)
         {
             if (posted != null && posted.ComplaintIds.Any()) {

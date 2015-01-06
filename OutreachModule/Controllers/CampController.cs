@@ -210,7 +210,11 @@ namespace OutreachModule.Controllers
             var list = manager.getListOfUnfinishedExaminationsForCamp(campId);
             return View(list);
         }
-
+        public ActionResult Completed(int campId)
+        {
+            var list = manager.getListOfDoneExaminationsForCamp(campId);
+            return View(list);
+        }
         public ActionResult GoToExamination(int examId)
         {
             var exam = manager.getExaminationWithId(examId);

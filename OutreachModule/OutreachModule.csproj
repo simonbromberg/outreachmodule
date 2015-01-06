@@ -440,6 +440,8 @@
     <Content Include="Views\Shared\DisplayTemplates\spectacles.cshtml" />
     <Content Include="Views\Examination\PrintReferral.cshtml" />
     <Content Include="Views\Shared\_LayoutPrintout.cshtml" />
+    <Content Include="Views\Examination\PrintPrescription.cshtml" />
+    <Content Include="Views\Camp\Completed.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

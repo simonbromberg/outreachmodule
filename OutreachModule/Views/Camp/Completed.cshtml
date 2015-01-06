@@ -1,9 +1,8 @@
 ﻿@model List<OutreachModule.Models.Examination>
 @{
-    ViewBag.Title = "Queue";
+    ViewBag.Title = "Completed";
 }
-
-<h2>Examination Queue</h2>
+<h2>Completed Examinations</h2>
 <ul>
     @if (Model.Count > 0)
     {
@@ -14,7 +13,7 @@
     }
     else
     {
-        @Html.Raw("<p>No examinations in the queue</p>")
+        @Html.Raw("<p>No completed</p>")
     }
-    <p>@Html.ActionLink("Back","Index","Home")</p>
+    <p>@Html.ActionLink("Back", "Index", "Home")</p>
 </ul>

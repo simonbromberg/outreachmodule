@@ -25,11 +25,13 @@ namespace OutreachModule.Controllers
                 ViewBag.SavedCamp = manager.getCampWithId((int)campId);            
                 ViewBag.ToScreenCount = manager.getListOfUnscreenedPatientsForCamp((int)campId).Count();
                 ViewBag.ToExamineCount = manager.getListOfUnfinishedExaminationsForCamp((int)campId).Count();
+                ViewBag.DoneCount = manager.getListOfDoneExaminationsForCamp((int)campId).Count();
             }
             else
             {
                 ViewBag.ToScreenCount = "N/A";
                 ViewBag.ToExamineCount = "N/A";
+                ViewBag.DoneCount = 0;
             }
             ViewBag.CampList = new SelectList(manager.campList, "Id", "selectRow", getDefaultCamp());
             return View();
@@ -86,6 +88,16 @@ namespace OutreachModule.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("ExaminationQueue", "Camp", new { campId = c });
+        }
+        public ActionResult GoToCompleted()
+        {
+            var c = getDefaultCamp();
+            if (c == null)
+            {
+                TempData["message"] = "No camp selected";
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Completed", "Camp", new { campId = c });
         }
     }
 

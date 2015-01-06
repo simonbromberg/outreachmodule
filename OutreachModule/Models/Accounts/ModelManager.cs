@@ -255,11 +255,6 @@ namespace OutreachModule.Models
                 return db.Patients;
             }
         }
-        public List<Patient> getListOfUnscreenedPatientsForCamp(int campId)
-        {
-            return Patients.Where(x => (x.campId == campId && x.Examinations.Count == 0)).ToList();
-        }
-
         public SelectList GenderSelect(string Gender = null)
         {
             if (Gender == null)
@@ -370,9 +365,18 @@ namespace OutreachModule.Models
             List<ExamComplaint> complaints = ex.ExamComplaints.ToList(); //getComplaintsForExam(e);
             return new ExaminationDetailModel(ex, complaints);
         }
+
+        public List<Patient> getListOfUnscreenedPatientsForCamp(int campId)
+        {
+            return Patients.Where(x => (x.campId == campId && x.Examinations.Count == 0)).ToList();
+        }
         public List<Examination> getListOfUnfinishedExaminationsForCamp(int campId)
         {
             return db.Examinations.Where(x => (x.campId == campId && x.status == (int)Examination.ExamStatus.ScreeningDone)).ToList();
+        }
+        public List<Examination> getListOfDoneExaminationsForCamp (int campId)
+        {
+            return db.Examinations.Where(x => (x.campId == campId && x.status == (int)Examination.ExamStatus.ExaminationDone)).ToList();
         }
         public Examination addExamination(Examination newEx)
         {

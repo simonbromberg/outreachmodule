@@ -21,7 +21,7 @@
 <h4>@Html.ActionLink("Counter 1: Patient Registration", "GoToRegistration")</h4>
 <h4>@Html.ActionLink("Counter 2: Patient Screening", "GoToScreening") (@ViewBag.ToScreenCount)</h4>
 <h4>@Html.ActionLink("Counter 3: Patient Examination", "GoToExamination") (@ViewBag.ToExamineCount)</h4>
-
+<h4>@Html.ActionLink("Completed: "+ ((int)@ViewBag.DoneCount).ToString(),"GoToCompleted")</h4>
 <p> Change current camp:</p>
 @using (Html.BeginForm("Go", "Home", FormMethod.Get, new { @class = "form-inline",id="camp-form" }))
 {

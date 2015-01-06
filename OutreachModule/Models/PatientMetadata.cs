@@ -26,7 +26,7 @@ namespace OutreachModule.Models
                 {
                     return ((DateTime)birthdate).ToString("d MMMM yyyy");
                 }
-                    return null;
+                return null;
             }
         }
         [Display(Name = "Camp Code")]
@@ -34,7 +34,8 @@ namespace OutreachModule.Models
         {
             get
             {
-                if (fromCamp != null) {
+                if (fromCamp != null)
+                {
                     return fromCamp.code;
                 }
                 return null;
@@ -48,7 +49,7 @@ namespace OutreachModule.Models
             {
                 return gender.EqualsIgnoreCase(query);
             }
-            return mrn.Contains(query, ignoreCase) || name.Contains(query,ignoreCase) || camp_code.Contains(query,ignoreCase) || address_1.Contains(query,ignoreCase) || address_2.Contains(query,ignoreCase);
+            return mrn.Contains(query, ignoreCase) || name.Contains(query, ignoreCase) || camp_code.Contains(query, ignoreCase) || address_1.Contains(query, ignoreCase) || address_2.Contains(query, ignoreCase);
         }
         [Display(Name = "Medical Record Number")]
         public string mrn
@@ -62,6 +63,39 @@ namespace OutreachModule.Models
                 return null;
             }
         }
+        public string locationDisplay
+        {
+            get
+            {
+                string display = "";
+                string sep = "";
+                if (district != null && district.Length > 0)
+                {
+                    display += district;
+                    sep = ", ";
+                }
+                if (gram_panchayat != null && gram_panchayat.Length > 0)
+                {
+                    display += sep + gram_panchayat;
+                    sep = ", ";
+                }
+                if (address_1 != null && address_1.Length > 0)
+                {
+                    display += sep + address_1;
+                    sep = ", ";
+                }
+                if (address_2 != null && address_2.Length > 0)
+                {
+                    display += sep + address_2;
+                }
+                if (display.Length == 0)
+                {
+                    return "N/A";
+                }
+                return display;
+            }
+        }
+
     }
 
     public class PatientMetadata

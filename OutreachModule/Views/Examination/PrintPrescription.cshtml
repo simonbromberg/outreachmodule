@@ -1,8 +1,11 @@
 ﻿@model OutreachModule.Models.E2
 @{
+    ViewBag.Title = "Prescription";
     Layout = "~/Views/Shared/_LayoutPrintout.cshtml";
 }
-<h4>Referral Printout</h4>
+
+<h2>Spectacles Prescription</h2>
+
 <dl class="dl-horizontal">
     <dt>Name</dt>
     <dd>@Model.Examination.Patient.name</dd>
@@ -21,39 +24,27 @@
 
     <dt>MRN</dt>
     <dd>@Model.Examination.Patient.mrn</dd>
-
     <dt>
-        Diagnosis
+        Refraction
     </dt>
     <dd>
-        <div class="col-md-3">
-            <b>RE</b><br />
-            @foreach (var d in Model.DiagnosisRight)
-            {
-                @Html.Raw(d.displayValue + " <br/>");
-            }
-        </div>
-        <div class="col-md-3">
-            <b>LE</b><br />
-            @foreach (var d in Model.DiagnosisLeft)
-            {
-                @Html.Raw(d.displayValue + " <br/>");
-            }
-        </div>
+        @foreach (var r in Model.Refractions)
+        {
+            @Html.Raw("<b>" + r.eye + ": </b>")
+            @Html.Raw("sph: ") @Html.Raw(r.sph)
+            @Html.Raw(", cyl: ") @Html.Raw(r.cyl)
+            @Html.Raw(", axis: ") @Html.Raw(r.axis) @Html.Raw("&emsp;")
+        }
     </dd>
+
     <dt>
-        @Html.DisplayNameFor(model => model.displayReferral)
+        @Html.DisplayNameFor(model => model.displaySpectacles)
     </dt>
 
     <dd>
-        @Html.DisplayFor(model => model.displayReferral)
+        @Html.DisplayFor(model => model.displaySpectacles)
     </dd>
-    <dt>Staff Member</dt>
-    <dd>@Model.user</dd>
 
-    <dt>Camp Code</dt>
-    <dd>@Model.Examination.Camp.code</dd>
-    <dt>Camp Date</dt>
-    <dd>@Model.Examination.Camp.date</dd>
 </dl>
+
 <p>@Model.timestamp</p>
